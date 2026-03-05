@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.typelit.io)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:entertrained.app)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(mv .claude:*)",
+      "Bash(npm install:*)",
+      "Bash(npx next:*)",
+      "Bash(npx supabase:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(rm:*)"
+    ]
+  }
+}

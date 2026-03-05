@@ -1,0 +1,2 @@
+- [ ] Add AI model to generate review questions for chapters.
+- [ ] Make typing experience cooler
