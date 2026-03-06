@@ -237,16 +237,23 @@ export async function getProfile(): Promise<Profile | null> {
   };
 }
 
-export async function updateProfile(updates: { displayName?: string | null; avatarUrl?: string | null }): Promise<void> {
+export async function updateProfile(updates: { displayName?: string | null; avatarUrl?: string | null }): Promise<boolean> {
   const row: Record<string, unknown> = {};
   if (updates.displayName !== undefined) row.display_name = updates.displayName;
   if (updates.avatarUrl !== undefined) row.avatar_url = updates.avatarUrl;
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
+    console.error("updateProfile: no user", authError);
+    return false;
+  }
 
   const { error } = await supabase
     .from("profiles")
     .upsert({ id: user.id, ...row });
-  if (error) console.error("updateProfile:", error);
+  if (error) {
+    console.error("updateProfile:", error);
+    return false;
+  }
+  return true;
 }

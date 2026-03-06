@@ -22,10 +22,14 @@ export default function SettingsPage() {
     });
   }, [user]);
 
+  const [saveMsg, setSaveMsg] = useState<string | null>(null);
+
   async function handleSaveProfile() {
     setSaving(true);
-    await db.updateProfile({ displayName: displayName.trim() || null });
+    setSaveMsg(null);
+    const ok = await db.updateProfile({ displayName: displayName.trim() || null });
     setSaving(false);
+    setSaveMsg(ok ? "Saved!" : "Failed to save — check console for details");
   }
 
   return (
@@ -64,6 +68,11 @@ export default function SettingsPage() {
                       {saving ? "Saving..." : "Save"}
                     </button>
                   </div>
+                  {saveMsg && (
+                    <p className={`text-xs mt-1 ${saveMsg === "Saved!" ? "text-ink-correct" : "text-ink-error"}`}>
+                      {saveMsg}
+                    </p>
+                  )}
                 </div>
               </div>
             </Section>
