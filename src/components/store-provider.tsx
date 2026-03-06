@@ -40,17 +40,18 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     ]);
   }, [refreshBooks, refreshProgress, refreshSessions, refreshKeystrokeStats]);
 
-  // Load all data once auth is ready
+  // Load all data once auth is ready — keyed on user ID, not user object ref
+  // (Supabase emits TOKEN_REFRESHED on tab focus, creating a new user object)
+  const userId = user?.id ?? null;
   useEffect(() => {
     if (authLoading) return;
-    if (!user) {
-      // Auth finished but no user (failed sign-in) — stop loading
+    if (!userId) {
       setDataLoading(false);
       return;
     }
     setDataLoading(true);
     refresh().then(() => setDataLoading(false));
-  }, [authLoading, user, refresh]);
+  }, [authLoading, userId, refresh]);
 
   const loading = authLoading || dataLoading;
 
