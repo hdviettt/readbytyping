@@ -12,7 +12,10 @@ export function useAuth() {
     const supabase = createClient();
 
     // Check current session
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(({ data, error: getUserError }) => {
+      if (getUserError) {
+        console.error("getUser failed:", getUserError);
+      }
       if (data.user) {
         setUser(data.user);
         setLoading(false);
@@ -27,6 +30,9 @@ export function useAuth() {
           setLoading(false);
         });
       }
+    }).catch((err) => {
+      console.error("Auth init failed:", err);
+      setLoading(false);
     });
 
     // Listen for auth changes

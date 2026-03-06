@@ -42,7 +42,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   // Load all data once auth is ready
   useEffect(() => {
-    if (authLoading || !user) return;
+    if (authLoading) return;
+    if (!user) {
+      // Auth finished but no user (failed sign-in) — stop loading
+      setDataLoading(false);
+      return;
+    }
     setDataLoading(true);
     refresh().then(() => setDataLoading(false));
   }, [authLoading, user, refresh]);
