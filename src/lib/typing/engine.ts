@@ -12,6 +12,7 @@ export function createInitialState(text: string, startOffset: number = 0): Typin
     startedAt: null,
     lastKeystrokeAt: null,
     keystrokes: [],
+    streak: 0,
   };
 }
 
@@ -32,7 +33,6 @@ const IGNORED_KEYS = new Set([
   "PageDown",
   "Insert",
   "Delete",
-  "Backspace",
   "Tab",
   "F1",
   "F2",
@@ -59,6 +59,27 @@ export function handleKeyPress(
 ): TypingState {
   if (state.isComplete) return state;
   if (shouldIgnoreKey(key)) return state;
+
+  // Handle backspace
+  if (key === "Backspace") {
+    if (state.cursor <= 0) return state;
+
+    const newCursor = state.cursor - 1;
+    const newErrors = new Set(state.errors);
+    const wasError = newErrors.has(newCursor);
+    newErrors.delete(newCursor);
+
+    return {
+      ...state,
+      cursor: newCursor,
+      errors: newErrors,
+      totalTyped: state.totalTyped > 0 ? state.totalTyped - 1 : 0,
+      correctCount: wasError ? state.correctCount : Math.max(0, state.correctCount - 1),
+      incorrectCount: wasError ? Math.max(0, state.incorrectCount - 1) : state.incorrectCount,
+      lastKeystrokeAt: timestamp,
+      streak: 0,
+    };
+  }
 
   const expected = state.text[state.cursor];
   if (expected === undefined) return state;
@@ -100,6 +121,7 @@ export function handleKeyPress(
     startedAt: state.startedAt ?? timestamp,
     lastKeystrokeAt: timestamp,
     keystrokes: [...state.keystrokes, keystroke],
+    streak: isCorrect ? state.streak + 1 : 0,
   };
 }
 

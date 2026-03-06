@@ -19,6 +19,7 @@ export interface TypingState {
   startedAt: number | null;
   lastKeystrokeAt: number | null;
   keystrokes: Keystroke[];
+  streak: number;
 }
 
 export interface TypingStats {
