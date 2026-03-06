@@ -183,13 +183,16 @@ export default function LibraryPage() {
     <>
       <Nav />
       <main className="max-w-5xl mx-auto px-6 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold font-typewriter text-accent">Library</h1>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-sm font-bold tracking-[0.25em] uppercase text-accent">File Cabinet</h1>
+            <p className="text-[10px] text-dim tracking-wider uppercase mt-0.5">Document Archive</p>
+          </div>
         </div>
 
         {error && (
-          <div className="p-3 text-sm text-ink-error bg-ink-error/10 border border-ink-error/20 rounded-lg mb-6">
-            {error}
+          <div className="mb-6 px-3 py-2 border-2 border-stamp/40 bg-stamp/10">
+            <p className="text-xs text-stamp font-bold uppercase tracking-wider">{error}</p>
           </div>
         )}
 
@@ -201,24 +204,21 @@ export default function LibraryPage() {
           }}
           onDragLeave={() => setDragActive(false)}
           onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors mb-8 ${
+          className={`border-2 border-dashed p-6 text-center transition-colors mb-6 ${
             dragActive
               ? "border-accent bg-accent/10"
               : "border-border hover:border-border-hover"
           }`}
         >
           {uploading ? (
-            <div className="flex items-center justify-center gap-3">
-              <span className="inline-block font-typewriter text-muted">
-                Feeding paper into typewriter
-                <TypingDots />
-              </span>
-            </div>
+            <span className="text-xs font-bold tracking-[0.15em] uppercase text-muted">
+              Processing document<TypingDots />
+            </span>
           ) : (
             <div>
-              <p className="text-muted mb-2">
-                Drop an EPUB or PDF here, or{" "}
-                <label className="text-accent hover:text-accent-hover cursor-pointer underline">
+              <p className="text-xs text-muted uppercase tracking-wider mb-1">
+                Drop file here or{" "}
+                <label className="text-accent hover:text-accent-hover cursor-pointer font-bold">
                   browse
                   <input
                     type="file"
@@ -231,25 +231,25 @@ export default function LibraryPage() {
                   />
                 </label>
               </p>
-              <p className="text-xs text-dim">EPUB or PDF</p>
+              <p className="text-[10px] text-dim tracking-wider">ACCEPTED: EPUB, PDF</p>
             </div>
           )}
         </div>
 
         {/* Search and sort */}
         {books.length > 0 && (
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-2 mb-6">
             <input
               type="text"
-              placeholder="Search by title or author..."
+              placeholder="Search files..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-3 py-2 text-sm bg-surface border border-border rounded-lg placeholder:text-dim focus:outline-none focus:border-accent"
+              className="flex-1 px-3 py-1.5 text-xs bg-background border-2 border-border placeholder:text-dim focus:outline-none focus:border-accent font-typewriter uppercase tracking-wider"
             />
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortOption)}
-              className="px-3 py-2 text-sm bg-surface border border-border rounded-lg focus:outline-none focus:border-accent"
+              className="px-3 py-1.5 text-xs bg-background border-2 border-border focus:outline-none focus:border-accent font-typewriter uppercase tracking-wider"
             >
               <option value="recent">Recently added</option>
               <option value="last-typed">Recently typed</option>
@@ -280,52 +280,55 @@ export default function LibraryPage() {
               return (
                 <div
                   key={book.id}
-                  className="border border-border rounded-xl overflow-hidden hover:border-border-hover transition-colors group"
+                  className="border-2 border-border hover:border-border-hover transition-colors group bg-surface"
                 >
-                  <div
-                    className="h-2 w-full"
-                    style={{ backgroundColor: hashColor(book.title) }}
-                  />
+                  {/* File tab */}
+                  <div className="flex items-center justify-between px-4 py-1.5 border-b-2 border-border bg-paper/30">
+                    <span className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim">
+                      {book.fileType} — {book.totalChapters} ch
+                    </span>
+                    {pct === 100 && (
+                      <span className="stamp text-[8px] py-0 px-1.5 border-[1.5px]" style={{ transform: "rotate(-2deg)" }}>
+                        Complete
+                      </span>
+                    )}
+                  </div>
                   <button
                     onClick={() => router.push(`/book/${book.id}`)}
-                    className="w-full text-left p-5 cursor-pointer"
+                    className="w-full text-left px-4 py-3 cursor-pointer"
                   >
-                    <h3 className="font-semibold truncate group-hover:text-accent transition-colors">
+                    <h3 className="text-sm font-bold truncate group-hover:text-accent transition-colors uppercase tracking-wide">
                       {book.title}
                     </h3>
                     {book.author && (
-                      <p className="text-sm text-muted mt-0.5 truncate">
+                      <p className="text-[11px] text-muted mt-0.5 truncate tracking-wider">
                         {book.author}
                       </p>
                     )}
-                    <div className="flex items-center gap-3 mt-3 text-xs text-dim">
-                      <span>{book.totalChapters} ch</span>
+                    <div className="flex items-center gap-3 mt-2 text-[10px] text-dim tracking-wider uppercase">
                       <span>{book.totalPages} pages</span>
-                      <span className="uppercase">{book.fileType}</span>
+                      {prog?.lastTypedAt && (
+                        <span>{timeAgo(prog.lastTypedAt)}</span>
+                      )}
                     </div>
-                    {prog?.lastTypedAt && (
-                      <p className="text-xs text-dim mt-1">
-                        Last typed {timeAgo(prog.lastTypedAt)}
-                      </p>
-                    )}
-                    {pct > 0 && (
-                      <div className="mt-3">
-                        <div className="w-full h-1.5 bg-paper rounded-full overflow-hidden">
+                    {pct > 0 && pct < 100 && (
+                      <div className="mt-2">
+                        <div className="w-full h-1.5 bg-background border border-border">
                           <div
-                            className="h-full bg-accent rounded-full"
+                            className="h-full bg-accent transition-all duration-300"
                             style={{ width: `${pct}%` }}
                           />
                         </div>
-                        <p className="text-xs text-muted mt-1">{pct}%</p>
+                        <p className="text-[10px] text-muted mt-0.5 tracking-wider">{pct}%</p>
                       </div>
                     )}
                   </button>
-                  <div className="px-5 pb-4 flex justify-end">
+                  <div className="px-4 pb-2 flex justify-end border-t border-border/50">
                     <button
                       onClick={() => handleDelete(book.id)}
-                      className="text-xs text-dim hover:text-ink-error transition-colors"
+                      className="text-[10px] text-dim hover:text-stamp uppercase tracking-wider font-bold transition-colors py-1"
                     >
-                      Remove
+                      Discard
                     </button>
                   </div>
                 </div>
@@ -336,15 +339,15 @@ export default function LibraryPage() {
       </main>
 
       {undoItem && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-surface border border-border rounded-lg shadow-lg px-5 py-3 flex items-center gap-4">
-          <p className="text-sm">
-            Removed <span className="font-medium">{undoItem.book.title}</span>
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-surface border-2 border-border px-5 py-3 flex items-center gap-4">
+          <p className="text-xs uppercase tracking-wider">
+            Discarded: <span className="font-bold text-foreground">{undoItem.book.title}</span>
           </p>
           <button
             onClick={handleUndo}
-            className="text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+            className="text-xs font-bold text-accent hover:text-accent-hover uppercase tracking-wider transition-colors"
           >
-            Undo
+            Restore
           </button>
         </div>
       )}

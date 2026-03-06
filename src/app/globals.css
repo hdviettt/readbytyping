@@ -1,69 +1,76 @@
 @import "tailwindcss";
 
-/* ===== Dark theme (default) ===== */
+/* ===== PAPERS PLEASE — Dark theme (default) ===== */
 :root {
-  --background: #1a1410;
-  --foreground: #e8dcc8;
-  --surface: #231e18;
-  --paper: #2d2620;
-  --border-color: #3d3429;
-  --border-hover: #5a4a3a;
-  --muted: #8a7a66;
-  --dim: #5a4d3e;
-  --accent: #c89b3c;
-  --accent-hover: #d4a84c;
-  --ink: #d4c5a9;
-  --ink-correct: #8db87a;
-  --ink-error: #c45a4a;
-  --ink-current: #c89b3c;
+  /* Core palette: military olive, worn parchment, bureaucratic grey */
+  --background: #0f1210;
+  --foreground: #c8c4b0;
+  --surface: #1a1e1a;
+  --paper: #242822;
+  --border-color: #3a3e34;
+  --border-hover: #5a5e4a;
+  --muted: #7a7d6a;
+  --dim: #4a4e40;
+  --accent: #b8a44c;
+  --accent-hover: #d0b85a;
+  /* Ink / feedback */
+  --ink: #b8b4a0;
+  --ink-correct: #6a9a50;
+  --ink-error: #c44a3a;
+  --ink-current: #b8a44c;
+  /* Stamp red */
+  --stamp: #c44a3a;
+  --stamp-dim: #8a3228;
   /* Paper sheet */
-  --paper-bg: #faf6ee;
-  --paper-text: #1a1610;
-  --paper-upcoming: #9a8e78;
-  --paper-line: #ede6d6;
-  --paper-margin: #d49898;
-  --paper-shadow: rgba(0, 0, 0, 0.35);
+  --paper-bg: #e8e0ca;
+  --paper-text: #1a1a12;
+  --paper-upcoming: #9a9480;
+  --paper-line: #d8d0b8;
+  --paper-margin: #c46060;
+  --paper-shadow: rgba(0, 0, 0, 0.5);
   /* Keyboard */
-  --key-bg: #2e2820;
-  --key-border: #504638;
-  --key-text: #b8a888;
-  --key-shadow: #100e0a;
+  --key-bg: #222620;
+  --key-border: #444838;
+  --key-text: #9a9a82;
+  --key-shadow: #0a0c0a;
   /* Platen */
-  --platen-from: #28221a;
-  --platen-mid: #4a4030;
+  --platen-from: #1a1e18;
+  --platen-mid: #3a4030;
 }
 
 /* ===== Light theme ===== */
 .light {
-  --background: #f5f0e8;
-  --foreground: #2a2218;
-  --surface: #ebe4d6;
-  --paper: #ddd6c6;
-  --border-color: #c8bfad;
-  --border-hover: #a89a86;
-  --muted: #7a6e5e;
-  --dim: #a09585;
-  --accent: #9a7520;
-  --accent-hover: #b8892e;
-  --ink: #4a3f30;
-  --ink-correct: #4a8035;
-  --ink-error: #b83a2e;
-  --ink-current: #9a7520;
+  --background: #e8e2d0;
+  --foreground: #1a1e14;
+  --surface: #d8d2be;
+  --paper: #ccc6b0;
+  --border-color: #b0aa96;
+  --border-hover: #8a8474;
+  --muted: #5a5e4a;
+  --dim: #8a8e7a;
+  --accent: #8a7a28;
+  --accent-hover: #a08e30;
+  --ink: #2a2e20;
+  --ink-correct: #3a7a20;
+  --ink-error: #a83a2a;
+  --ink-current: #8a7a28;
+  --stamp: #a83a2a;
+  --stamp-dim: #c86050;
   /* Paper sheet */
-  --paper-bg: #ffffff;
-  --paper-text: #1a1610;
-  --paper-upcoming: #b0a594;
-  --paper-line: #f0ebe2;
-  --paper-margin: #dda0a0;
-  --paper-shadow: rgba(0, 0, 0, 0.1);
+  --paper-bg: #f8f4e4;
+  --paper-text: #1a1a12;
+  --paper-upcoming: #a0988a;
+  --paper-line: #ece4d0;
+  --paper-margin: #c46060;
+  --paper-shadow: rgba(0, 0, 0, 0.12);
   /* Keyboard */
-  --key-bg: #e8e0d2;
-  --key-border: #c8bfad;
-  --key-text: #5a5040;
-  --key-shadow: #c0b8a8;
+  --key-bg: #d0caba;
+  --key-border: #b0aa98;
+  --key-text: #4a4e3a;
+  --key-shadow: #b8b2a0;
   /* Platen */
-  --platen-from: #7a7268;
-  --platen-mid: #928880;
+  --platen-from: #6a6e60;
+  --platen-mid: #8a8e80;
 }
 
 @theme inline {
@@ -81,6 +88,8 @@
   --color-ink-correct: var(--ink-correct);
   --color-ink-error: var(--ink-error);
   --color-ink-current: var(--ink-current);
+  --color-stamp: var(--stamp);
+  --color-stamp-dim: var(--stamp-dim);
   --color-paper-bg: var(--paper-bg);
   --color-paper-text: var(--paper-text);
   --color-paper-upcoming: var(--paper-upcoming);
@@ -97,42 +106,19 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-typewriter), "Courier New", monospace;
 }
 
-/* Typewriter cursor blink */
+/* ===== Typewriter cursor blink ===== */
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
-
 .typewriter-cursor {
   animation: cursor-blink 0.8s step-end infinite;
 }
 
-/* Paper texture via subtle noise gradient */
-.paper-texture {
-  background-color: var(--paper-bg);
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 1.75rem,
-      var(--paper-line) 1.75rem,
-      var(--paper-line) calc(1.75rem + 1px)
-    );
-  background-position-y: 0.875rem;
-}
-
-/* Hide scrollbar on the paper roll */
-.paper-texture {
-  scrollbar-width: none;
-}
-.paper-texture::-webkit-scrollbar {
-  display: none;
-}
-
-/* Book page — the focal typing surface */
+/* ===== Paper / book page ===== */
 .book-page {
   background-color: var(--paper-bg);
   background-image:
@@ -150,30 +136,61 @@ body {
     inset 0 0 60px rgba(0, 0, 0, 0.03);
   scrollbar-width: none;
 }
-.book-page::-webkit-scrollbar {
-  display: none;
+.book-page::-webkit-scrollbar { display: none; }
+
+/* ===== Stamp effect ===== */
+.stamp {
+  display: inline-block;
+  border: 3px solid var(--stamp);
+  color: var(--stamp);
+  padding: 2px 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-family: var(--font-typewriter);
+  letter-spacing: 0.1em;
+  transform: rotate(-3deg);
+  opacity: 0.85;
 }
 
-/* Fade-up animation for page elements */
+/* ===== Document border — thick double-line ===== */
+.doc-border {
+  border: 2px solid var(--border-color);
+  outline: 1px solid var(--border-color);
+  outline-offset: 3px;
+}
+
+/* ===== Dossier tab ===== */
+.dossier-tab {
+  background: var(--surface);
+  border: 2px solid var(--border-color);
+  border-bottom: none;
+  padding: 4px 16px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+/* ===== Animations ===== */
 @keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 .animate-fade-up {
   animation: fade-up 0.4s ease-out both;
 }
 
-/* Staggered children */
-.stagger-children > * {
-  animation: fade-up 0.35s ease-out both;
+@keyframes stamp-in {
+  0% { transform: rotate(-3deg) scale(2); opacity: 0; }
+  60% { transform: rotate(-3deg) scale(0.95); opacity: 1; }
+  100% { transform: rotate(-3deg) scale(1); opacity: 0.85; }
 }
+.animate-stamp {
+  animation: stamp-in 0.3s ease-out both;
+}
+
+/* Staggered children */
+.stagger-children > * { animation: fade-up 0.35s ease-out both; }
 .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
 .stagger-children > *:nth-child(2) { animation-delay: 50ms; }
 .stagger-children > *:nth-child(3) { animation-delay: 100ms; }
@@ -184,17 +201,19 @@ body {
 .stagger-children > *:nth-child(8) { animation-delay: 350ms; }
 .stagger-children > *:nth-child(9) { animation-delay: 400ms; }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--surface);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--border-hover);
+/* ===== Scrollbar — utilitarian ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: var(--border-color); }
+::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+/* ===== Noise texture overlay ===== */
+.noise-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

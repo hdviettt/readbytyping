@@ -18,32 +18,33 @@ export function ChapterNav({
   onNextPage,
 }: ChapterNavProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between border-2 border-border bg-surface px-4 py-2">
       <div>
-        <p className="text-sm text-muted">{bookTitle}</p>
-        <p className="font-medium font-typewriter">{chapterTitle}</p>
+        <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim">Document</p>
+        <p className="text-sm font-bold font-typewriter text-foreground">{chapterTitle}</p>
+        <p className="text-[10px] text-muted tracking-wider uppercase">{bookTitle}</p>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <button
           onClick={onPrevPage}
           disabled={!onPrevPage}
-          className="p-2 rounded-lg hover:bg-paper disabled:opacity-30 transition-colors"
+          className="w-7 h-7 flex items-center justify-center border-2 border-border hover:border-border-hover disabled:opacity-20 transition-colors"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <span className="text-sm font-medium font-typewriter min-w-[80px] text-center">
-          Page {currentPage} / {totalPages}
+        <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-muted min-w-[70px] text-center">
+          {currentPage} / {totalPages}
         </span>
         <button
           onClick={onNextPage}
           disabled={!onNextPage}
-          className="p-2 rounded-lg hover:bg-paper disabled:opacity-30 transition-colors"
+          className="w-7 h-7 flex items-center justify-center border-2 border-border hover:border-border-hover disabled:opacity-20 transition-colors"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
           </svg>
         </button>
       </div>

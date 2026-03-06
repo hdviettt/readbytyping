@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${courierPrime.variable} antialiased min-h-screen bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} ${courierPrime.variable} antialiased min-h-screen bg-background text-foreground noise-bg`}
       >
         <ThemeProvider>
           <StoreProvider>{children}</StoreProvider>

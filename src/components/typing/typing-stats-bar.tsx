@@ -11,39 +11,42 @@ export function TypingStatsBar({
   progress: { current: number; total: number; percentage: number };
 }) {
   return (
-    <div className="flex items-end justify-between">
-      <div className="flex items-end gap-8">
-        <div>
-          <p className="text-3xl font-bold font-typewriter text-accent leading-none">
-            {stats.wpm === 0 && stats.elapsedSeconds < 3 ? "--" : stats.wpm}
-          </p>
-          <p className="text-[10px] text-muted mt-1 uppercase tracking-widest">wpm</p>
-        </div>
-        <div>
-          <p className="text-3xl font-bold font-typewriter text-ink-correct leading-none">
-            {stats.accuracy}<span className="text-lg">%</span>
-          </p>
-          <p className="text-[10px] text-muted mt-1 uppercase tracking-widest">accuracy</p>
-        </div>
-        <div>
-          <p className="text-3xl font-bold font-typewriter text-foreground/60 leading-none">
-            {formatTime(stats.elapsedSeconds)}
-          </p>
-          <p className="text-[10px] text-muted mt-1 uppercase tracking-widest">time</p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <p className="text-sm font-typewriter text-muted">
-          {progress.current}<span className="text-dim"> / {progress.total}</span>
-        </p>
-        <div className="w-28 h-1.5 bg-border rounded-full overflow-hidden">
+    <div className="flex items-stretch gap-0 border-2 border-border bg-surface">
+      <StatField
+        label="WPM"
+        value={stats.wpm === 0 && stats.elapsedSeconds < 3 ? "--" : String(stats.wpm)}
+        highlight
+      />
+      <StatField
+        label="ACC"
+        value={`${stats.accuracy}%`}
+      />
+      <StatField
+        label="TIME"
+        value={formatTime(stats.elapsedSeconds)}
+      />
+      <div className="flex-1 border-l-2 border-border px-4 py-2 flex items-center justify-end gap-3">
+        <div className="w-24 h-2 bg-background border border-border">
           <div
-            className="h-full bg-accent rounded-full transition-all duration-300"
+            className="h-full bg-accent transition-all duration-300"
             style={{ width: `${progress.percentage}%` }}
           />
         </div>
+        <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-muted">
+          {progress.current}/{progress.total}
+        </span>
       </div>
+    </div>
+  );
+}
+
+function StatField({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+  return (
+    <div className="border-r-2 border-border px-4 py-2 min-w-[80px]">
+      <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim mb-0.5">{label}</p>
+      <p className={`text-xl font-bold font-typewriter leading-none ${highlight ? "text-accent" : "text-foreground"}`}>
+        {value}
+      </p>
     </div>
   );
 }
