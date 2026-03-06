@@ -20,6 +20,7 @@ import { TypingDisplay } from "./typing-display";
 import { TypingStatsBar } from "./typing-stats-bar";
 import { ChapterNav } from "./chapter-nav";
 import { CompletionModal } from "./completion-modal";
+import { StreakEffects } from "./streak-effects";
 
 export function TypingInterface({
   book,
@@ -60,6 +61,8 @@ export function TypingInterface({
     inputRef,
     focusInput,
   } = useTypingEngine(page?.content || "", startOffset);
+
+  const typingContainerRef = useRef<HTMLDivElement>(null);
 
   // Track peak WPM for session
   const peakWpmRef = useRef(0);
@@ -220,11 +223,16 @@ export function TypingInterface({
 
       <TypingStatsBar stats={stats} progress={pageProgress} />
 
-      <div className="relative" onClick={focusInput}>
+      <div className="relative" ref={typingContainerRef} onClick={focusInput}>
         <TypingDisplay
           text={page.content}
           getCharStatus={charStatuses}
           onClick={focusInput}
+          streak={state.streak}
+        />
+        <StreakEffects
+          streak={state.streak}
+          containerRef={typingContainerRef}
         />
         <textarea
           ref={inputRef}
@@ -236,7 +244,7 @@ export function TypingInterface({
       </div>
 
       {!state.startedAt && !state.isComplete && (
-        <p className="text-center text-sm text-zinc-500 animate-pulse">
+        <p className="text-center text-sm text-muted animate-pulse font-typewriter">
           Click the text and start typing...
         </p>
       )}
