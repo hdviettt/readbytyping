@@ -105,10 +105,8 @@ export function TypingDisplay({
       className="book-page relative cursor-text select-none overflow-hidden border-2 border-border"
       style={{ height: "24rem", fontSize: `${fontSize}px` }}
     >
-      {/* Red margin line */}
-      <div className="absolute left-10 top-0 bottom-0 w-px bg-paper-margin/40 z-0" />
       {/* Text content */}
-      <div className="pl-14 pr-8 py-6 pb-40 leading-[1.75rem] whitespace-pre-wrap relative z-10">
+      <div className="px-8 py-6 pb-40 leading-[1.75rem] whitespace-pre-wrap relative z-10">
         {text.split("").map((char, i) => (
           <CharSpan key={i} char={char} status={getCharStatus(i)} />
         ))}

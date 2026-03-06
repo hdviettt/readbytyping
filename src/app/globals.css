@@ -118,25 +118,9 @@ body {
   animation: cursor-blink 0.8s step-end infinite;
 }
 
-/* ===== Paper / book page — worn institutional form ===== */
+/* ===== Paper / book page — flat government form ===== */
 .book-page {
-  background-color: var(--paper-bg);
-  background-image:
-    /* Faint horizontal rules */
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 1.75rem,
-      var(--paper-line) 1.75rem,
-      var(--paper-line) calc(1.75rem + 1px)
-    ),
-    /* Subtle wear/grain */
-    radial-gradient(ellipse at 20% 50%, rgba(0,0,0,0.04) 0%, transparent 70%),
-    radial-gradient(ellipse at 80% 20%, rgba(0,0,0,0.03) 0%, transparent 60%);
-  background-position-y: 0.875rem;
-  box-shadow:
-    inset 0 0 40px rgba(0, 0, 0, 0.08),
-    inset 0 0 4px rgba(0, 0, 0, 0.05);
+  background: var(--paper-bg);
   scrollbar-width: none;
 }
 .book-page::-webkit-scrollbar { display: none; }
