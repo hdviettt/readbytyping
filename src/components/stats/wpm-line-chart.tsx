@@ -20,7 +20,7 @@ export function WpmLineChart({
 }) {
   if (data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[250px] text-sm text-zinc-500">
+      <div className="flex items-center justify-center h-[250px] text-sm text-muted">
         No data yet
       </div>
     );
@@ -29,25 +29,26 @@ export function WpmLineChart({
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-        <XAxis dataKey="t" stroke="#71717a" tick={{ fontSize: 12 }} />
-        <YAxis stroke="#71717a" tick={{ fontSize: 12 }} />
+        <CartesianGrid strokeDasharray="3 3" stroke="#3d3429" />
+        <XAxis dataKey="t" stroke="#8a7a66" tick={{ fontSize: 12 }} />
+        <YAxis stroke="#8a7a66" tick={{ fontSize: 12 }} />
         <Tooltip
           contentStyle={{
-            backgroundColor: "#18181b",
-            border: "1px solid #27272a",
+            backgroundColor: "#231e18",
+            border: "1px solid #3d3429",
             borderRadius: "8px",
             fontSize: 13,
+            color: "#e8dcc8",
           }}
           labelFormatter={(v) => `${v}s`}
         />
         <Line
           type="monotone"
           dataKey="wpm"
-          stroke="#3b82f6"
+          stroke="#c89b3c"
           strokeWidth={2}
           dot={false}
-          activeDot={{ r: 4 }}
+          activeDot={{ r: 4, fill: "#c89b3c" }}
         />
       </LineChart>
     </ResponsiveContainer>

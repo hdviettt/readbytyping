@@ -100,11 +100,11 @@ export default function LibraryPage() {
       <Nav />
       <main className="max-w-5xl mx-auto px-6 py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold">Library</h1>
+          <h1 className="text-2xl font-bold font-typewriter text-accent">Library</h1>
         </div>
 
         {error && (
-          <div className="p-3 text-sm text-red-400 bg-red-950/50 rounded-lg mb-6">
+          <div className="p-3 text-sm text-ink-error bg-ink-error/10 border border-ink-error/20 rounded-lg mb-6">
             {error}
           </div>
         )}
@@ -117,20 +117,19 @@ export default function LibraryPage() {
           }}
           onDragLeave={() => setDragActive(false)}
           onDrop={handleDrop}
-          className={cn(
-            "border-2 border-dashed rounded-xl p-8 text-center transition-colors mb-8",
+          className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors mb-8 ${
             dragActive
-              ? "border-blue-500 bg-blue-950/20"
-              : "border-zinc-700 hover:border-zinc-600"
-          )}
+              ? "border-accent bg-accent/10"
+              : "border-border hover:border-border-hover"
+          }`}
         >
           {uploading ? (
-            <p className="text-zinc-400">Parsing book...</p>
+            <p className="text-muted">Parsing book...</p>
           ) : (
             <div>
-              <p className="text-zinc-400 mb-2">
+              <p className="text-muted mb-2">
                 Drop an EPUB or PDF here, or{" "}
-                <label className="text-blue-400 hover:text-blue-300 cursor-pointer underline">
+                <label className="text-accent hover:text-accent-hover cursor-pointer underline">
                   browse
                   <input
                     type="file"
@@ -143,14 +142,14 @@ export default function LibraryPage() {
                   />
                 </label>
               </p>
-              <p className="text-xs text-zinc-600">EPUB or PDF</p>
+              <p className="text-xs text-dim">EPUB or PDF</p>
             </div>
           )}
         </div>
 
         {/* Book list */}
         {books.length === 0 ? (
-          <p className="text-center text-zinc-500 py-12">
+          <p className="text-center text-muted py-12">
             No books yet. Import one to start typing.
           </p>
         ) : (
@@ -167,41 +166,41 @@ export default function LibraryPage() {
               return (
                 <div
                   key={book.id}
-                  className="border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-600 transition-colors group"
+                  className="border border-border rounded-xl overflow-hidden hover:border-border-hover transition-colors group"
                 >
                   <button
                     onClick={() => router.push(`/book/${book.id}`)}
                     className="w-full text-left p-5 cursor-pointer"
                   >
-                    <h3 className="font-semibold truncate group-hover:text-blue-400 transition-colors">
+                    <h3 className="font-semibold truncate group-hover:text-accent transition-colors">
                       {book.title}
                     </h3>
                     {book.author && (
-                      <p className="text-sm text-zinc-500 mt-0.5 truncate">
+                      <p className="text-sm text-muted mt-0.5 truncate">
                         {book.author}
                       </p>
                     )}
-                    <div className="flex items-center gap-3 mt-3 text-xs text-zinc-500">
+                    <div className="flex items-center gap-3 mt-3 text-xs text-dim">
                       <span>{book.totalChapters} ch</span>
                       <span>{book.totalPages} pages</span>
                       <span className="uppercase">{book.fileType}</span>
                     </div>
                     {pct > 0 && (
                       <div className="mt-3">
-                        <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                        <div className="w-full h-1.5 bg-paper rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-blue-600 rounded-full"
+                            className="h-full bg-accent rounded-full"
                             style={{ width: `${pct}%` }}
                           />
                         </div>
-                        <p className="text-xs text-zinc-500 mt-1">{pct}%</p>
+                        <p className="text-xs text-muted mt-1">{pct}%</p>
                       </div>
                     )}
                   </button>
                   <div className="px-5 pb-4 flex justify-end">
                     <button
                       onClick={() => handleDelete(book.id)}
-                      className="text-xs text-zinc-600 hover:text-red-400 transition-colors"
+                      className="text-xs text-dim hover:text-ink-error transition-colors"
                     >
                       Remove
                     </button>
@@ -214,8 +213,4 @@ export default function LibraryPage() {
       </main>
     </>
   );
-}
-
-function cn(...classes: (string | boolean | undefined)[]) {
-  return classes.filter(Boolean).join(" ");
 }

@@ -49,21 +49,21 @@ export default function StatsPage() {
     <>
       <Nav />
       <main className="max-w-5xl mx-auto px-6 py-8">
-        <h1 className="text-2xl font-bold mb-8">Typing Stats</h1>
+        <h1 className="text-2xl font-bold font-typewriter text-accent mb-8">Typing Stats</h1>
 
         {totalSessions === 0 ? (
-          <p className="text-center text-zinc-500 py-12">
+          <p className="text-center text-muted py-12">
             No stats yet. Complete a page of typing to see your metrics.
           </p>
         ) : (
           <>
             {/* Summary cards */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-              <StatCard label="Avg WPM" value={avgWpm} color="text-blue-400" />
+              <StatCard label="Avg WPM" value={avgWpm} color="text-accent" />
               <StatCard
                 label="Avg Accuracy"
                 value={`${avgAccuracy}%`}
-                color="text-green-400"
+                color="text-ink-correct"
               />
               <StatCard label="Sessions" value={totalSessions} />
               <StatCard
@@ -78,8 +78,8 @@ export default function StatsPage() {
 
             {/* Latest session WPM chart */}
             {latestSession && latestSession.wpmSamples.length > 0 && (
-              <div className="mb-8 p-6 bg-zinc-900 rounded-xl border border-zinc-800">
-                <h2 className="text-lg font-semibold mb-4">
+              <div className="mb-8 p-6 bg-surface rounded-xl border border-border">
+                <h2 className="text-lg font-semibold font-typewriter mb-4">
                   Latest Session WPM
                 </h2>
                 <WpmLineChart data={latestSession.wpmSamples} />
@@ -87,20 +87,20 @@ export default function StatsPage() {
             )}
 
             {/* Key heatmap */}
-            <div className="mb-8 p-6 bg-zinc-900 rounded-xl border border-zinc-800">
-              <h2 className="text-lg font-semibold mb-4">
+            <div className="mb-8 p-6 bg-surface rounded-xl border border-border">
+              <h2 className="text-lg font-semibold font-typewriter mb-4">
                 Key Accuracy Heatmap
               </h2>
               <KeyHeatmap stats={keystrokeStats} />
             </div>
 
             {/* Session history */}
-            <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
-              <h2 className="text-lg font-semibold mb-4">Session History</h2>
+            <div className="p-6 bg-surface rounded-xl border border-border">
+              <h2 className="text-lg font-semibold font-typewriter mb-4">Session History</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-zinc-800 text-zinc-500">
+                    <tr className="border-b border-border text-muted">
                       <th className="text-left py-3 px-3 font-medium">Book</th>
                       <th className="text-right py-3 px-3 font-medium">WPM</th>
                       <th className="text-right py-3 px-3 font-medium">
@@ -121,24 +121,24 @@ export default function StatsPage() {
                     {sessions.slice(0, 30).map((s) => (
                       <tr
                         key={s.id}
-                        className="border-b border-zinc-800/50 hover:bg-zinc-800/30"
+                        className="border-b border-border/50 hover:bg-paper/30"
                       >
                         <td className="py-3 px-3 truncate max-w-[200px]">
                           {s.bookTitle}
                         </td>
-                        <td className="py-3 px-3 text-right font-medium">
+                        <td className="py-3 px-3 text-right font-medium font-typewriter">
                           {Math.round(s.avgWpm)}
                         </td>
-                        <td className="py-3 px-3 text-right">
+                        <td className="py-3 px-3 text-right font-typewriter">
                           {Math.round(s.peakWpm)}
                         </td>
-                        <td className="py-3 px-3 text-right">
+                        <td className="py-3 px-3 text-right font-typewriter">
                           {Math.round(s.accuracy * 100)}%
                         </td>
-                        <td className="py-3 px-3 text-right">
+                        <td className="py-3 px-3 text-right font-typewriter">
                           {formatTime(s.durationSeconds)}
                         </td>
-                        <td className="py-3 px-3 text-right">
+                        <td className="py-3 px-3 text-right font-typewriter">
                           {s.totalCharactersTyped}
                         </td>
                       </tr>
@@ -164,11 +164,11 @@ function StatCard({
   color?: string;
 }) {
   return (
-    <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800">
-      <p className={`text-2xl font-bold ${color || "text-zinc-200"}`}>
+    <div className="p-4 bg-surface rounded-xl border border-border">
+      <p className={`text-2xl font-bold font-typewriter ${color || "text-ink"}`}>
         {value}
       </p>
-      <p className="text-xs text-zinc-500 mt-1">{label}</p>
+      <p className="text-xs text-muted mt-1">{label}</p>
     </div>
   );
 }

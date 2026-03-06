@@ -10,7 +10,7 @@ const CharSpan = memo(function CharSpan({
   char: string;
   status: CharStatus;
 }) {
-  const base = "font-mono text-lg";
+  const base = "font-typewriter text-lg";
 
   if (char === "\n") {
     return (
@@ -18,12 +18,12 @@ const CharSpan = memo(function CharSpan({
         <span
           className={`${base} ${
             status === "correct"
-              ? "text-green-400"
+              ? "text-ink-correct"
               : status === "incorrect"
-                ? "bg-red-500/30 text-red-400"
+                ? "bg-ink-error/20 text-ink-error"
                 : status === "current"
-                  ? "bg-blue-500/30"
-                  : "text-zinc-600"
+                  ? "bg-ink-current/20"
+                  : "text-dim"
           }`}
         >
           {"\u21B5"}
@@ -36,16 +36,16 @@ const CharSpan = memo(function CharSpan({
   let cls = base;
   switch (status) {
     case "correct":
-      cls += " text-green-400";
+      cls += " text-ink-correct";
       break;
     case "incorrect":
-      cls += " bg-red-500/30 text-red-400 rounded-sm";
+      cls += " bg-ink-error/20 text-ink-error rounded-sm";
       break;
     case "current":
-      cls += " bg-blue-500/30 border-l-2 border-blue-400";
+      cls += " bg-ink-current/25 border-l-2 border-ink-current";
       break;
     case "upcoming":
-      cls += " text-zinc-500";
+      cls += " text-dim";
       break;
   }
 
@@ -56,15 +56,42 @@ export function TypingDisplay({
   text,
   getCharStatus,
   onClick,
+  streak = 0,
 }: {
   text: string;
   getCharStatus: (index: number) => CharStatus;
   onClick: () => void;
+  streak?: number;
 }) {
+  const glowColor =
+    streak >= 100
+      ? "rgba(196, 90, 74, 0.35)"
+      : streak >= 50
+        ? "rgba(200, 155, 60, 0.35)"
+        : streak >= 25
+          ? "rgba(200, 155, 60, 0.25)"
+          : streak >= 10
+            ? "rgba(200, 155, 60, 0.15)"
+            : "none";
+
+  const borderClass =
+    streak >= 100
+      ? "border-ink-error/40"
+      : streak >= 50
+        ? "border-accent/50"
+        : streak >= 25
+          ? "border-accent/35"
+          : streak >= 10
+            ? "border-accent/20"
+            : "border-border";
+
   return (
     <div
       onClick={onClick}
-      className="font-mono text-lg leading-relaxed whitespace-pre-wrap cursor-text select-none p-6 bg-zinc-900 rounded-xl border border-zinc-800 min-h-[300px]"
+      className={`font-typewriter text-lg leading-relaxed whitespace-pre-wrap cursor-text select-none p-6 bg-surface rounded-xl border min-h-[300px] transition-all duration-300 ${borderClass}`}
+      style={{
+        boxShadow: glowColor !== "none" ? `0 0 20px ${glowColor}, inset 0 0 20px ${glowColor}` : "none",
+      }}
     >
       {text.split("").map((char, i) => (
         <CharSpan key={i} char={char} status={getCharStatus(i)} />

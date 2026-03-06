@@ -8,9 +8,9 @@ export function Nav() {
   const pathname = usePathname();
 
   return (
-    <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
+    <header className="border-b border-border bg-surface/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-        <Link href="/" className="font-bold text-lg">
+        <Link href="/" className="font-typewriter font-bold text-lg text-accent tracking-wide">
           BookTyper
         </Link>
         <nav className="flex items-center gap-1">
@@ -19,8 +19,8 @@ export function Nav() {
             className={cn(
               "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
               pathname === "/"
-                ? "bg-zinc-800 text-white"
-                : "text-zinc-400 hover:text-white"
+                ? "bg-paper text-foreground"
+                : "text-muted hover:text-foreground"
             )}
           >
             Library
@@ -30,8 +30,8 @@ export function Nav() {
             className={cn(
               "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
               pathname === "/stats"
-                ? "bg-zinc-800 text-white"
-                : "text-zinc-400 hover:text-white"
+                ? "bg-paper text-foreground"
+                : "text-muted hover:text-foreground"
             )}
           >
             Stats

@@ -35,7 +35,7 @@ export default function BookChaptersPage() {
       <main className="max-w-3xl mx-auto px-6 py-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-300 mb-6"
+          className="inline-flex items-center gap-1 text-sm text-muted hover:text-foreground mb-6"
         >
           <svg
             className="w-4 h-4"
@@ -54,11 +54,11 @@ export default function BookChaptersPage() {
         </Link>
 
         <div className="mb-8">
-          <h1 className="text-2xl font-bold">{book.title}</h1>
+          <h1 className="text-2xl font-bold font-typewriter text-accent">{book.title}</h1>
           {book.author && (
-            <p className="text-zinc-500 mt-1">{book.author}</p>
+            <p className="text-muted mt-1">{book.author}</p>
           )}
-          <div className="flex items-center gap-4 mt-3 text-sm text-zinc-500">
+          <div className="flex items-center gap-4 mt-3 text-sm text-muted">
             <span>{book.totalChapters} chapters</span>
             <span>{book.totalPages} pages</span>
           </div>
@@ -68,10 +68,10 @@ export default function BookChaptersPage() {
         {progress && progress.completedPages < book.totalPages && (
           <Link
             href={`/book/${book.id}/type?chapter=${progress.chapterIndex}`}
-            className="flex items-center justify-between w-full mb-6 px-5 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors"
+            className="flex items-center justify-between w-full mb-6 px-5 py-4 bg-accent hover:bg-accent-hover text-background rounded-xl font-medium transition-colors"
           >
             <span>Resume typing</span>
-            <span className="text-sm text-blue-200">
+            <span className="text-sm opacity-80">
               {Math.round((completedPages / book.totalPages) * 100)}% complete
             </span>
           </Link>
@@ -98,14 +98,14 @@ export default function BookChaptersPage() {
               <Link
                 key={ci}
                 href={`/book/${book.id}/type?chapter=${ci}`}
-                className="flex items-center gap-4 p-4 border border-zinc-800 rounded-xl hover:border-zinc-600 transition-colors group"
+                className="flex items-center gap-4 p-4 border border-border rounded-xl hover:border-border-hover transition-colors group"
               >
                 {/* Chapter number / check */}
                 <div
                   className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 ${
                     isDone
-                      ? "bg-green-600/20 text-green-400"
-                      : "bg-zinc-800 text-zinc-400 group-hover:text-white"
+                      ? "bg-ink-correct/20 text-ink-correct"
+                      : "bg-paper text-muted group-hover:text-foreground"
                   }`}
                 >
                   {isDone ? (
@@ -128,10 +128,10 @@ export default function BookChaptersPage() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate group-hover:text-blue-400 transition-colors">
+                  <p className="font-medium text-sm truncate group-hover:text-accent transition-colors">
                     {chapter.title}
                   </p>
-                  <p className="text-xs text-zinc-500 mt-0.5">
+                  <p className="text-xs text-muted mt-0.5">
                     {chapterPageCount} pages
                   </p>
                 </div>
@@ -139,20 +139,20 @@ export default function BookChaptersPage() {
                 {/* Progress bar */}
                 {pct > 0 && !isDone && (
                   <div className="w-20 shrink-0">
-                    <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-paper rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-blue-600 rounded-full"
+                        className="h-full bg-accent rounded-full"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <p className="text-[10px] text-zinc-500 text-right mt-0.5">
+                    <p className="text-[10px] text-muted text-right mt-0.5">
                       {pct}%
                     </p>
                   </div>
                 )}
 
                 <svg
-                  className="w-5 h-5 text-zinc-600 group-hover:text-zinc-400 shrink-0"
+                  className="w-5 h-5 text-dim group-hover:text-muted shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

@@ -10,11 +10,11 @@ const ROWS = [
 ];
 
 function accuracyColor(acc: number): string {
-  if (acc >= 0.98) return "bg-green-600/50";
-  if (acc >= 0.95) return "bg-green-500/30";
-  if (acc >= 0.9) return "bg-yellow-500/30";
-  if (acc >= 0.8) return "bg-orange-500/30";
-  return "bg-red-500/40";
+  if (acc >= 0.98) return "bg-ink-correct/50";
+  if (acc >= 0.95) return "bg-ink-correct/30";
+  if (acc >= 0.9) return "bg-accent/30";
+  if (acc >= 0.8) return "bg-accent/20";
+  return "bg-ink-error/40";
 }
 
 export function KeyHeatmap({ stats }: { stats: KeystrokeStat[] }) {
@@ -22,7 +22,7 @@ export function KeyHeatmap({ stats }: { stats: KeystrokeStat[] }) {
 
   if (stats.length === 0) {
     return (
-      <p className="text-center text-sm text-zinc-500 py-8">
+      <p className="text-center text-sm text-muted py-8">
         Type through some text to see your key accuracy
       </p>
     );
@@ -46,8 +46,8 @@ export function KeyHeatmap({ stats }: { stats: KeystrokeStat[] }) {
             return (
               <div
                 key={key}
-                className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-mono border border-zinc-700 ${
-                  acc !== null ? accuracyColor(acc) : "bg-zinc-800/50"
+                className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-typewriter border border-border ${
+                  acc !== null ? accuracyColor(acc) : "bg-paper/50"
                 }`}
                 title={
                   stat
@@ -61,15 +61,15 @@ export function KeyHeatmap({ stats }: { stats: KeystrokeStat[] }) {
           })}
         </div>
       ))}
-      <div className="flex items-center justify-center gap-4 mt-4 text-xs text-zinc-500">
+      <div className="flex items-center justify-center gap-4 mt-4 text-xs text-muted">
         <span className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-green-600/50" /> 98%+
+          <span className="w-3 h-3 rounded bg-ink-correct/50" /> 98%+
         </span>
         <span className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-yellow-500/30" /> 90-95%
+          <span className="w-3 h-3 rounded bg-accent/30" /> 90-95%
         </span>
         <span className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-red-500/40" /> &lt;80%
+          <span className="w-3 h-3 rounded bg-ink-error/40" /> &lt;80%
         </span>
       </div>
     </div>

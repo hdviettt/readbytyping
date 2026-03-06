@@ -11,34 +11,34 @@ export function TypingStatsBar({
   progress: { current: number; total: number; percentage: number };
 }) {
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-zinc-900 rounded-xl border border-zinc-800">
+    <div className="flex items-center justify-between px-4 py-3 bg-surface rounded-xl border border-border">
       <div className="flex items-center gap-6">
         <div className="text-center">
-          <p className="text-2xl font-bold text-blue-400">{stats.wpm}</p>
-          <p className="text-xs text-zinc-500">WPM</p>
+          <p className="text-2xl font-bold font-typewriter text-accent">{stats.wpm}</p>
+          <p className="text-xs text-muted">WPM</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-bold text-green-400">{stats.accuracy}%</p>
-          <p className="text-xs text-zinc-500">Accuracy</p>
+          <p className="text-2xl font-bold font-typewriter text-ink-correct">{stats.accuracy}%</p>
+          <p className="text-xs text-muted">Accuracy</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-bold text-zinc-300">
+          <p className="text-2xl font-bold font-typewriter text-ink">
             {formatTime(stats.elapsedSeconds)}
           </p>
-          <p className="text-xs text-zinc-500">Time</p>
+          <p className="text-xs text-muted">Time</p>
         </div>
       </div>
 
       <div className="flex items-center gap-3">
         <div className="text-right">
-          <p className="text-sm font-medium">{progress.percentage}%</p>
-          <p className="text-xs text-zinc-500">
+          <p className="text-sm font-medium font-typewriter">{progress.percentage}%</p>
+          <p className="text-xs text-muted">
             {progress.current} / {progress.total}
           </p>
         </div>
-        <div className="w-24 h-2 bg-zinc-700 rounded-full overflow-hidden">
+        <div className="w-24 h-2 bg-paper rounded-full overflow-hidden">
           <div
-            className="h-full bg-blue-600 rounded-full transition-all duration-300"
+            className="h-full bg-accent rounded-full transition-all duration-300"
             style={{ width: `${progress.percentage}%` }}
           />
         </div>
