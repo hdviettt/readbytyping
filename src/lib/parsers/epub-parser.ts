@@ -129,13 +129,13 @@ function htmlToPlainText(html: string): string {
   text = text.replace(/&#0?39;/g, "'");
   text = text.replace(/&apos;/g, "'");
   text = text.replace(/&nbsp;/g, " ");
-  text = text.replace(/&mdash;/g, "\u2014");
-  text = text.replace(/&ndash;/g, "\u2013");
-  text = text.replace(/&hellip;/g, "\u2026");
-  text = text.replace(/&lsquo;/g, "\u2018");
-  text = text.replace(/&rsquo;/g, "\u2019");
-  text = text.replace(/&ldquo;/g, "\u201C");
-  text = text.replace(/&rdquo;/g, "\u201D");
+  text = text.replace(/&mdash;/g, "-");
+  text = text.replace(/&ndash;/g, "-");
+  text = text.replace(/&hellip;/g, "...");
+  text = text.replace(/&lsquo;/g, "'");
+  text = text.replace(/&rsquo;/g, "'");
+  text = text.replace(/&ldquo;/g, '"');
+  text = text.replace(/&rdquo;/g, '"');
   text = text.replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)));
   text = text.replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)));
   // Collapse whitespace
