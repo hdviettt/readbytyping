@@ -109,32 +109,46 @@ const KeyCap = memo(function KeyCap({
   const isLetter = keyDef.key.length === 1 && /[a-z]/.test(keyDef.key);
   const display = keyDef.label ?? (isLetter ? keyDef.key.toUpperCase() : keyDef.key);
   const isShiftKey = keyDef.key === "ShiftLeft" || keyDef.key === "ShiftRight";
+  const isSpace = keyDef.key === " ";
   const highlight = isExpected || (isShiftKey && isShiftExpected);
 
-  let bgCls = "bg-key-bg border-key-border text-key-text";
+  // Pressed state
+  const pressed = !!flashState;
+
+  // Colors
+  let textCls = "text-key-text";
+  let borderColor = "var(--key-border)";
+  let bgColor = "var(--key-bg)";
 
   if (flashState === "correct") {
-    bgCls = "bg-ink-correct/25 border-ink-correct/50 text-ink-correct";
+    textCls = "text-ink-correct";
+    borderColor = "var(--ink-correct)";
+    bgColor = "rgba(106, 154, 80, 0.15)";
   } else if (flashState === "incorrect") {
-    bgCls = "bg-ink-error/25 border-ink-error/50 text-ink-error";
+    textCls = "text-ink-error";
+    borderColor = "var(--ink-error)";
+    bgColor = "rgba(196, 74, 58, 0.15)";
   } else if (highlight) {
-    bgCls = "bg-accent/20 border-accent/50 text-accent";
+    textCls = "text-accent";
+    borderColor = "var(--accent)";
+    bgColor = "rgba(184, 164, 76, 0.12)";
   }
 
   return (
     <div
-      className={`${bgCls} border-2 flex items-center justify-center font-typewriter select-none transition-all duration-75 ${
-        flashState ? "translate-y-px" : ""
-      }`}
+      className={`${textCls} flex items-center justify-center font-typewriter select-none transition-all duration-75`}
       style={{
-        width: `${keyDef.w * 2.4}rem`,
-        height: "2.2rem",
-        boxShadow: flashState
-          ? "none"
-          : "0 2px 0 var(--key-shadow), inset 0 -1px 0 rgba(0,0,0,0.2)",
+        width: `${keyDef.w * 2.6}rem`,
+        height: isSpace ? "2rem" : "2.4rem",
+        background: bgColor,
+        border: `1px solid ${borderColor}`,
+        boxShadow: pressed
+          ? `inset 0 1px 3px rgba(0,0,0,0.4)`
+          : `0 2px 0 var(--key-shadow), inset 0 1px 0 rgba(255,255,255,0.04)`,
+        transform: pressed ? "translateY(2px)" : "none",
       }}
     >
-      <span className={`${keyDef.label ? "text-[8px] tracking-[0.15em]" : "text-[11px]"} font-bold`}>
+      <span className={`${keyDef.label ? "text-[8px] tracking-[0.15em]" : "text-xs"} font-bold`}>
         {display}
       </span>
     </div>
@@ -175,13 +189,22 @@ export function TypewriterKeyboard({
   const shiftNeeded = expectedChar ? isShiftNeeded(expectedChar) : false;
 
   return (
-    <div className="border-2 border-border bg-surface p-3">
-      <div className="flex flex-col items-center gap-[3px]">
+    <div
+      className="border-2 border-t-0 border-border"
+      style={{
+        background: "linear-gradient(180deg, var(--surface) 0%, var(--background) 100%)",
+        padding: "12px 16px 16px",
+      }}
+    >
+      {/* Metal tray top edge */}
+      <div className="h-px bg-border-hover/30 mb-3" />
+
+      <div className="flex flex-col items-center gap-[2px]">
         {ROWS.map((row, ri) => (
           <div
             key={ri}
-            className="flex gap-[3px]"
-            style={{ paddingLeft: ri === 1 ? "0.6rem" : ri === 2 ? "0.3rem" : 0 }}
+            className="flex gap-[2px]"
+            style={{ paddingLeft: ri === 1 ? "0.8rem" : ri === 2 ? "0.4rem" : 0 }}
           >
             {row.map((keyDef, ki) => (
               <KeyCap
