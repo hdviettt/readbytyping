@@ -253,7 +253,7 @@ export function TypingInterface({
   const expectedChar = state.isComplete ? null : state.text[state.cursor] ?? null;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-4" onClick={focusInput}>
+    <div className="max-w-5xl mx-auto space-y-0" onClick={focusInput}>
       {/* Chapter info */}
       <ChapterNav
         bookTitle={book.title}
@@ -307,8 +307,8 @@ export function TypingInterface({
           />
         )}
         {isPaused && (
-          <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/20 rounded-lg pointer-events-none">
-            <span className="text-lg font-typewriter text-paper-text/60 animate-pulse">
+          <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/30 pointer-events-none">
+            <span className="stamp text-xl animate-pulse">
               Paused
             </span>
           </div>
@@ -331,8 +331,8 @@ export function TypingInterface({
       )}
 
       {!state.startedAt && !state.isComplete && (
-        <p className="text-center text-sm text-muted animate-pulse font-typewriter mt-2">
-          Click and start typing...
+        <p className="text-center text-[10px] text-muted animate-pulse font-typewriter mt-3 uppercase tracking-[0.2em]">
+          Click here and begin typing to proceed
         </p>
       )}
 

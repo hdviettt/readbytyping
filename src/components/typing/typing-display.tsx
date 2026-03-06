@@ -40,10 +40,10 @@ const CharSpan = memo(function CharSpan({
       cls += "text-paper-text";
       break;
     case "incorrect":
-      cls += "text-ink-error bg-ink-error/12 rounded-sm";
+      cls += "text-ink-error bg-ink-error/15";
       break;
     case "current":
-      cls += "text-paper-text bg-accent/15 border-b-2 border-paper-text typewriter-cursor";
+      cls += "text-paper-text bg-accent/20 border-b-2 border-paper-text typewriter-cursor";
       break;
     case "upcoming":
       cls += "text-paper-upcoming";
@@ -86,7 +86,6 @@ export function TypingDisplay({
     const cursorRelY = cursorRect.top - containerRect.top;
     const h = containerRect.height;
 
-    // Skip scroll if cursor is in the visible comfort zone (20%-60%)
     if (cursorRelY > h * 0.2 && cursorRelY < h * 0.6) return;
 
     const targetY = h * 0.4;
@@ -103,11 +102,13 @@ export function TypingDisplay({
     <div
       onClick={onClick}
       ref={scrollRef}
-      className="book-page relative cursor-text select-none overflow-hidden rounded-lg"
+      className="book-page relative cursor-text select-none overflow-hidden border-2 border-border"
       style={{ height: "24rem", fontSize: `${fontSize}px` }}
     >
+      {/* Red margin line */}
+      <div className="absolute left-10 top-0 bottom-0 w-px bg-paper-margin/40 z-0" />
       {/* Text content */}
-      <div className="px-12 py-8 pb-40 leading-[1.75rem] whitespace-pre-wrap relative z-10">
+      <div className="pl-14 pr-8 py-6 pb-40 leading-[1.75rem] whitespace-pre-wrap relative z-10">
         {text.split("").map((char, i) => (
           <CharSpan key={i} char={char} status={getCharStatus(i)} />
         ))}

@@ -29,7 +29,7 @@ const ROWS = [
     { key: "i", w: 1 },
     { key: "o", w: 1 },
     { key: "p", w: 1 },
-    { key: "Backspace", label: "Bksp", w: 1.4 },
+    { key: "Backspace", label: "DEL", w: 1.4 },
   ],
   [
     { key: "a", w: 1 },
@@ -41,10 +41,10 @@ const ROWS = [
     { key: "j", w: 1 },
     { key: "k", w: 1 },
     { key: "l", w: 1 },
-    { key: "Enter", label: "Ret", w: 1.4 },
+    { key: "Enter", label: "RET", w: 1.4 },
   ],
   [
-    { key: "ShiftLeft", label: "Shift", w: 1.4 },
+    { key: "ShiftLeft", label: "SHIFT", w: 1.4 },
     { key: "z", w: 1 },
     { key: "x", w: 1 },
     { key: "c", w: 1 },
@@ -52,7 +52,7 @@ const ROWS = [
     { key: "b", w: 1 },
     { key: "n", w: 1 },
     { key: "m", w: 1 },
-    { key: "ShiftRight", label: "Shift", w: 1.4 },
+    { key: "ShiftRight", label: "SHIFT", w: 1.4 },
   ],
   [
     { key: ",", w: 1 },
@@ -111,28 +111,30 @@ const KeyCap = memo(function KeyCap({
   const isShiftKey = keyDef.key === "ShiftLeft" || keyDef.key === "ShiftRight";
   const highlight = isExpected || (isShiftKey && isShiftExpected);
 
-  let cls = "bg-key-bg border-key-border text-key-text";
+  let bgCls = "bg-key-bg border-key-border text-key-text";
 
   if (flashState === "correct") {
-    cls = "bg-ink-correct/20 border-ink-correct/40 text-ink-correct";
+    bgCls = "bg-ink-correct/25 border-ink-correct/50 text-ink-correct";
   } else if (flashState === "incorrect") {
-    cls = "bg-ink-error/20 border-ink-error/40 text-ink-error";
+    bgCls = "bg-ink-error/25 border-ink-error/50 text-ink-error";
   } else if (highlight) {
-    cls = "bg-accent/15 border-accent/40 text-accent";
+    bgCls = "bg-accent/20 border-accent/50 text-accent";
   }
 
   return (
     <div
-      className={`${cls} border rounded-md flex items-center justify-center font-typewriter select-none transition-all duration-75 ${
+      className={`${bgCls} border-2 flex items-center justify-center font-typewriter select-none transition-all duration-75 ${
         flashState ? "translate-y-px" : ""
       }`}
       style={{
         width: `${keyDef.w * 2.4}rem`,
         height: "2.2rem",
-        boxShadow: "0 1px 0 var(--key-shadow)",
+        boxShadow: flashState
+          ? "none"
+          : "0 2px 0 var(--key-shadow), inset 0 -1px 0 rgba(0,0,0,0.2)",
       }}
     >
-      <span className={`${keyDef.label ? "text-[9px]" : "text-xs"} font-bold`}>
+      <span className={`${keyDef.label ? "text-[8px] tracking-[0.15em]" : "text-[11px]"} font-bold`}>
         {display}
       </span>
     </div>
@@ -173,24 +175,26 @@ export function TypewriterKeyboard({
   const shiftNeeded = expectedChar ? isShiftNeeded(expectedChar) : false;
 
   return (
-    <div className="flex flex-col items-center gap-1 py-3">
-      {ROWS.map((row, ri) => (
-        <div
-          key={ri}
-          className="flex gap-1"
-          style={{ paddingLeft: ri === 1 ? "0.6rem" : ri === 2 ? "0.3rem" : 0 }}
-        >
-          {row.map((keyDef, ki) => (
-            <KeyCap
-              key={ki}
-              keyDef={keyDef}
-              isExpected={expectedKey === keyDef.key}
-              isShiftExpected={shiftNeeded}
-              flashState={flashKey === keyDef.key ? flashState : null}
-            />
-          ))}
-        </div>
-      ))}
+    <div className="border-2 border-border bg-surface p-3">
+      <div className="flex flex-col items-center gap-[3px]">
+        {ROWS.map((row, ri) => (
+          <div
+            key={ri}
+            className="flex gap-[3px]"
+            style={{ paddingLeft: ri === 1 ? "0.6rem" : ri === 2 ? "0.3rem" : 0 }}
+          >
+            {row.map((keyDef, ki) => (
+              <KeyCap
+                key={ki}
+                keyDef={keyDef}
+                isExpected={expectedKey === keyDef.key}
+                isShiftExpected={shiftNeeded}
+                flashState={flashKey === keyDef.key ? flashState : null}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
