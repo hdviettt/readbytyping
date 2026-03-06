@@ -247,7 +247,6 @@ export async function updateProfile(updates: { displayName?: string | null; avat
 
   const { error } = await supabase
     .from("profiles")
-    .update(row)
-    .eq("id", user.id);
+    .upsert({ id: user.id, ...row });
   if (error) console.error("updateProfile:", error);
 }
