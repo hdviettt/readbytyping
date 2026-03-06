@@ -1,13 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
+import { useAuth } from "@/hooks/use-auth";
 
 export function Nav() {
   const pathname = usePathname();
+  const router = useRouter();
   const { theme, toggle } = useTheme();
+  const { user, isAnonymous, signOut } = useAuth();
+
+  const email = user?.email;
+
+  async function handleSignOut() {
+    await signOut();
+    router.push("/login");
+  }
 
   return (
     <header className="border-b border-border bg-surface/80 backdrop-blur-sm sticky top-0 z-50">
@@ -68,6 +78,34 @@ export function Nav() {
               </svg>
             )}
           </button>
+
+          {user && (
+            <div className="ml-2 flex items-center gap-2 border-l border-border pl-3">
+              {isAnonymous ? (
+                <Link
+                  href="/signup"
+                  className="text-xs text-accent hover:text-accent-hover font-medium"
+                >
+                  Create account
+                </Link>
+              ) : (
+                <span className="text-xs text-muted truncate max-w-[120px]" title={email ?? undefined}>
+                  {email}
+                </span>
+              )}
+              <button
+                onClick={handleSignOut}
+                className="p-1.5 rounded-lg text-muted hover:text-foreground hover:bg-paper transition-colors"
+                title="Sign out"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
         </nav>
       </div>
     </header>

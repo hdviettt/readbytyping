@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
 
@@ -11,31 +11,13 @@ export function useAuth() {
   useEffect(() => {
     const supabase = createClient();
 
-    // Check current session
-    supabase.auth.getUser().then(({ data, error: getUserError }) => {
-      if (getUserError) {
-        console.error("getUser failed:", getUserError);
-      }
-      if (data.user) {
-        setUser(data.user);
-        setLoading(false);
-      } else {
-        // Auto sign in anonymously
-        supabase.auth.signInAnonymously().then(({ data, error }) => {
-          if (error) {
-            console.error("Anonymous sign-in failed:", error);
-          } else {
-            setUser(data.user);
-          }
-          setLoading(false);
-        });
-      }
-    }).catch((err) => {
-      console.error("Auth init failed:", err);
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user ?? null);
+      setLoading(false);
+    }).catch(() => {
       setLoading(false);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
@@ -43,5 +25,17 @@ export function useAuth() {
     return () => subscription.unsubscribe();
   }, []);
 
-  return { user, loading };
+  const signOut = useCallback(async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setUser(null);
+  }, []);
+
+  return {
+    user,
+    loading,
+    signOut,
+    isAnonymous: user?.is_anonymous ?? false,
+    isAuthenticated: !!user && !user.is_anonymous,
+  };
 }
