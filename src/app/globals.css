@@ -21,12 +21,12 @@
   /* Stamp red */
   --stamp: #c44a3a;
   --stamp-dim: #8a3228;
-  /* Paper sheet */
-  --paper-bg: #e8e0ca;
-  --paper-text: #1a1a12;
-  --paper-upcoming: #9a9480;
-  --paper-line: #d8d0b8;
-  --paper-margin: #c46060;
+  /* Paper sheet — dingy institutional form, not clean stationery */
+  --paper-bg: #c8c4a8;
+  --paper-text: #1a1c12;
+  --paper-upcoming: #8a8870;
+  --paper-line: #b8b498;
+  --paper-margin: #9a4040;
   --paper-shadow: rgba(0, 0, 0, 0.5);
   /* Keyboard */
   --key-bg: #222620;
@@ -57,11 +57,11 @@
   --stamp: #a83a2a;
   --stamp-dim: #c86050;
   /* Paper sheet */
-  --paper-bg: #f8f4e4;
-  --paper-text: #1a1a12;
-  --paper-upcoming: #a0988a;
-  --paper-line: #ece4d0;
-  --paper-margin: #c46060;
+  --paper-bg: #d8d4b8;
+  --paper-text: #1a1c12;
+  --paper-upcoming: #8a8674;
+  --paper-line: #cac6a8;
+  --paper-margin: #9a4040;
   --paper-shadow: rgba(0, 0, 0, 0.12);
   /* Keyboard */
   --key-bg: #d0caba;
@@ -118,22 +118,25 @@ body {
   animation: cursor-blink 0.8s step-end infinite;
 }
 
-/* ===== Paper / book page ===== */
+/* ===== Paper / book page — worn institutional form ===== */
 .book-page {
   background-color: var(--paper-bg);
   background-image:
+    /* Faint horizontal rules */
     repeating-linear-gradient(
       0deg,
       transparent,
       transparent 1.75rem,
       var(--paper-line) 1.75rem,
       var(--paper-line) calc(1.75rem + 1px)
-    );
+    ),
+    /* Subtle wear/grain */
+    radial-gradient(ellipse at 20% 50%, rgba(0,0,0,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse at 80% 20%, rgba(0,0,0,0.03) 0%, transparent 60%);
   background-position-y: 0.875rem;
   box-shadow:
-    0 4px 24px var(--paper-shadow),
-    0 1px 4px var(--paper-shadow),
-    inset 0 0 60px rgba(0, 0, 0, 0.03);
+    inset 0 0 40px rgba(0, 0, 0, 0.08),
+    inset 0 0 4px rgba(0, 0, 0, 0.05);
   scrollbar-width: none;
 }
 .book-page::-webkit-scrollbar { display: none; }
