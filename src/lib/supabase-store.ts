@@ -210,3 +210,44 @@ export async function updateKeystrokeStats(
     if (error) console.error("updateKeystrokeStats:", error);
   }
 }
+
+// ── Profile ─────────────────────────────────────────────
+
+export interface Profile {
+  id: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export async function getProfile(): Promise<Profile | null> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .single();
+
+  if (error) { console.error("getProfile:", error); return null; }
+  return {
+    id: data.id,
+    displayName: data.display_name,
+    avatarUrl: data.avatar_url,
+    createdAt: new Date(data.created_at).getTime(),
+    updatedAt: new Date(data.updated_at).getTime(),
+  };
+}
+
+export async function updateProfile(updates: { displayName?: string | null; avatarUrl?: string | null }): Promise<void> {
+  const row: Record<string, unknown> = {};
+  if (updates.displayName !== undefined) row.display_name = updates.displayName;
+  if (updates.avatarUrl !== undefined) row.avatar_url = updates.avatarUrl;
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { error } = await supabase
+    .from("profiles")
+    .update(row)
+    .eq("id", user.id);
+  if (error) console.error("updateProfile:", error);
+}
