@@ -86,7 +86,7 @@ export function TypingInterface({
     setIsPaused(false);
     clearTimeout(pauseTimerRef.current);
     if (!state.isComplete && state.startedAt) {
-      pauseTimerRef.current = setTimeout(() => setIsPaused(true), 5000);
+      pauseTimerRef.current = setTimeout(() => setIsPaused(true), 10000);
     }
 
     if (state.cursor < prev.cursor) {
@@ -253,7 +253,7 @@ export function TypingInterface({
   const expectedChar = state.isComplete ? null : state.text[state.cursor] ?? null;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-0" onClick={focusInput}>
+    <div className="max-w-3xl mx-auto" onClick={focusInput}>
       {/* Chapter info */}
       <ChapterNav
         bookTitle={book.title}
@@ -287,11 +287,13 @@ export function TypingInterface({
         }
       />
 
-      {/* Stats bar — standalone */}
-      <TypingStatsBar stats={stats} progress={pageProgress} />
+      {/* Stats bar */}
+      <div className="mt-1.5">
+        <TypingStatsBar stats={stats} progress={pageProgress} />
+      </div>
 
       {/* Book page — the focal point */}
-      <div className="relative" ref={typingContainerRef}>
+      <div className="relative mt-0" ref={typingContainerRef}>
         <TypingDisplay
           text={page.content}
           getCharStatus={charStatuses}
@@ -306,13 +308,21 @@ export function TypingInterface({
             shakeEnabled={settings.screenShake}
           />
         )}
-        {isPaused && (
-          <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/30 pointer-events-none">
-            <span className="stamp text-xl animate-pulse">
-              Paused
+        {!state.startedAt && !state.isComplete && (
+          <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+            <span className="stamp text-sm animate-pulse">
+              Begin Typing
             </span>
           </div>
         )}
+        <div
+          className={`absolute inset-0 flex items-center justify-center z-20 pointer-events-none transition-opacity duration-1000 ${isPaused ? "opacity-100" : "opacity-0"}`}
+          style={{ background: isPaused ? "rgba(0,0,0,0.25)" : "transparent" }}
+        >
+          {isPaused && (
+            <span className="stamp text-xl">Paused</span>
+          )}
+        </div>
         <textarea
           ref={inputRef}
           onKeyDown={handleKeyDown}
@@ -328,12 +338,6 @@ export function TypingInterface({
           expectedChar={expectedChar}
           lastAction={lastAction}
         />
-      )}
-
-      {!state.startedAt && !state.isComplete && (
-        <p className="text-center text-[10px] text-muted animate-pulse font-typewriter mt-3 uppercase tracking-[0.2em]">
-          Click here and begin typing to proceed
-        </p>
       )}
 
       {completionType && (

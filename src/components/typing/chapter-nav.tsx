@@ -18,7 +18,7 @@ export function ChapterNav({
   onNextPage,
 }: ChapterNavProps) {
   return (
-    <div className="flex items-center justify-between border-2 border-border bg-surface px-4 py-2">
+    <div className="flex items-center justify-between border border-border bg-surface px-4 py-1.5">
       <div>
         <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim">Document</p>
         <p className="text-sm font-bold font-typewriter text-foreground">{chapterTitle}</p>
@@ -29,7 +29,7 @@ export function ChapterNav({
         <button
           onClick={onPrevPage}
           disabled={!onPrevPage}
-          className="w-7 h-7 flex items-center justify-center border-2 border-border hover:border-border-hover disabled:opacity-20 transition-colors"
+          className="w-7 h-7 flex items-center justify-center border border-border hover:border-border-hover disabled:opacity-20 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -41,7 +41,7 @@ export function ChapterNav({
         <button
           onClick={onNextPage}
           disabled={!onNextPage}
-          className="w-7 h-7 flex items-center justify-center border-2 border-border hover:border-border-hover disabled:opacity-20 transition-colors"
+          className="w-7 h-7 flex items-center justify-center border border-border hover:border-border-hover disabled:opacity-20 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />

@@ -17,8 +17,8 @@ const CharSpan = memo(function CharSpan({
         : status === "incorrect"
           ? "text-ink-error"
           : status === "current"
-            ? "text-paper-text typewriter-cursor"
-            : "text-paper-upcoming";
+            ? "text-paper-text"
+            : "text-paper-upcoming/50";
 
     return (
       <>
@@ -43,7 +43,7 @@ const CharSpan = memo(function CharSpan({
       cls += "text-ink-error bg-ink-error/15";
       break;
     case "current":
-      cls += "text-paper-text bg-accent/20 border-b-2 border-paper-text typewriter-cursor";
+      cls += "text-paper-bg bg-paper-text";
       break;
     case "upcoming":
       cls += "text-paper-upcoming";
@@ -102,11 +102,11 @@ export function TypingDisplay({
     <div
       onClick={onClick}
       ref={scrollRef}
-      className="book-page relative cursor-text select-none overflow-hidden border-2 border-border"
-      style={{ height: "24rem", fontSize: `${fontSize}px` }}
+      className="book-page relative cursor-text select-none overflow-hidden doc-border"
+      style={{ minHeight: "20rem", height: "55vh", maxHeight: "70vh", fontSize: `${fontSize}px` }}
     >
       {/* Text content */}
-      <div className="px-8 py-6 pb-40 leading-[1.75rem] whitespace-pre-wrap relative z-10">
+      <div className="px-8 py-6 pb-40 leading-[1.5rem] whitespace-pre-wrap relative z-10">
         {text.split("").map((char, i) => (
           <CharSpan key={i} char={char} status={getCharStatus(i)} />
         ))}

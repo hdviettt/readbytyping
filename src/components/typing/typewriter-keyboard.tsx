@@ -29,7 +29,9 @@ const ROWS = [
     { key: "i", w: 1 },
     { key: "o", w: 1 },
     { key: "p", w: 1 },
-    { key: "Backspace", label: "DEL", w: 1.4 },
+    { key: "[", w: 1 },
+    { key: "]", w: 1 },
+    { key: "Backspace", label: "DEL", w: 1.2 },
   ],
   [
     { key: "a", w: 1 },
@@ -41,7 +43,9 @@ const ROWS = [
     { key: "j", w: 1 },
     { key: "k", w: 1 },
     { key: "l", w: 1 },
-    { key: "Enter", label: "RET", w: 1.4 },
+    { key: ";", w: 1 },
+    { key: "'", w: 1 },
+    { key: "Enter", label: "RET", w: 1.2 },
   ],
   [
     { key: "ShiftLeft", label: "SHIFT", w: 1.4 },
@@ -52,14 +56,13 @@ const ROWS = [
     { key: "b", w: 1 },
     { key: "n", w: 1 },
     { key: "m", w: 1 },
+    { key: ",", w: 1 },
+    { key: ".", w: 1 },
+    { key: "/", w: 1 },
     { key: "ShiftRight", label: "SHIFT", w: 1.4 },
   ],
   [
-    { key: ",", w: 1 },
-    { key: ".", w: 1 },
-    { key: " ", label: "", w: 6 },
-    { key: ";", w: 1 },
-    { key: "'", w: 1 },
+    { key: " ", label: "", w: 7 },
   ],
 ];
 
@@ -112,10 +115,8 @@ const KeyCap = memo(function KeyCap({
   const isSpace = keyDef.key === " ";
   const highlight = isExpected || (isShiftKey && isShiftExpected);
 
-  // Pressed state
   const pressed = !!flashState;
 
-  // Colors
   let textCls = "text-key-text";
   let borderColor = "var(--key-border)";
   let bgColor = "var(--key-bg)";
@@ -138,8 +139,8 @@ const KeyCap = memo(function KeyCap({
     <div
       className={`${textCls} flex items-center justify-center font-typewriter select-none transition-all duration-75`}
       style={{
-        width: `${keyDef.w * 2.6}rem`,
-        height: isSpace ? "2rem" : "2.4rem",
+        width: `${keyDef.w * 2.2}rem`,
+        height: isSpace ? "1.6rem" : "2rem",
         background: bgColor,
         border: `1px solid ${borderColor}`,
         boxShadow: pressed
@@ -148,7 +149,7 @@ const KeyCap = memo(function KeyCap({
         transform: pressed ? "translateY(2px)" : "none",
       }}
     >
-      <span className={`${keyDef.label ? "text-[8px] tracking-[0.15em]" : "text-xs"} font-bold`}>
+      <span className={`${keyDef.label ? "text-[7px] tracking-[0.15em]" : "text-[10px]"} font-bold`}>
         {display}
       </span>
     </div>
@@ -190,21 +191,20 @@ export function TypewriterKeyboard({
 
   return (
     <div
-      className="border-2 border-t-0 border-border"
+      className="border border-t-0 border-border"
       style={{
         background: "linear-gradient(180deg, var(--surface) 0%, var(--background) 100%)",
-        padding: "12px 16px 16px",
+        padding: "8px 12px 10px",
       }}
     >
-      {/* Metal tray top edge */}
-      <div className="h-px bg-border-hover/30 mb-3" />
+      <div className="h-px bg-border-hover/30 mb-2" />
 
-      <div className="flex flex-col items-center gap-[2px]">
+      <div className="flex flex-col items-center gap-[1px]">
         {ROWS.map((row, ri) => (
           <div
             key={ri}
-            className="flex gap-[2px]"
-            style={{ paddingLeft: ri === 1 ? "0.8rem" : ri === 2 ? "0.4rem" : 0 }}
+            className="flex gap-[1px]"
+            style={{ paddingLeft: ri === 1 ? "0.6rem" : ri === 2 ? "0.3rem" : 0 }}
           >
             {row.map((keyDef, ki) => (
               <KeyCap
