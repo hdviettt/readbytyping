@@ -1,23 +1,47 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Nav } from "@/components/nav";
-import { getBooks, saveBook, deleteBook, getProgress } from "@/lib/store";
+import { useStore } from "@/hooks/use-store";
+import * as db from "@/lib/supabase-store";
 import { parseEpub } from "@/lib/parsers/epub-parser";
 import { parsePdf } from "@/lib/parsers/pdf-parser";
 import type { Book, Chapter, Page } from "@/types/book";
+import { Onboarding } from "@/components/onboarding";
+
+function hashColor(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = Math.abs(hash) % 360;
+  return `hsl(${hue}, 30%, 25%)`;
+}
+
+function timeAgo(ts: number): string {
+  const diff = Date.now() - ts;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  return `${Math.floor(days / 30)}mo ago`;
+}
+
+type SortOption = "recent" | "last-typed" | "title" | "progress";
 
 export default function LibraryPage() {
-  const [books, setBooks] = useState<Book[]>([]);
+  const { books, progress, loading, refreshBooks } = useStore();
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState<SortOption>("recent");
+  const [undoItem, setUndoItem] = useState<{ book: Book; timeout: ReturnType<typeof setTimeout> } | null>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    setBooks(getBooks());
-  }, []);
 
   const handleFile = useCallback(
     async (file: File) => {
@@ -71,8 +95,8 @@ export default function LibraryPage() {
           createdAt: Date.now(),
         };
 
-        saveBook(book);
-        setBooks(getBooks());
+        await db.saveBook(book);
+        await refreshBooks();
         setUploading(false);
       } catch (err) {
         console.error(err);
@@ -80,7 +104,7 @@ export default function LibraryPage() {
         setUploading(false);
       }
     },
-    []
+    [refreshBooks]
   );
 
   function handleDrop(e: React.DragEvent) {
@@ -90,9 +114,69 @@ export default function LibraryPage() {
     if (file) handleFile(file);
   }
 
-  function handleDelete(id: string) {
-    deleteBook(id);
-    setBooks(getBooks());
+  async function handleDelete(id: string) {
+    const book = books.find((b) => b.id === id);
+    if (!book) return;
+
+    await db.deleteBook(id);
+    await refreshBooks();
+
+    if (undoItem) clearTimeout(undoItem.timeout);
+
+    const timeout = setTimeout(() => {
+      setUndoItem(null);
+    }, 5000);
+
+    setUndoItem({ book, timeout });
+  }
+
+  async function handleUndo() {
+    if (!undoItem) return;
+    clearTimeout(undoItem.timeout);
+    await db.saveBook(undoItem.book);
+    await refreshBooks();
+    setUndoItem(null);
+  }
+
+  const filtered = books.filter((b) => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return (
+      b.title.toLowerCase().includes(q) ||
+      (b.author && b.author.toLowerCase().includes(q))
+    );
+  });
+
+  const sorted = [...filtered].sort((a, b) => {
+    switch (sort) {
+      case "recent":
+        return b.createdAt - a.createdAt;
+      case "last-typed": {
+        const pa = progress[a.id]?.lastTypedAt ?? 0;
+        const pb = progress[b.id]?.lastTypedAt ?? 0;
+        return pb - pa;
+      }
+      case "title":
+        return a.title.localeCompare(b.title);
+      case "progress": {
+        const pctA = a.totalPages > 0 ? (progress[a.id]?.completedPages ?? 0) / a.totalPages : 0;
+        const pctB = b.totalPages > 0 ? (progress[b.id]?.completedPages ?? 0) / b.totalPages : 0;
+        return pctB - pctA;
+      }
+      default:
+        return 0;
+    }
+  });
+
+  if (loading) {
+    return (
+      <>
+        <Nav />
+        <main className="max-w-5xl mx-auto px-6 py-8">
+          <p className="text-center text-muted py-12 animate-pulse font-typewriter">Loading library...</p>
+        </main>
+      </>
+    );
   }
 
   return (
@@ -124,7 +208,12 @@ export default function LibraryPage() {
           }`}
         >
           {uploading ? (
-            <p className="text-muted">Parsing book...</p>
+            <div className="flex items-center justify-center gap-3">
+              <span className="inline-block font-typewriter text-muted">
+                Feeding paper into typewriter
+                <TypingDots />
+              </span>
+            </div>
           ) : (
             <div>
               <p className="text-muted mb-2">
@@ -147,19 +236,44 @@ export default function LibraryPage() {
           )}
         </div>
 
+        {/* Search and sort */}
+        {books.length > 0 && (
+          <div className="flex items-center gap-3 mb-6">
+            <input
+              type="text"
+              placeholder="Search by title or author..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex-1 px-3 py-2 text-sm bg-surface border border-border rounded-lg placeholder:text-dim focus:outline-none focus:border-accent"
+            />
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortOption)}
+              className="px-3 py-2 text-sm bg-surface border border-border rounded-lg focus:outline-none focus:border-accent"
+            >
+              <option value="recent">Recently added</option>
+              <option value="last-typed">Recently typed</option>
+              <option value="title">Title A-Z</option>
+              <option value="progress">Progress</option>
+            </select>
+          </div>
+        )}
+
         {/* Book list */}
         {books.length === 0 ? (
+          <Onboarding />
+        ) : sorted.length === 0 ? (
           <p className="text-center text-muted py-12">
-            No books yet. Import one to start typing.
+            No books match your search.
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {books.map((book) => {
-              const progress = getProgress(book.id);
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 stagger-children">
+            {sorted.map((book) => {
+              const prog = progress[book.id];
               const pct =
                 book.totalPages > 0
                   ? Math.round(
-                      ((progress?.completedPages || 0) / book.totalPages) * 100
+                      ((prog?.completedPages || 0) / book.totalPages) * 100
                     )
                   : 0;
 
@@ -168,6 +282,10 @@ export default function LibraryPage() {
                   key={book.id}
                   className="border border-border rounded-xl overflow-hidden hover:border-border-hover transition-colors group"
                 >
+                  <div
+                    className="h-2 w-full"
+                    style={{ backgroundColor: hashColor(book.title) }}
+                  />
                   <button
                     onClick={() => router.push(`/book/${book.id}`)}
                     className="w-full text-left p-5 cursor-pointer"
@@ -185,6 +303,11 @@ export default function LibraryPage() {
                       <span>{book.totalPages} pages</span>
                       <span className="uppercase">{book.fileType}</span>
                     </div>
+                    {prog?.lastTypedAt && (
+                      <p className="text-xs text-dim mt-1">
+                        Last typed {timeAgo(prog.lastTypedAt)}
+                      </p>
+                    )}
                     {pct > 0 && (
                       <div className="mt-3">
                         <div className="w-full h-1.5 bg-paper rounded-full overflow-hidden">
@@ -211,6 +334,31 @@ export default function LibraryPage() {
           </div>
         )}
       </main>
+
+      {undoItem && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-surface border border-border rounded-lg shadow-lg px-5 py-3 flex items-center gap-4">
+          <p className="text-sm">
+            Removed <span className="font-medium">{undoItem.book.title}</span>
+          </p>
+          <button
+            onClick={handleUndo}
+            className="text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+          >
+            Undo
+          </button>
+        </div>
+      )}
     </>
   );
+}
+
+function TypingDots() {
+  const [dots, setDots] = useState("");
+  useEffect(() => {
+    const id = setInterval(() => {
+      setDots((d) => (d.length >= 3 ? "" : d + "."));
+    }, 400);
+    return () => clearInterval(id);
+  }, []);
+  return <span className="inline-block w-4">{dots}</span>;
 }

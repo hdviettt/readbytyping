@@ -40,6 +40,8 @@ export interface SessionRecord {
   id: string;
   bookId: string;
   bookTitle: string;
+  chapterIndex?: number;
+  pageIndex?: number;
   startedAt: number;
   endedAt: number;
   durationSeconds: number;

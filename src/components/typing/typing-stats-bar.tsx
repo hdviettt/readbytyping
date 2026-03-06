@@ -11,32 +11,33 @@ export function TypingStatsBar({
   progress: { current: number; total: number; percentage: number };
 }) {
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-surface rounded-xl border border-border">
-      <div className="flex items-center gap-6">
-        <div className="text-center">
-          <p className="text-2xl font-bold font-typewriter text-accent">{stats.wpm}</p>
-          <p className="text-xs text-muted">WPM</p>
+    <div className="flex items-end justify-between">
+      <div className="flex items-end gap-8">
+        <div>
+          <p className="text-3xl font-bold font-typewriter text-accent leading-none">
+            {stats.wpm === 0 && stats.elapsedSeconds < 3 ? "--" : stats.wpm}
+          </p>
+          <p className="text-[10px] text-muted mt-1 uppercase tracking-widest">wpm</p>
         </div>
-        <div className="text-center">
-          <p className="text-2xl font-bold font-typewriter text-ink-correct">{stats.accuracy}%</p>
-          <p className="text-xs text-muted">Accuracy</p>
+        <div>
+          <p className="text-3xl font-bold font-typewriter text-ink-correct leading-none">
+            {stats.accuracy}<span className="text-lg">%</span>
+          </p>
+          <p className="text-[10px] text-muted mt-1 uppercase tracking-widest">accuracy</p>
         </div>
-        <div className="text-center">
-          <p className="text-2xl font-bold font-typewriter text-ink">
+        <div>
+          <p className="text-3xl font-bold font-typewriter text-foreground/60 leading-none">
             {formatTime(stats.elapsedSeconds)}
           </p>
-          <p className="text-xs text-muted">Time</p>
+          <p className="text-[10px] text-muted mt-1 uppercase tracking-widest">time</p>
         </div>
       </div>
 
       <div className="flex items-center gap-3">
-        <div className="text-right">
-          <p className="text-sm font-medium font-typewriter">{progress.percentage}%</p>
-          <p className="text-xs text-muted">
-            {progress.current} / {progress.total}
-          </p>
-        </div>
-        <div className="w-24 h-2 bg-paper rounded-full overflow-hidden">
+        <p className="text-sm font-typewriter text-muted">
+          {progress.current}<span className="text-dim"> / {progress.total}</span>
+        </p>
+        <div className="w-28 h-1.5 bg-border rounded-full overflow-hidden">
           <div
             className="h-full bg-accent rounded-full transition-all duration-300"
             style={{ width: `${progress.percentage}%` }}

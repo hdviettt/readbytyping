@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import type { TypingStats } from "@/types/typing";
 import { formatTime } from "@/lib/utils";
+import { CountUp } from "@/components/count-up";
 
 export function CompletionModal({
   type,
@@ -14,6 +16,17 @@ export function CompletionModal({
   onContinue: () => void;
   onBackToBook: () => void;
 }) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (!dialog.open) dialog.showModal();
+    return () => {
+      if (dialog.open) dialog.close();
+    };
+  }, []);
+
   const titles = {
     page: "Page Complete!",
     chapter: "Chapter Complete!",
@@ -21,7 +34,11 @@ export function CompletionModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+    <dialog
+      ref={dialogRef}
+      onClose={onBackToBook}
+      className="backdrop:bg-black/60 bg-transparent p-0 m-auto"
+    >
       <div className="bg-surface border border-border rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl">
         <h2 className="text-2xl font-bold font-typewriter text-accent text-center mb-6">
           {titles[type]}
@@ -29,12 +46,14 @@ export function CompletionModal({
 
         <div className="grid grid-cols-3 gap-4 mb-8">
           <div className="text-center p-3 bg-paper rounded-lg">
-            <p className="text-2xl font-bold font-typewriter text-accent">{stats.wpm}</p>
+            <p className="text-2xl font-bold font-typewriter text-accent">
+              <CountUp end={stats.wpm} />
+            </p>
             <p className="text-xs text-muted mt-1">WPM</p>
           </div>
           <div className="text-center p-3 bg-paper rounded-lg">
             <p className="text-2xl font-bold font-typewriter text-ink-correct">
-              {stats.accuracy}%
+              <CountUp end={stats.accuracy} suffix="%" />
             </p>
             <p className="text-xs text-muted mt-1">Accuracy</p>
           </div>
@@ -59,10 +78,10 @@ export function CompletionModal({
             onClick={onBackToBook}
             className="w-full py-3 px-4 border border-border hover:border-border-hover rounded-lg font-medium hover:bg-paper transition-colors"
           >
-            Back to Library
+            Back to Book
           </button>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

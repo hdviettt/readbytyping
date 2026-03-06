@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* ===== Dark theme (default) ===== */
 :root {
   --background: #1a1410;
   --foreground: #e8dcc8;
@@ -15,6 +16,54 @@
   --ink-correct: #8db87a;
   --ink-error: #c45a4a;
   --ink-current: #c89b3c;
+  /* Paper sheet */
+  --paper-bg: #faf6ee;
+  --paper-text: #1a1610;
+  --paper-upcoming: #9a8e78;
+  --paper-line: #ede6d6;
+  --paper-margin: #d49898;
+  --paper-shadow: rgba(0, 0, 0, 0.35);
+  /* Keyboard */
+  --key-bg: #2e2820;
+  --key-border: #504638;
+  --key-text: #b8a888;
+  --key-shadow: #100e0a;
+  /* Platen */
+  --platen-from: #28221a;
+  --platen-mid: #4a4030;
+}
+
+/* ===== Light theme ===== */
+.light {
+  --background: #f5f0e8;
+  --foreground: #2a2218;
+  --surface: #ebe4d6;
+  --paper: #ddd6c6;
+  --border-color: #c8bfad;
+  --border-hover: #a89a86;
+  --muted: #7a6e5e;
+  --dim: #a09585;
+  --accent: #9a7520;
+  --accent-hover: #b8892e;
+  --ink: #4a3f30;
+  --ink-correct: #4a8035;
+  --ink-error: #b83a2e;
+  --ink-current: #9a7520;
+  /* Paper sheet */
+  --paper-bg: #ffffff;
+  --paper-text: #1a1610;
+  --paper-upcoming: #b0a594;
+  --paper-line: #f0ebe2;
+  --paper-margin: #dda0a0;
+  --paper-shadow: rgba(0, 0, 0, 0.1);
+  /* Keyboard */
+  --key-bg: #e8e0d2;
+  --key-border: #c8bfad;
+  --key-text: #5a5040;
+  --key-shadow: #c0b8a8;
+  /* Platen */
+  --platen-from: #7a7268;
+  --platen-mid: #928880;
 }
 
 @theme inline {
@@ -32,6 +81,14 @@
   --color-ink-correct: var(--ink-correct);
   --color-ink-error: var(--ink-error);
   --color-ink-current: var(--ink-current);
+  --color-paper-bg: var(--paper-bg);
+  --color-paper-text: var(--paper-text);
+  --color-paper-upcoming: var(--paper-upcoming);
+  --color-paper-line: var(--paper-line);
+  --color-paper-margin: var(--paper-margin);
+  --color-key-bg: var(--key-bg);
+  --color-key-border: var(--key-border);
+  --color-key-text: var(--key-text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-typewriter: var(--font-courier-prime);
@@ -42,6 +99,90 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Typewriter cursor blink */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typewriter-cursor {
+  animation: cursor-blink 0.8s step-end infinite;
+}
+
+/* Paper texture via subtle noise gradient */
+.paper-texture {
+  background-color: var(--paper-bg);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1.75rem,
+      var(--paper-line) 1.75rem,
+      var(--paper-line) calc(1.75rem + 1px)
+    );
+  background-position-y: 0.875rem;
+}
+
+/* Hide scrollbar on the paper roll */
+.paper-texture {
+  scrollbar-width: none;
+}
+.paper-texture::-webkit-scrollbar {
+  display: none;
+}
+
+/* Book page — the focal typing surface */
+.book-page {
+  background-color: var(--paper-bg);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1.75rem,
+      var(--paper-line) 1.75rem,
+      var(--paper-line) calc(1.75rem + 1px)
+    );
+  background-position-y: 0.875rem;
+  box-shadow:
+    0 4px 24px var(--paper-shadow),
+    0 1px 4px var(--paper-shadow),
+    inset 0 0 60px rgba(0, 0, 0, 0.03);
+  scrollbar-width: none;
+}
+.book-page::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fade-up animation for page elements */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.4s ease-out both;
+}
+
+/* Staggered children */
+.stagger-children > * {
+  animation: fade-up 0.35s ease-out both;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-children > *:nth-child(9) { animation-delay: 400ms; }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {

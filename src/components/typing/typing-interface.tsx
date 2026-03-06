@@ -3,24 +3,22 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { Book } from "@/types/book";
-import {
-  getProgress,
-  saveProgress,
-  saveSession,
-  updateKeystrokeStats,
-} from "@/lib/store";
+import { useStore } from "@/hooks/use-store";
+import * as db from "@/lib/supabase-store";
 import { useTypingEngine } from "@/hooks/use-typing-engine";
 import {
   calculateSessionWpm,
   calculateAccuracy,
   generateWpmSamples,
-  calculateWpm,
 } from "@/lib/typing/wpm";
 import { TypingDisplay } from "./typing-display";
 import { TypingStatsBar } from "./typing-stats-bar";
 import { ChapterNav } from "./chapter-nav";
 import { CompletionModal } from "./completion-modal";
 import { StreakEffects } from "./streak-effects";
+import { TypewriterKeyboard } from "./typewriter-keyboard";
+import { playKeystroke, playReturn, playBackspace, playError, cleanupAudio } from "@/lib/typing/sounds";
+import { useSettings } from "@/hooks/use-settings";
 
 export function TypingInterface({
   book,
@@ -30,8 +28,10 @@ export function TypingInterface({
   startChapterIndex: number;
 }) {
   const router = useRouter();
+  const { settings } = useSettings();
+  const { progress: allProgress, refreshProgress, refreshSessions, refreshKeystrokeStats } = useStore();
 
-  const progress = getProgress(book.id);
+  const progress = allProgress[book.id] ?? null;
 
   // Use saved progress if we're resuming the same chapter, otherwise start fresh
   const resuming =
@@ -60,9 +60,61 @@ export function TypingInterface({
     handleKeyDown,
     inputRef,
     focusInput,
+    keystrokesRef,
   } = useTypingEngine(page?.content || "", startOffset);
 
   const typingContainerRef = useRef<HTMLDivElement>(null);
+  const prevStateRef = useRef(state);
+  const [isPaused, setIsPaused] = useState(false);
+  const pauseTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  // Track last key action for keyboard flash
+  const [lastAction, setLastAction] = useState<{
+    key: string;
+    correct: boolean;
+    timestamp: number;
+  } | null>(null);
+
+  // Play typewriter sounds and track key actions
+  useEffect(() => {
+    const prev = prevStateRef.current;
+    prevStateRef.current = state;
+
+    if (state.cursor === prev.cursor) return;
+
+    // Reset pause timer on any keystroke
+    setIsPaused(false);
+    clearTimeout(pauseTimerRef.current);
+    if (!state.isComplete && state.startedAt) {
+      pauseTimerRef.current = setTimeout(() => setIsPaused(true), 5000);
+    }
+
+    if (state.cursor < prev.cursor) {
+      if (settings.soundEnabled) playBackspace();
+      setLastAction({ key: "Backspace", correct: true, timestamp: Date.now() });
+    } else if (state.cursor > prev.cursor) {
+      const typedChar = state.text[state.cursor - 1];
+      const isError = state.errors.has(state.cursor - 1);
+
+      if (settings.soundEnabled) {
+        if (typedChar === "\n") {
+          playReturn();
+        } else if (isError) {
+          playError();
+        } else {
+          playKeystroke();
+        }
+      }
+
+      // Determine what was actually typed from the last keystroke
+      const lastKs = state.keystrokes[state.keystrokes.length - 1];
+      setLastAction({
+        key: lastKs?.actual ?? typedChar,
+        correct: !isError,
+        timestamp: Date.now(),
+      });
+    }
+  }, [state, settings.soundEnabled]);
 
   // Track peak WPM for session
   const peakWpmRef = useRef(0);
@@ -83,8 +135,8 @@ export function TypingInterface({
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const doSaveProgress = useCallback(
-    (charOffset: number, completed: boolean = false) => {
-      saveProgress({
+    async (charOffset: number, completed: boolean = false) => {
+      await db.saveProgress({
         bookId: book.id,
         chapterIndex,
         pageIndex,
@@ -106,6 +158,11 @@ export function TypingInterface({
     return () => clearTimeout(saveTimeoutRef.current);
   }, [state.cursor, state.isComplete, doSaveProgress]);
 
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => cleanupAudio();
+  }, []);
+
   // Save on visibility change
   useEffect(() => {
     function handleVisibility() {
@@ -120,47 +177,52 @@ export function TypingInterface({
   useEffect(() => {
     if (!state.isComplete) return;
 
-    doSaveProgress(state.cursor, true);
+    (async () => {
+      await doSaveProgress(state.cursor, true);
 
-    // Save session record
-    if (state.startedAt && state.lastKeystrokeAt) {
-      const duration = state.lastKeystrokeAt - state.startedAt;
-      const samples = generateWpmSamples(state);
+      if (state.startedAt && state.lastKeystrokeAt) {
+        const duration = state.lastKeystrokeAt - state.startedAt;
+        const samples = generateWpmSamples(state);
 
-      saveSession({
-        id: crypto.randomUUID(),
-        bookId: book.id,
-        bookTitle: book.title,
-        startedAt: state.startedAt,
-        endedAt: state.lastKeystrokeAt,
-        durationSeconds: Math.round(duration / 1000),
-        totalCharactersTyped: state.totalTyped,
-        correctCharacters: state.correctCount,
-        incorrectCharacters: state.incorrectCount,
-        avgWpm: calculateSessionWpm(state),
-        peakWpm: peakWpmRef.current,
-        accuracy: calculateAccuracy(state) / 100,
-        wpmSamples: samples,
-      });
+        await db.saveSession({
+          id: crypto.randomUUID(),
+          bookId: book.id,
+          bookTitle: book.title,
+          chapterIndex,
+          pageIndex,
+          startedAt: state.startedAt,
+          endedAt: state.lastKeystrokeAt,
+          durationSeconds: Math.round(duration / 1000),
+          totalCharactersTyped: state.totalTyped,
+          correctCharacters: state.correctCount,
+          incorrectCharacters: state.incorrectCount,
+          avgWpm: calculateSessionWpm(state),
+          peakWpm: peakWpmRef.current,
+          accuracy: calculateAccuracy(state) / 100,
+          wpmSamples: samples,
+        });
 
-      // Update keystroke stats
-      const charMap = new Map<
-        string,
-        { correct: number; incorrect: number }
-      >();
-      for (const k of state.keystrokes) {
-        const prev = charMap.get(k.expected) || {
-          correct: 0,
-          incorrect: 0,
-        };
-        if (k.correct) prev.correct++;
-        else prev.incorrect++;
-        charMap.set(k.expected, prev);
+        const charMap = new Map<
+          string,
+          { correct: number; incorrect: number }
+        >();
+        for (const k of keystrokesRef.current) {
+          const prev = charMap.get(k.expected) || {
+            correct: 0,
+            incorrect: 0,
+          };
+          if (k.correct) prev.correct++;
+          else prev.incorrect++;
+          charMap.set(k.expected, prev);
+        }
+        await db.updateKeystrokeStats(charMap);
+
+        peakWpmRef.current = 0;
+
+        // Refresh store data
+        await Promise.all([refreshProgress(), refreshSessions(), refreshKeystrokeStats()]);
       }
-      updateKeystrokeStats(charMap);
-
-      peakWpmRef.current = 0;
-    }
+    })();
 
     // Determine completion type
     const isLastPageInChapter = pageIndex === chapter.pages.length - 1;
@@ -187,8 +249,12 @@ export function TypingInterface({
 
   if (!page) return null;
 
+  // Expected character for keyboard highlighting
+  const expectedChar = state.isComplete ? null : state.text[state.cursor] ?? null;
+
   return (
-    <div className="max-w-4xl mx-auto space-y-4">
+    <div className="max-w-5xl mx-auto space-y-4" onClick={focusInput}>
+      {/* Chapter info */}
       <ChapterNav
         bookTitle={book.title}
         chapterTitle={chapter.title}
@@ -221,19 +287,32 @@ export function TypingInterface({
         }
       />
 
+      {/* Stats bar — standalone */}
       <TypingStatsBar stats={stats} progress={pageProgress} />
 
-      <div className="relative" ref={typingContainerRef} onClick={focusInput}>
+      {/* Book page — the focal point */}
+      <div className="relative" ref={typingContainerRef}>
         <TypingDisplay
           text={page.content}
           getCharStatus={charStatuses}
           onClick={focusInput}
-          streak={state.streak}
+          cursor={state.cursor}
+          fontSize={settings.fontSize}
         />
-        <StreakEffects
-          streak={state.streak}
-          containerRef={typingContainerRef}
-        />
+        {settings.streakEffects && (
+          <StreakEffects
+            streak={state.streak}
+            containerRef={typingContainerRef}
+            shakeEnabled={settings.screenShake}
+          />
+        )}
+        {isPaused && (
+          <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/20 rounded-lg pointer-events-none">
+            <span className="text-lg font-typewriter text-paper-text/60 animate-pulse">
+              Paused
+            </span>
+          </div>
+        )}
         <textarea
           ref={inputRef}
           onKeyDown={handleKeyDown}
@@ -243,9 +322,17 @@ export function TypingInterface({
         />
       </div>
 
+      {/* On-screen keyboard — standalone */}
+      {settings.keyboardVisible && (
+        <TypewriterKeyboard
+          expectedChar={expectedChar}
+          lastAction={lastAction}
+        />
+      )}
+
       {!state.startedAt && !state.isComplete && (
-        <p className="text-center text-sm text-muted animate-pulse font-typewriter">
-          Click the text and start typing...
+        <p className="text-center text-sm text-muted animate-pulse font-typewriter mt-2">
+          Click and start typing...
         </p>
       )}
 

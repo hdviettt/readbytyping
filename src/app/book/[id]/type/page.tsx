@@ -1,38 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Nav } from "@/components/nav";
-import { getBook } from "@/lib/store";
+import { useStore } from "@/hooks/use-store";
 import { TypingInterface } from "@/components/typing/typing-interface";
-import type { Book } from "@/types/book";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export default function TypingPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [book, setBook] = useState<Book | null>(null);
-  const [startChapter, setStartChapter] = useState(0);
+  const { books, progress, loading } = useStore();
 
-  useEffect(() => {
-    const b = getBook(params.id as string);
-    if (!b) {
-      router.push("/");
-      return;
-    }
-    setBook(b);
+  if (loading) {
+    return (
+      <>
+        <Nav />
+        <main className="px-6 py-6">
+          <p className="text-center text-muted py-12 animate-pulse font-typewriter">Loading...</p>
+        </main>
+      </>
+    );
+  }
 
-    const ch = parseInt(searchParams.get("chapter") || "0", 10);
-    setStartChapter(Math.max(0, Math.min(ch, b.chapters.length - 1)));
-  }, [params.id, searchParams, router]);
+  const book = books.find((b) => b.id === params.id);
+  if (!book) {
+    router.push("/");
+    return null;
+  }
 
-  if (!book) return null;
+  const ch = parseInt(searchParams.get("chapter") || "0", 10);
+  const startChapter = Math.max(0, Math.min(ch, book.chapters.length - 1));
 
   return (
     <>
       <Nav />
       <main className="px-6 py-6">
-        <TypingInterface book={book} startChapterIndex={startChapter} />
+        <ErrorBoundary>
+          <TypingInterface book={book} startChapterIndex={startChapter} />
+        </ErrorBoundary>
       </main>
     </>
   );

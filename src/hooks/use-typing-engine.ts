@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useCallback, useEffect, useRef } from "react";
+import { useReducer, useCallback, useEffect, useRef, useMemo } from "react";
 import type { TypingState, TypingStats } from "@/types/typing";
 import {
   createInitialState,
@@ -11,7 +11,6 @@ import {
 } from "@/lib/typing/engine";
 import {
   calculateRollingWpm,
-  calculateSessionWpm,
   calculateAccuracy,
 } from "@/lib/typing/wpm";
 
@@ -38,8 +37,23 @@ export function useTypingEngine(text: string, startOffset: number = 0) {
   );
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const statsIntervalRef = useRef<ReturnType<typeof setInterval>>(undefined);
-  const [stats, setStats] = useReducerStats(state);
+  const keystrokesRef = useRef<import("@/types/typing").Keystroke[]>([]);
+
+  // Keep keystrokesRef in sync — engine still adds to state.keystrokes for WPM,
+  // but we also keep a ref copy for session-end reads without reducer cost
+  const prevKeystrokeLenRef = useRef(0);
+  if (state.keystrokes.length > prevKeystrokeLenRef.current) {
+    for (let i = prevKeystrokeLenRef.current; i < state.keystrokes.length; i++) {
+      keystrokesRef.current.push(state.keystrokes[i]);
+    }
+    prevKeystrokeLenRef.current = state.keystrokes.length;
+  } else if (state.keystrokes.length === 0 && prevKeystrokeLenRef.current > 0) {
+    // Reset happened
+    keystrokesRef.current = [];
+    prevKeystrokeLenRef.current = 0;
+  }
+
+  const stats = useMemo(() => computeStats(state), [state]);
 
   // Reset when text changes
   useEffect(() => {
@@ -72,14 +86,6 @@ export function useTypingEngine(text: string, startOffset: number = 0) {
     focusInput();
   }, [focusInput]);
 
-  // Update stats periodically
-  useEffect(() => {
-    statsIntervalRef.current = setInterval(() => {
-      setStats(computeStats(state));
-    }, 500);
-    return () => clearInterval(statsIntervalRef.current);
-  }, [state]);
-
   const charStatuses = useCallback(
     (index: number) => getCharStatus(state, index),
     [state]
@@ -89,12 +95,13 @@ export function useTypingEngine(text: string, startOffset: number = 0) {
 
   return {
     state,
-    stats: computeStats(state),
+    stats,
     charStatuses,
     progress,
     handleKeyDown,
     inputRef,
     focusInput,
+    keystrokesRef,
     reset: (newText: string, offset?: number) =>
       dispatch({ type: "RESET", text: newText, startOffset: offset }),
   };
@@ -116,12 +123,3 @@ function computeStats(state: TypingState): TypingStats {
   };
 }
 
-// Simple state for stats updates
-function useReducerStats(state: TypingState): [TypingStats, (s: TypingStats) => void] {
-  const [stats, setStats] = useReducer(
-    (_: TypingStats, next: TypingStats) => next,
-    state,
-    (s) => computeStats(s)
-  );
-  return [stats, setStats];
-}

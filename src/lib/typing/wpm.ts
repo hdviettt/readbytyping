@@ -21,11 +21,20 @@ export function calculateRollingWpm(
   const now = state.lastKeystrokeAt || Date.now();
   const windowStart = now - windowMs;
 
-  const recentCorrect = state.keystrokes.filter(
-    (k) => k.timestamp >= windowStart && k.correct
-  ).length;
+  const recentKeystrokes = state.keystrokes.filter(
+    (k) => k.timestamp >= windowStart
+  );
+  const recentCorrect = recentKeystrokes.filter((k) => k.correct).length;
 
-  const actualWindow = Math.min(windowMs, now - state.startedAt);
+  // Subtract idle gaps (>5s between consecutive keystrokes) from the window
+  let idleMs = 0;
+  for (let i = 1; i < recentKeystrokes.length; i++) {
+    const gap = recentKeystrokes[i].timestamp - recentKeystrokes[i - 1].timestamp;
+    if (gap > 5000) idleMs += gap;
+  }
+
+  const actualWindow = Math.min(windowMs, now - state.startedAt) - idleMs;
+  if (actualWindow < 3000) return 0;
   return calculateWpm(recentCorrect, actualWindow);
 }
 

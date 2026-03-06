@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Nav } from "@/components/nav";
-import { getSessions, getKeystrokeStats } from "@/lib/store";
+import { useStore } from "@/hooks/use-store";
 import { formatTime } from "@/lib/utils";
-import type { SessionRecord, KeystrokeStat } from "@/types/typing";
+import { CountUp } from "@/components/count-up";
 import dynamic from "next/dynamic";
 
 const WpmLineChart = dynamic(
@@ -17,14 +17,22 @@ const KeyHeatmap = dynamic(
   { ssr: false }
 );
 
-export default function StatsPage() {
-  const [sessions, setSessions] = useState<SessionRecord[]>([]);
-  const [keystrokeStats, setKeystrokeStats] = useState<KeystrokeStat[]>([]);
+const PAGE_SIZE = 20;
 
-  useEffect(() => {
-    setSessions(getSessions());
-    setKeystrokeStats(getKeystrokeStats());
-  }, []);
+export default function StatsPage() {
+  const { sessions, keystrokeStats, loading } = useStore();
+  const [page, setPage] = useState(0);
+
+  if (loading) {
+    return (
+      <>
+        <Nav />
+        <main className="max-w-5xl mx-auto px-6 py-8">
+          <p className="text-center text-muted py-12 animate-pulse font-typewriter">Loading...</p>
+        </main>
+      </>
+    );
+  }
 
   const totalSessions = sessions.length;
   const totalTime = sessions.reduce((s, r) => s + r.durationSeconds, 0);
@@ -43,7 +51,23 @@ export default function StatsPage() {
         )
       : 0;
 
+  const bestSession = sessions.length > 0
+    ? sessions.reduce((best, s) => (s.avgWpm > best.avgWpm ? s : best), sessions[0])
+    : null;
+
   const latestSession = sessions[0];
+
+  // WPM trend data: one point per session, ordered chronologically
+  const trendData = [...sessions]
+    .reverse()
+    .map((s, i) => ({
+      t: i + 1,
+      wpm: Math.round(s.avgWpm),
+    }));
+
+  // Pagination
+  const totalPages = Math.ceil(sessions.length / PAGE_SIZE);
+  const paginatedSessions = sessions.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
   return (
     <>
@@ -52,29 +76,67 @@ export default function StatsPage() {
         <h1 className="text-2xl font-bold font-typewriter text-accent mb-8">Typing Stats</h1>
 
         {totalSessions === 0 ? (
-          <p className="text-center text-muted py-12">
-            No stats yet. Complete a page of typing to see your metrics.
-          </p>
+          <div className="text-center py-16 animate-fade-up">
+            <svg
+              viewBox="0 0 120 80"
+              className="w-24 h-20 mx-auto mb-4 text-muted"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              {/* Chart axes */}
+              <line x1="20" y1="10" x2="20" y2="65" />
+              <line x1="20" y1="65" x2="100" y2="65" />
+              {/* Flat line */}
+              <line x1="25" y1="55" x2="95" y2="55" strokeDasharray="4 4" className="stroke-dim" />
+            </svg>
+            <p className="text-muted font-medium mb-1">No stats yet</p>
+            <p className="text-dim text-sm">Complete a page of typing to see your metrics.</p>
+          </div>
         ) : (
           <>
             {/* Summary cards */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-              <StatCard label="Avg WPM" value={avgWpm} color="text-accent" />
-              <StatCard
-                label="Avg Accuracy"
-                value={`${avgAccuracy}%`}
-                color="text-ink-correct"
-              />
-              <StatCard label="Sessions" value={totalSessions} />
-              <StatCard
-                label="Characters"
-                value={totalChars.toLocaleString()}
-              />
-              <StatCard
-                label="Total Time"
-                value={`${Math.round(totalTime / 60)}m`}
-              />
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 stagger-children">
+              <StatCard label="Avg WPM" color="text-accent">
+                <CountUp end={avgWpm} className="text-2xl font-bold font-typewriter" />
+              </StatCard>
+              <StatCard label="Avg Accuracy" color="text-ink-correct">
+                <CountUp end={avgAccuracy} suffix="%" className="text-2xl font-bold font-typewriter" />
+              </StatCard>
+              <StatCard label="Sessions">
+                <CountUp end={totalSessions} className="text-2xl font-bold font-typewriter" />
+              </StatCard>
+              <StatCard label="Characters">
+                <CountUp end={totalChars} className="text-2xl font-bold font-typewriter" />
+              </StatCard>
+              <StatCard label="Total Time">
+                <span className="text-2xl font-bold font-typewriter">{Math.round(totalTime / 60)}m</span>
+              </StatCard>
             </div>
+
+            {/* Best session highlight */}
+            {bestSession && (
+              <div className="mb-8 p-5 bg-surface rounded-xl border border-accent/30">
+                <h2 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">Best Session</h2>
+                <div className="flex items-center gap-6 text-sm">
+                  <span className="font-typewriter text-xl font-bold text-accent">{Math.round(bestSession.avgWpm)} WPM</span>
+                  <span className="text-muted">{Math.round(bestSession.accuracy * 100)}% accuracy</span>
+                  <span className="text-muted truncate">{bestSession.bookTitle}</span>
+                  <span className="text-dim ml-auto">{formatDate(bestSession.startedAt)}</span>
+                </div>
+              </div>
+            )}
+
+            {/* WPM trend chart */}
+            {trendData.length > 1 && (
+              <div className="mb-8 p-6 bg-surface rounded-xl border border-border">
+                <h2 className="text-lg font-semibold font-typewriter mb-4">
+                  WPM Over Time
+                </h2>
+                <WpmLineChart data={trendData} />
+              </div>
+            )}
 
             {/* Latest session WPM chart */}
             {latestSession && latestSession.wpmSamples.length > 0 && (
@@ -103,22 +165,15 @@ export default function StatsPage() {
                     <tr className="border-b border-border text-muted">
                       <th className="text-left py-3 px-3 font-medium">Book</th>
                       <th className="text-right py-3 px-3 font-medium">WPM</th>
-                      <th className="text-right py-3 px-3 font-medium">
-                        Peak
-                      </th>
-                      <th className="text-right py-3 px-3 font-medium">
-                        Accuracy
-                      </th>
-                      <th className="text-right py-3 px-3 font-medium">
-                        Duration
-                      </th>
-                      <th className="text-right py-3 px-3 font-medium">
-                        Chars
-                      </th>
+                      <th className="text-right py-3 px-3 font-medium">Peak</th>
+                      <th className="text-right py-3 px-3 font-medium">Accuracy</th>
+                      <th className="text-right py-3 px-3 font-medium">Duration</th>
+                      <th className="text-right py-3 px-3 font-medium">Chars</th>
+                      <th className="text-right py-3 px-3 font-medium">Date</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {sessions.slice(0, 30).map((s) => (
+                    {paginatedSessions.map((s) => (
                       <tr
                         key={s.id}
                         className="border-b border-border/50 hover:bg-paper/30"
@@ -141,11 +196,37 @@ export default function StatsPage() {
                         <td className="py-3 px-3 text-right font-typewriter">
                           {s.totalCharactersTyped}
                         </td>
+                        <td className="py-3 px-3 text-right text-dim whitespace-nowrap">
+                          {formatDate(s.startedAt)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+                  <button
+                    onClick={() => setPage((p) => Math.max(0, p - 1))}
+                    disabled={page === 0}
+                    className="text-sm text-muted hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-xs text-dim">
+                    Page {page + 1} of {totalPages}
+                  </span>
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                    disabled={page >= totalPages - 1}
+                    className="text-sm text-muted hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           </>
         )}
@@ -156,19 +237,26 @@ export default function StatsPage() {
 
 function StatCard({
   label,
-  value,
   color,
+  children,
 }: {
   label: string;
-  value: string | number;
   color?: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className="p-4 bg-surface rounded-xl border border-border">
-      <p className={`text-2xl font-bold font-typewriter ${color || "text-ink"}`}>
-        {value}
-      </p>
+      <div className={color || "text-ink"}>
+        {children}
+      </div>
       <p className="text-xs text-muted mt-1">{label}</p>
     </div>
   );
+}
+
+function formatDate(ts: number): string {
+  return new Date(ts).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
 }

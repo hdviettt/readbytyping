@@ -1,32 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Nav } from "@/components/nav";
-import { getBook, getProgress } from "@/lib/store";
-import type { Book, ReadingProgress } from "@/types/book";
+import { useStore } from "@/hooks/use-store";
 import Link from "next/link";
 
 export default function BookChaptersPage() {
   const params = useParams();
   const router = useRouter();
-  const [book, setBook] = useState<Book | null>(null);
-  const [progress, setProgress] = useState<ReadingProgress | null>(null);
+  const { books, progress, loading } = useStore();
 
-  useEffect(() => {
-    const b = getBook(params.id as string);
-    if (!b) {
-      router.push("/");
-      return;
-    }
-    setBook(b);
-    setProgress(getProgress(b.id));
-  }, [params.id, router]);
+  const book = books.find((b) => b.id === params.id);
+  const bookProgress = book ? progress[book.id] : null;
 
-  if (!book) return null;
+  if (loading) {
+    return (
+      <>
+        <Nav />
+        <main className="max-w-3xl mx-auto px-6 py-8">
+          <p className="text-center text-muted py-12 animate-pulse font-typewriter">Loading...</p>
+        </main>
+      </>
+    );
+  }
 
-  // Figure out which pages are completed per chapter
-  const completedPages = progress?.completedPages || 0;
+  if (!book) {
+    router.push("/");
+    return null;
+  }
+
+  const completedPages = bookProgress?.completedPages || 0;
   let pagesBeforeChapter = 0;
 
   return (
@@ -64,10 +67,9 @@ export default function BookChaptersPage() {
           </div>
         </div>
 
-        {/* Resume button if there's progress */}
-        {progress && progress.completedPages < book.totalPages && (
+        {bookProgress && bookProgress.completedPages < book.totalPages && (
           <Link
-            href={`/book/${book.id}/type?chapter=${progress.chapterIndex}`}
+            href={`/book/${book.id}/type?chapter=${bookProgress.chapterIndex}`}
             className="flex items-center justify-between w-full mb-6 px-5 py-4 bg-accent hover:bg-accent-hover text-background rounded-xl font-medium transition-colors"
           >
             <span>Resume typing</span>
@@ -83,7 +85,6 @@ export default function BookChaptersPage() {
             const chapterStart = pagesBeforeChapter;
             pagesBeforeChapter += chapterPageCount;
 
-            // How many of this chapter's pages are completed
             const completedInChapter = Math.max(
               0,
               Math.min(chapterPageCount, completedPages - chapterStart)
@@ -100,7 +101,6 @@ export default function BookChaptersPage() {
                 href={`/book/${book.id}/type?chapter=${ci}`}
                 className="flex items-center gap-4 p-4 border border-border rounded-xl hover:border-border-hover transition-colors group"
               >
-                {/* Chapter number / check */}
                 <div
                   className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 ${
                     isDone
@@ -136,7 +136,6 @@ export default function BookChaptersPage() {
                   </p>
                 </div>
 
-                {/* Progress bar */}
                 {pct > 0 && !isDone && (
                   <div className="w-20 shrink-0">
                     <div className="w-full h-1.5 bg-paper rounded-full overflow-hidden">

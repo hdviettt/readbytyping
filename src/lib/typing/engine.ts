@@ -77,7 +77,7 @@ export function handleKeyPress(
       correctCount: wasError ? state.correctCount : Math.max(0, state.correctCount - 1),
       incorrectCount: wasError ? Math.max(0, state.incorrectCount - 1) : state.incorrectCount,
       lastKeystrokeAt: timestamp,
-      streak: 0,
+      streak: state.streak,
     };
   }
 

@@ -17,8 +17,8 @@ const STREAK_TIERS = [
   { min: 5, label: "", color: "text-accent", particles: 2, shake: 0 },
   { min: 10, label: "Nice!", color: "text-accent", particles: 3, shake: 0 },
   { min: 25, label: "Great!", color: "text-accent-hover", particles: 5, shake: 1 },
-  { min: 50, label: "Amazing!", color: "text-ink-error", particles: 7, shake: 2 },
-  { min: 100, label: "GODLIKE!", color: "text-ink-error", particles: 10, shake: 3 },
+  { min: 50, label: "Amazing!", color: "text-ink-error", particles: 7, shake: 1 },
+  { min: 100, label: "GODLIKE!", color: "text-ink-error", particles: 10, shake: 1.5 },
 ] as const;
 
 function getTier(streak: number) {
@@ -48,9 +48,11 @@ function getParticleColors(streak: number): string[] {
 export function StreakEffects({
   streak,
   containerRef,
+  shakeEnabled = true,
 }: {
   streak: number;
   containerRef: React.RefObject<HTMLDivElement | null>;
+  shakeEnabled?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
@@ -62,8 +64,8 @@ export function StreakEffects({
       const container = containerRef.current;
       if (!container) return;
 
-      // Find the cursor element (border-ink-current class)
-      const cursor = container.querySelector(".border-ink-current");
+      // Find the cursor element
+      const cursor = container.querySelector("[data-cursor]");
       if (!cursor) return;
 
       const containerRect = container.getBoundingClientRect();
@@ -72,7 +74,9 @@ export function StreakEffects({
       const cx = cursorRect.left - containerRect.left + cursorRect.width / 2;
       const cy = cursorRect.top - containerRect.top + cursorRect.height / 2;
 
-      for (let i = 0; i < count; i++) {
+      const maxParticles = 50;
+      const spawnCount = Math.min(count, maxParticles - particlesRef.current.length);
+      for (let i = 0; i < spawnCount; i++) {
         const angle = Math.random() * Math.PI * 2;
         const speed = 1 + Math.random() * 3;
         particlesRef.current.push({
@@ -108,7 +112,7 @@ export function StreakEffects({
     if (!container) return;
 
     const tier = getTier(streak);
-    if (!tier || tier.shake === 0) {
+    if (!tier || tier.shake === 0 || !shakeEnabled) {
       container.style.transform = "";
       return;
     }
@@ -123,7 +127,7 @@ export function StreakEffects({
       }, 50);
       return () => clearTimeout(timeout);
     }
-  }, [streak, containerRef]);
+  }, [streak, containerRef, shakeEnabled]);
 
   // Animation loop
   useEffect(() => {
