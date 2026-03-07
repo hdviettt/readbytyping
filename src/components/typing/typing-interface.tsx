@@ -70,6 +70,28 @@ export function TypingInterface({
   const showBeginPrompt = useRef(true);
   const pauseTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
+  // Focus tracking for typing display
+  const [isFocused, setIsFocused] = useState(true);
+
+  // Save status indicator
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
+  const saveStatusTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  // Frozen stats for when idle
+  const frozenStatsRef = useRef(stats);
+  useEffect(() => {
+    if (!isPaused) {
+      frozenStatsRef.current = stats;
+    }
+  }, [stats, isPaused]);
+
+  // Escape key state for double-press exit
+  const escapeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const [escapePrompt, setEscapePrompt] = useState(false);
+
+  // Chapter completion animation
+  const [chapterOverlayVisible, setChapterOverlayVisible] = useState(false);
+
   // Track last key action for keyboard flash
   const [lastAction, setLastAction] = useState<{
     key: string;
@@ -138,14 +160,23 @@ export function TypingInterface({
 
   const doSaveProgress = useCallback(
     async (charOffset: number, completed: boolean = false) => {
-      await db.saveProgress({
-        bookId: book.id,
-        chapterIndex,
-        pageIndex,
-        charOffset,
-        completedPages: completed ? globalPageIndex + 1 : globalPageIndex,
-        lastTypedAt: Date.now(),
-      });
+      try {
+        await db.saveProgress({
+          bookId: book.id,
+          chapterIndex,
+          pageIndex,
+          charOffset,
+          completedPages: completed ? globalPageIndex + 1 : globalPageIndex,
+          lastTypedAt: Date.now(),
+        });
+        setSaveStatus("saved");
+        clearTimeout(saveStatusTimerRef.current);
+        saveStatusTimerRef.current = setTimeout(() => setSaveStatus("idle"), 1500);
+      } catch {
+        setSaveStatus("error");
+        clearTimeout(saveStatusTimerRef.current);
+        saveStatusTimerRef.current = setTimeout(() => setSaveStatus("idle"), 5000);
+      }
     },
     [book.id, chapterIndex, pageIndex, globalPageIndex]
   );
@@ -250,6 +281,8 @@ export function TypingInterface({
       setCompletionType("book");
     } else if (isLastPageInChapter) {
       setCompletionType("chapter");
+      // Animate in the chapter overlay
+      requestAnimationFrame(() => setChapterOverlayVisible(true));
     } else {
       // Auto-advance to next page with brief transition
       setIsTransitioning(true);
@@ -264,6 +297,7 @@ export function TypingInterface({
 
   const handleContinue = useCallback(() => {
     setCompletionType(null);
+    setChapterOverlayVisible(false);
     setIsPaused(false);
     if (pageIndex < chapter.pages.length - 1) {
       setPageIndex(pageIndex + 1);
@@ -277,6 +311,29 @@ export function TypingInterface({
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       e.preventDefault();
+
+      // Escape key — double press to exit
+      if (e.key === "Escape") {
+        if (escapePrompt) {
+          // Second press — save and navigate back
+          clearTimeout(escapeTimerRef.current);
+          setEscapePrompt(false);
+          if (state.cursor > 0) doSaveProgress(state.cursor);
+          router.push(`/book/${book.id}`);
+        } else {
+          // First press — show prompt
+          setEscapePrompt(true);
+          escapeTimerRef.current = setTimeout(() => setEscapePrompt(false), 3000);
+        }
+        return;
+      }
+
+      // Clear escape prompt on any other key
+      if (escapePrompt) {
+        setEscapePrompt(false);
+        clearTimeout(escapeTimerRef.current);
+      }
+
       if (completionType === "chapter") {
         handleContinue();
         return;
@@ -284,13 +341,16 @@ export function TypingInterface({
       if (isTransitioning || completionType) return;
       handleKeyDown(e);
     },
-    [completionType, isTransitioning, handleKeyDown, handleContinue]
+    [completionType, isTransitioning, handleKeyDown, handleContinue, escapePrompt, state.cursor, doSaveProgress, router, book.id]
   );
 
   if (!page) return null;
 
   // Expected character for keyboard highlighting
   const expectedChar = state.isComplete ? null : state.text[state.cursor] ?? null;
+
+  // Show frozen stats when idle
+  const displayStats = isPaused ? frozenStatsRef.current : stats;
 
   return (
     <div className="max-w-3xl mx-auto" onClick={focusInput}>
@@ -329,7 +389,12 @@ export function TypingInterface({
 
       {/* Stats bar */}
       <div className="mt-1.5">
-        <TypingStatsBar stats={stats} progress={pageProgress} />
+        <TypingStatsBar
+          stats={displayStats}
+          progress={pageProgress}
+          streak={state.streak}
+          saveStatus={saveStatus}
+        />
       </div>
 
       {/* Book page — the focal point */}
@@ -340,6 +405,7 @@ export function TypingInterface({
           onClick={focusInput}
           cursor={state.cursor}
           fontSize={settings.fontSize}
+          isFocused={isFocused}
         />
         {settings.streakEffects && (
           <StreakEffects
@@ -348,25 +414,40 @@ export function TypingInterface({
             shakeEnabled={settings.screenShake}
           />
         )}
-        {!state.startedAt && !state.isComplete && showBeginPrompt.current && (
+        {!state.startedAt && !state.isComplete && showBeginPrompt.current && isFocused && (
           <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
             <span className="stamp text-sm animate-pulse">
               Begin Typing
             </span>
           </div>
         )}
+
+        {/* Escape prompt */}
+        {escapePrompt && (
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+            <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-muted bg-surface border border-border px-3 py-1.5 animate-fade-up">
+              Press Escape again to exit
+            </span>
+          </div>
+        )}
+
+        {/* Idle overlay */}
         <div
           className={`absolute inset-0 flex items-center justify-center z-20 pointer-events-none transition-opacity duration-1000 ${isPaused ? "opacity-100" : "opacity-0"}`}
-          style={{ background: isPaused ? "rgba(0,0,0,0.25)" : "transparent" }}
+          style={{ background: isPaused ? "rgba(0,0,0,0.15)" : "transparent" }}
         >
           {isPaused && (
-            <span className="stamp text-xl">Paused</span>
+            <span className="stamp text-lg" style={{ opacity: 0.6 }}>Idle</span>
           )}
         </div>
+
+        {/* Chapter completion overlay with animation */}
         {completionType === "chapter" && (
-          <div className="absolute inset-0 flex items-center justify-center z-30"
-               style={{ background: "rgba(0,0,0,0.4)" }}>
-            <div className="bg-surface border-2 border-border px-8 py-6 text-center max-w-xs">
+          <div
+            className={`absolute inset-0 flex items-center justify-center z-30 transition-opacity duration-250 ${chapterOverlayVisible ? "opacity-100" : "opacity-0"}`}
+            style={{ background: "rgba(0,0,0,0.4)" }}
+          >
+            <div className={`bg-surface border-2 border-border px-8 py-6 text-center max-w-xs ${chapterOverlayVisible ? "animate-card-in" : ""}`}>
               <span className="stamp text-sm animate-stamp">Cleared</span>
               <div className="flex gap-8 mt-4 mb-4 justify-center">
                 <div>
@@ -387,18 +468,22 @@ export function TypingInterface({
         <textarea
           ref={inputRef}
           onKeyDown={onKeyDown}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           className="absolute top-0 left-0 w-0 h-0 opacity-0"
           autoFocus
           aria-label="Type here"
         />
       </div>
 
-      {/* On-screen keyboard — standalone */}
+      {/* On-screen keyboard — hidden on mobile */}
       {settings.keyboardVisible && (
-        <TypewriterKeyboard
-          expectedChar={expectedChar}
-          lastAction={lastAction}
-        />
+        <div className="hidden md:block">
+          <TypewriterKeyboard
+            expectedChar={expectedChar}
+            lastAction={lastAction}
+          />
+        </div>
       )}
 
       {completionType === "book" && (

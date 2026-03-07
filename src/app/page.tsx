@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Nav } from "@/components/nav";
 import { useStore } from "@/hooks/use-store";
@@ -41,6 +41,9 @@ export default function LibraryPage() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortOption>("recent");
   const [undoItem, setUndoItem] = useState<{ book: Book; timeout: ReturnType<typeof setTimeout> } | null>(null);
+  const [undoExiting, setUndoExiting] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const confirmTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const router = useRouter();
 
   const handleFile = useCallback(
@@ -114,17 +117,36 @@ export default function LibraryPage() {
     if (file) handleFile(file);
   }
 
-  async function handleDelete(id: string) {
+  function handleDeleteClick(id: string) {
+    if (confirmDeleteId === id) {
+      // Second click — actually delete
+      doDelete(id);
+    } else {
+      // First click — show confirm
+      setConfirmDeleteId(id);
+      clearTimeout(confirmTimerRef.current);
+      confirmTimerRef.current = setTimeout(() => setConfirmDeleteId(null), 3000);
+    }
+  }
+
+  async function doDelete(id: string) {
     const book = books.find((b) => b.id === id);
     if (!book) return;
+
+    setConfirmDeleteId(null);
+    clearTimeout(confirmTimerRef.current);
 
     await db.deleteBook(id);
     await refreshBooks();
 
-    if (undoItem) clearTimeout(undoItem.timeout);
+    if (undoItem) {
+      clearTimeout(undoItem.timeout);
+      setUndoExiting(false);
+    }
 
     const timeout = setTimeout(() => {
-      setUndoItem(null);
+      setUndoExiting(true);
+      setTimeout(() => setUndoItem(null), 300);
     }, 5000);
 
     setUndoItem({ book, timeout });
@@ -135,7 +157,11 @@ export default function LibraryPage() {
     clearTimeout(undoItem.timeout);
     await db.saveBook(undoItem.book);
     await refreshBooks();
-    setUndoItem(null);
+    setUndoExiting(true);
+    setTimeout(() => {
+      setUndoItem(null);
+      setUndoExiting(false);
+    }, 300);
   }
 
   const filtered = books.filter((b) => {
@@ -276,6 +302,7 @@ export default function LibraryPage() {
                       ((prog?.completedPages || 0) / book.totalPages) * 100
                     )
                   : 0;
+              const isInProgress = pct > 0 && pct < 100;
 
               return (
                 <div
@@ -311,7 +338,7 @@ export default function LibraryPage() {
                         <span>{timeAgo(prog.lastTypedAt)}</span>
                       )}
                     </div>
-                    {pct > 0 && pct < 100 && (
+                    {isInProgress && (
                       <div className="mt-2">
                         <div className="w-full h-1.5 bg-background border border-border">
                           <div
@@ -323,12 +350,29 @@ export default function LibraryPage() {
                       </div>
                     )}
                   </button>
-                  <div className="px-4 pb-2 flex justify-end border-t border-border/50">
+                  <div className="px-4 pb-2 flex items-center justify-between border-t border-border/50">
+                    {isInProgress && prog ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/book/${book.id}/type?chapter=${prog.chapterIndex}`);
+                        }}
+                        className="text-[10px] text-accent hover:text-accent-hover uppercase tracking-wider font-bold transition-colors py-1"
+                      >
+                        Continue
+                      </button>
+                    ) : (
+                      <span />
+                    )}
                     <button
-                      onClick={() => handleDelete(book.id)}
-                      className="text-[10px] text-dim hover:text-stamp uppercase tracking-wider font-bold transition-colors py-1"
+                      onClick={() => handleDeleteClick(book.id)}
+                      className={`text-[10px] uppercase tracking-wider font-bold transition-colors py-1 ${
+                        confirmDeleteId === book.id
+                          ? "text-stamp font-extrabold"
+                          : "text-dim hover:text-stamp"
+                      }`}
                     >
-                      Discard
+                      {confirmDeleteId === book.id ? "Confirm?" : "Discard"}
                     </button>
                   </div>
                 </div>
@@ -339,7 +383,9 @@ export default function LibraryPage() {
       </main>
 
       {undoItem && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-surface border-2 border-border px-5 py-3 flex items-center gap-4">
+        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border-2 border-border px-5 py-3 flex items-center gap-4 ${
+          undoExiting ? "animate-toast-out" : "animate-toast-in"
+        }`} style={{ willChange: "transform, opacity" }}>
           <p className="text-xs uppercase tracking-wider">
             Discarded: <span className="font-bold text-foreground">{undoItem.book.title}</span>
           </p>

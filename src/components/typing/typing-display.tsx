@@ -66,12 +66,14 @@ export function TypingDisplay({
   onClick,
   cursor,
   fontSize = 17,
+  isFocused = true,
 }: {
   text: string;
   getCharStatus: (index: number) => CharStatus;
   onClick: () => void;
   cursor: number;
   fontSize?: number;
+  isFocused?: boolean;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -86,7 +88,7 @@ export function TypingDisplay({
     const cursorRelY = cursorRect.top - containerRect.top;
     const h = containerRect.height;
 
-    if (cursorRelY > h * 0.2 && cursorRelY < h * 0.6) return;
+    if (cursorRelY > h * 0.3 && cursorRelY < h * 0.5) return;
 
     const targetY = h * 0.4;
     const cursorAbsY = cursorRelY + container.scrollTop;
@@ -94,7 +96,7 @@ export function TypingDisplay({
 
     container.scrollTo({
       top: Math.max(0, scrollTarget),
-      behavior: "instant",
+      behavior: "smooth",
     });
   }, [cursor]);
 
@@ -102,15 +104,24 @@ export function TypingDisplay({
     <div
       onClick={onClick}
       ref={scrollRef}
-      className="book-page relative cursor-text select-none overflow-hidden doc-border"
+      className={`book-page relative cursor-text select-none overflow-hidden doc-border transition-shadow duration-200 ${
+        isFocused ? "shadow-[0_0_0_2px_var(--accent)]" : ""
+      }`}
       style={{ minHeight: "20rem", height: "55vh", maxHeight: "70vh", fontSize: `${fontSize}px` }}
     >
       {/* Text content */}
-      <div className="px-8 py-6 pb-40 leading-[1.5rem] whitespace-pre-wrap relative z-10">
+      <div className="px-8 py-6 pb-40 leading-[1.8] whitespace-pre-wrap relative z-10">
         {text.split("").map((char, i) => (
           <CharSpan key={i} char={char} status={getCharStatus(i)} />
         ))}
       </div>
+
+      {/* Focus lost overlay */}
+      {!isFocused && (
+        <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/15 pointer-events-none">
+          <span className="stamp text-sm opacity-90">Click to resume typing</span>
+        </div>
+      )}
     </div>
   );
 }

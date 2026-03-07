@@ -21,7 +21,7 @@ const STREAK_TIERS = [
   { min: 100, label: "GODLIKE!", color: "text-ink-error", particles: 10, shake: 1.5 },
 ] as const;
 
-function getTier(streak: number) {
+export function getTier(streak: number) {
   for (let i = STREAK_TIERS.length - 1; i >= 0; i--) {
     if (streak >= STREAK_TIERS[i].min) return STREAK_TIERS[i];
   }
@@ -189,47 +189,10 @@ export function StreakEffects({
     };
   }, [containerRef]);
 
-  const tier = getTier(streak);
-
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none z-10"
-      />
-
-      {tier && streak >= 5 && (
-        <div className="absolute top-3 right-3 z-20 pointer-events-none select-none">
-          <div
-            className={`flex flex-col items-end transition-all duration-150 ${tier.color}`}
-          >
-            <span
-              className="font-bold font-typewriter tabular-nums"
-              style={{
-                fontSize: `${Math.min(1.2 + streak * 0.01, 2)}rem`,
-                textShadow:
-                  streak >= 50
-                    ? "0 0 12px currentColor, 0 0 24px currentColor"
-                    : streak >= 25
-                      ? "0 0 8px currentColor"
-                      : "none",
-              }}
-            >
-              {streak}x
-            </span>
-            {tier.label && (
-              <span
-                className="text-xs font-semibold tracking-wider uppercase opacity-80"
-                style={{
-                  textShadow: streak >= 50 ? "0 0 8px currentColor" : "none",
-                }}
-              >
-                {tier.label}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
-    </>
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none z-10"
+    />
   );
 }
