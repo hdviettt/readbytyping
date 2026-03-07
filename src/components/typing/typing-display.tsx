@@ -112,10 +112,10 @@ export function TypingDisplay({
       <div
         onClick={onClick}
         ref={scrollRef}
-        className={`book-page absolute inset-0 cursor-text select-none overflow-hidden transition-all duration-200 ${
+        className={`book-page absolute inset-0 cursor-text select-none overflow-hidden transition-all duration-200 opacity-70 ${
           isFocused
             ? "ring-1 ring-accent/40"
-            : "ring-1 ring-transparent opacity-50"
+            : "ring-1 ring-transparent"
         }`}
         style={{ fontSize: `${fontSize}px` }}
       >

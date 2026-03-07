@@ -67,7 +67,7 @@ export function TypingInterface({
   const prevStateRef = useRef(state);
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const showBeginPrompt = useRef(true);
+
   const pauseTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Focus tracking for typing display
@@ -285,7 +285,7 @@ export function TypingInterface({
     })();
 
     // Determine completion type
-    showBeginPrompt.current = false;
+
     const isLastPageInChapter = pageIndex === chapter.pages.length - 1;
     const isLastChapter = chapterIndex === book.chapters.length - 1;
 
@@ -428,14 +428,6 @@ export function TypingInterface({
             shakeEnabled={settings.screenShake}
           />
         )}
-        {!state.startedAt && !state.isComplete && showBeginPrompt.current && isFocused && (
-          <div className="absolute inset-x-0 bottom-4 flex justify-center z-20 pointer-events-none">
-            <span className="text-xs text-muted font-sans animate-pulse">
-              Begin typing...
-            </span>
-          </div>
-        )}
-
         {/* Escape prompt */}
         {escapePrompt && (
           <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
