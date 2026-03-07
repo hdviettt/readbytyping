@@ -126,15 +126,13 @@ export function TypingDisplay({
         </div>
       </div>
 
-      {/* Focus lost overlay */}
+      {/* Focus prompt */}
       {!isFocused && (
         <div
           onClick={onClick}
-          className="absolute inset-0 z-10 flex items-center justify-center bg-paper-bg/80 backdrop-blur-[2px] cursor-pointer"
+          className="absolute inset-x-0 bottom-0 z-10 flex justify-center py-3 cursor-pointer bg-gradient-to-t from-paper-bg to-transparent"
         >
-          <div className="flex flex-col items-center gap-2 text-paper-text/50">
-            <span className="text-sm tracking-wide">Click to continue typing</span>
-          </div>
+          <span className="text-xs tracking-wide text-paper-text/40">Click to continue typing</span>
         </div>
       )}
     </div>
