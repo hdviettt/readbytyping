@@ -31,35 +31,33 @@ export function CompletionModal({
     <dialog
       ref={dialogRef}
       onClose={onBackToBook}
-      className="backdrop:bg-black/70 bg-transparent p-0 m-auto"
+      className="backdrop:bg-black/60 backdrop:backdrop-blur-sm bg-transparent p-0 m-auto"
     >
-      <div className="bg-surface border border-border rounded-lg max-w-sm w-full mx-4">
+      <div className="bg-surface border border-border/70 rounded-xl max-w-sm w-full mx-4 shadow-2xl">
         {/* Header */}
-        <div className="border-b border-border px-6 py-3 flex items-center justify-between">
-          <p className="text-sm font-serif font-medium text-muted">
-            Session Summary
-          </p>
+        <div className="border-b border-border/50 px-6 py-4 flex items-center justify-between">
+          <p className="text-sm font-medium text-foreground">Session Complete</p>
           <span className="badge badge-accent animate-badge">
-            Complete
+            {type === "book" ? "Finished" : "Done"}
           </span>
         </div>
 
         {/* Stats grid */}
-        <div className="grid grid-cols-3 border-b border-border">
-          <div className="px-4 py-4 text-center border-r border-border">
-            <p className="text-xs text-muted mb-1">WPM</p>
+        <div className="grid grid-cols-3 border-b border-border/50">
+          <div className="px-4 py-5 text-center border-r border-border/50">
+            <p className="text-xs text-dim mb-1">WPM</p>
             <p className="text-2xl font-mono tabular-nums font-semibold text-accent">
               <CountUp end={stats.wpm} />
             </p>
           </div>
-          <div className="px-4 py-4 text-center border-r border-border">
-            <p className="text-xs text-muted mb-1">Accuracy</p>
+          <div className="px-4 py-5 text-center border-r border-border/50">
+            <p className="text-xs text-dim mb-1">Accuracy</p>
             <p className="text-2xl font-mono tabular-nums font-semibold text-ink-correct">
               <CountUp end={stats.accuracy} suffix="%" />
             </p>
           </div>
-          <div className="px-4 py-4 text-center">
-            <p className="text-xs text-muted mb-1">Time</p>
+          <div className="px-4 py-5 text-center">
+            <p className="text-xs text-dim mb-1">Time</p>
             <p className="text-2xl font-mono tabular-nums font-semibold text-foreground">
               {formatTime(stats.elapsedSeconds)}
             </p>
@@ -67,18 +65,18 @@ export function CompletionModal({
         </div>
 
         {/* Actions */}
-        <div className="px-6 py-4 flex gap-3">
+        <div className="px-6 py-4 flex gap-2">
           {type !== "book" && (
             <button
               onClick={onContinue}
-              className="flex-1 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-md transition-colors"
+              className="flex-1 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-lg transition-colors"
             >
               Next Chapter
             </button>
           )}
           <button
             onClick={onBackToBook}
-            className="flex-1 py-2.5 border border-border hover:border-border-hover font-medium text-sm rounded-md hover:bg-paper transition-colors"
+            className="flex-1 py-2.5 bg-border/30 hover:bg-border/50 font-medium text-sm rounded-lg transition-colors"
           >
             Back to Book
           </button>

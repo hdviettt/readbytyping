@@ -40,10 +40,10 @@ const CharSpan = memo(function CharSpan({
       cls += "text-paper-text";
       break;
     case "incorrect":
-      cls += "text-ink-error bg-ink-error/12";
+      cls += "text-ink-error bg-ink-error/10 rounded-sm";
       break;
     case "current":
-      cls += "bg-accent/80 text-white";
+      cls += "bg-accent text-white rounded-sm";
       break;
     case "upcoming":
       cls += "text-paper-upcoming";
@@ -104,15 +104,16 @@ export function TypingDisplay({
     <div
       onClick={onClick}
       ref={scrollRef}
-      className={`book-page relative cursor-text select-none overflow-hidden rounded-lg shadow-lg transition-shadow duration-200 ${
-        isFocused ? "ring-2 ring-accent/30" : ""
+      className={`book-page relative cursor-text select-none overflow-hidden rounded-lg transition-all duration-200 ${
+        isFocused
+          ? "ring-1 ring-accent/40 shadow-lg shadow-accent/5"
+          : "ring-1 ring-transparent shadow-md"
       }`}
       style={{
         minHeight: "20rem",
         height: "55vh",
         maxHeight: "70vh",
         fontSize: `${fontSize}px`,
-        boxShadow: "inset 0 2px 8px rgba(0,0,0,0.06)",
       }}
     >
       {/* Text content */}
@@ -124,8 +125,8 @@ export function TypingDisplay({
 
       {/* Focus lost overlay */}
       {!isFocused && (
-        <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/15 pointer-events-none">
-          <span className="text-sm text-muted font-sans">Click to resume typing</span>
+        <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/10 backdrop-blur-[1px] pointer-events-none">
+          <span className="text-[13px] text-paper-text/60">Click to focus</span>
         </div>
       )}
     </div>

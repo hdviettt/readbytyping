@@ -28,13 +28,13 @@ export function getTier(streak: number) {
   return null;
 }
 
-// Warm typewriter-themed particle colors
+// Modern warm particle colors
 const PARTICLE_COLORS = [
-  ["#c89b3c", "#d4a84c", "#b8892e"], // amber (5+)
-  ["#c89b3c", "#d4a84c", "#e8c36a"], // bright amber (10+)
-  ["#d4a84c", "#e8c36a", "#f0d890"], // gold (25+)
-  ["#c45a4a", "#d4704a", "#c89b3c"], // warm red-amber (50+)
-  ["#c45a4a", "#d4704a", "#e8c36a", "#f0d890"], // fire (100+)
+  ["#d4a63c", "#e4b84a", "#c49630"], // amber (5+)
+  ["#d4a63c", "#e4b84a", "#f0d060"], // bright amber (10+)
+  ["#e4b84a", "#f0d060", "#fce090"], // gold (25+)
+  ["#f87171", "#fb923c", "#d4a63c"], // red-amber (50+)
+  ["#f87171", "#fb923c", "#f0d060", "#fce090"], // fire (100+)
 ];
 
 function getParticleColors(streak: number): string[] {

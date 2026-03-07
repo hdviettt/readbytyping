@@ -17,8 +17,8 @@ export default function BookChaptersPage() {
     return (
       <>
         <Nav />
-        <main className="max-w-3xl mx-auto px-6 py-8">
-          <p className="text-center text-muted py-12 animate-pulse">Loading...</p>
+        <main className="max-w-3xl mx-auto px-6 py-10">
+          <p className="text-center text-muted py-12 animate-pulse text-sm">Loading...</p>
         </main>
       </>
     );
@@ -35,34 +35,25 @@ export default function BookChaptersPage() {
   return (
     <>
       <Nav />
-      <main className="max-w-3xl mx-auto px-6 py-8">
+      <main className="max-w-3xl mx-auto px-6 py-10">
         <Link
           href="/"
-          className="inline-flex items-center gap-1 text-sm text-muted hover:text-foreground mb-6"
+          className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-foreground mb-6 transition-colors"
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
           </svg>
           Library
         </Link>
 
         <div className="mb-8">
-          <h1 className="text-2xl font-serif font-semibold text-foreground">{book.title}</h1>
+          <h1 className="text-xl font-serif font-semibold text-foreground">{book.title}</h1>
           {book.author && (
-            <p className="text-muted mt-1">{book.author}</p>
+            <p className="text-muted text-[13px] mt-1">{book.author}</p>
           )}
-          <div className="flex items-center gap-4 mt-3 text-sm text-muted">
+          <div className="flex items-center gap-3 mt-2 text-[13px] text-dim">
             <span>{book.totalChapters} chapters</span>
+            <span className="text-border">·</span>
             <span>{book.totalPages} pages</span>
           </div>
         </div>
@@ -70,16 +61,16 @@ export default function BookChaptersPage() {
         {bookProgress && bookProgress.completedPages < book.totalPages && (
           <Link
             href={`/book/${book.id}/type?chapter=${bookProgress.chapterIndex}`}
-            className="flex items-center justify-between w-full mb-6 px-5 py-4 bg-accent hover:bg-accent-hover text-background rounded-md font-medium transition-colors"
+            className="flex items-center justify-between w-full mb-6 px-4 py-3 bg-accent hover:bg-accent-hover text-background rounded-lg font-medium text-sm transition-colors"
           >
             <span>Resume typing</span>
-            <span className="text-sm opacity-80">
+            <span className="text-xs opacity-80">
               {Math.round((completedPages / book.totalPages) * 100)}% complete
             </span>
           </Link>
         )}
 
-        <div className="space-y-2">
+        <div className="space-y-1">
           {book.chapters.map((chapter, ci) => {
             const chapterPageCount = chapter.pages.length;
             const chapterStart = pagesBeforeChapter;
@@ -99,28 +90,18 @@ export default function BookChaptersPage() {
               <Link
                 key={ci}
                 href={`/book/${book.id}/type?chapter=${ci}`}
-                className="flex items-center gap-4 p-4 border border-border rounded-md hover:border-border-hover transition-colors group"
+                className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-surface/70 transition-colors group"
               >
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 ${
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0 ${
                     isDone
-                      ? "bg-ink-correct/20 text-ink-correct"
-                      : "bg-paper text-muted group-hover:text-foreground"
+                      ? "bg-ink-correct/10 text-ink-correct"
+                      : "bg-border/30 text-muted group-hover:text-foreground"
                   }`}
                 >
                   {isDone ? (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   ) : (
                     ci + 1
@@ -128,40 +109,35 @@ export default function BookChaptersPage() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate group-hover:text-accent transition-colors">
+                  <p className="text-[13px] font-medium truncate group-hover:text-accent transition-colors">
                     {chapter.title}
                   </p>
-                  <p className="text-xs text-muted mt-0.5">
+                  <p className="text-xs text-dim mt-0.5">
                     {chapterPageCount} pages
                   </p>
                 </div>
 
                 {pct > 0 && !isDone && (
-                  <div className="w-20 shrink-0">
-                    <div className="w-full h-1.5 bg-paper rounded-full overflow-hidden">
+                  <div className="w-16 shrink-0">
+                    <div className="w-full h-1 bg-border/30 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-accent rounded-full"
+                        className="h-full bg-accent/70 rounded-full"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <p className="text-[10px] text-muted text-right mt-0.5">
+                    <p className="text-[10px] text-dim text-right mt-0.5">
                       {pct}%
                     </p>
                   </div>
                 )}
 
                 <svg
-                  className="w-5 h-5 text-dim group-hover:text-muted shrink-0"
+                  className="w-4 h-4 text-border group-hover:text-muted shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
             );

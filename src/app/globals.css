@@ -1,76 +1,70 @@
 @import "tailwindcss";
 
-/* ===== Warm Literary — Dark theme (default) ===== */
+/* ===== Modern Literary — Dark theme (default) ===== */
 :root {
-  /* Core palette: deep warm brown-black, parchment, walnut */
-  --background: #1a1610;
-  --foreground: #e8dcc8;
-  --surface: #231e18;
-  --paper: #2c2520;
-  --border-color: #3d3429;
-  --border-hover: #5a4d3e;
-  --muted: #8a7a66;
-  --dim: #5a4e40;
-  --accent: #c89b3c;
-  --accent-hover: #daa840;
-  /* Ink / feedback */
-  --ink: #e8dcc8;
-  --ink-correct: #6a9a5a;
-  --ink-error: #c45a4a;
-  --ink-current: #c89b3c;
-  /* Badge red */
-  --stamp: #b04a3c;
-  --stamp-dim: #8a3228;
-  /* Paper sheet — warm cream book page */
-  --paper-bg: #f4edd8;
-  --paper-text: #2a2418;
-  --paper-upcoming: #b0a890;
-  --paper-line: #d8d0b8;
-  --paper-margin: #c4a070;
-  --paper-shadow: rgba(0, 0, 0, 0.5);
+  --background: #09090b;
+  --foreground: #e4e4e7;
+  --surface: #18181b;
+  --paper: #1c1c21;
+  --border-color: #27272a;
+  --border-hover: #3f3f46;
+  --muted: #71717a;
+  --dim: #52525b;
+  --accent: #d4a63c;
+  --accent-hover: #e4b84a;
+  --ink: #e4e4e7;
+  --ink-correct: #4ade80;
+  --ink-error: #f87171;
+  --ink-current: #d4a63c;
+  --stamp: #ef4444;
+  --stamp-dim: #991b1b;
+  /* Typing page — warm cream literary feel */
+  --paper-bg: #f7f3e8;
+  --paper-text: #1c1917;
+  --paper-upcoming: #a8a29e;
+  --paper-line: #e7e5e4;
+  --paper-margin: #d4a63c;
+  --paper-shadow: rgba(0, 0, 0, 0.4);
   /* Keyboard */
-  --key-bg: #2c2520;
-  --key-border: #4a3e32;
-  --key-text: #9a8a72;
-  --key-shadow: #0a0806;
+  --key-bg: #18181b;
+  --key-border: #27272a;
+  --key-text: #a1a1aa;
+  --key-shadow: #09090b;
   /* Platen */
-  --platen-from: #1a1610;
-  --platen-mid: #3a3228;
+  --platen-from: #09090b;
+  --platen-mid: #27272a;
 }
 
 /* ===== Light theme ===== */
 .light {
-  --background: #faf6ee;
-  --foreground: #2a2418;
-  --surface: #f0e8d8;
-  --paper: #e8e0d0;
-  --border-color: #d4c8b0;
-  --border-hover: #b8a890;
-  --muted: #7a6e58;
-  --dim: #a09480;
-  --accent: #a07828;
-  --accent-hover: #b88830;
-  --ink: #2a2418;
-  --ink-correct: #3a7a20;
-  --ink-error: #a83a2a;
-  --ink-current: #a07828;
-  --stamp: #a83a2a;
-  --stamp-dim: #c86050;
-  /* Paper sheet */
-  --paper-bg: #faf5e8;
-  --paper-text: #2a2418;
-  --paper-upcoming: #a09880;
-  --paper-line: #e0d8c0;
-  --paper-margin: #c4a070;
-  --paper-shadow: rgba(0, 0, 0, 0.12);
-  /* Keyboard */
-  --key-bg: #e8e0d0;
-  --key-border: #c8c0a8;
-  --key-text: #5a5040;
-  --key-shadow: #c8c0b0;
-  /* Platen */
-  --platen-from: #8a8070;
-  --platen-mid: #a09888;
+  --background: #fafaf9;
+  --foreground: #1c1917;
+  --surface: #f5f5f4;
+  --paper: #e7e5e4;
+  --border-color: #d6d3d1;
+  --border-hover: #a8a29e;
+  --muted: #78716c;
+  --dim: #a8a29e;
+  --accent: #b8942e;
+  --accent-hover: #a07e20;
+  --ink: #1c1917;
+  --ink-correct: #16a34a;
+  --ink-error: #dc2626;
+  --ink-current: #b8942e;
+  --stamp: #dc2626;
+  --stamp-dim: #fca5a5;
+  --paper-bg: #faf8f2;
+  --paper-text: #1c1917;
+  --paper-upcoming: #a8a29e;
+  --paper-line: #e7e5e4;
+  --paper-margin: #b8942e;
+  --paper-shadow: rgba(0, 0, 0, 0.08);
+  --key-bg: #f5f5f4;
+  --key-border: #d6d3d1;
+  --key-text: #57534e;
+  --key-shadow: #d6d3d1;
+  --platen-from: #78716c;
+  --platen-mid: #a8a29e;
 }
 
 @theme inline {
@@ -99,79 +93,66 @@
   --color-key-border: var(--key-border);
   --color-key-text: var(--key-text);
   --font-serif: var(--font-lora);
-  --font-sans: var(--font-source-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
   --font-typewriter: var(--font-jetbrains-mono);
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Cursor blink removed — using solid block cursor */
-
-/* ===== Paper / book page ===== */
+/* ===== Typing page ===== */
 .book-page {
   background: var(--paper-bg);
   scrollbar-width: none;
 }
 .book-page::-webkit-scrollbar { display: none; }
 
-/* ===== Badge (replaces stamp) ===== */
+/* ===== Badge pills ===== */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
+  padding: 3px 10px;
   border-radius: 9999px;
   font-size: 0.7rem;
-  font-weight: 600;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  letter-spacing: 0.02em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 .badge-success {
-  background: rgba(106, 154, 90, 0.15);
+  background: rgba(74, 222, 128, 0.12);
   color: var(--ink-correct);
 }
 .badge-accent {
-  background: rgba(200, 155, 60, 0.15);
+  background: rgba(212, 166, 60, 0.12);
   color: var(--accent);
 }
 .badge-error {
-  background: rgba(196, 90, 74, 0.15);
+  background: rgba(248, 113, 113, 0.12);
   color: var(--ink-error);
 }
 
 /* ===== Animations ===== */
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-up {
-  animation: fade-up 0.4s ease-out both;
+  animation: fade-up 0.3s ease-out both;
 }
 
 @keyframes badge-in {
-  0% { transform: scale(1.3); opacity: 0; }
-  60% { transform: scale(0.97); opacity: 1; }
+  0% { transform: scale(1.2); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
 .animate-badge {
-  animation: badge-in 0.3s ease-out both;
-}
-
-/* Keep stamp-in as alias for compat */
-@keyframes stamp-in {
-  0% { transform: scale(1.3); opacity: 0; }
-  60% { transform: scale(0.97); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
+  animation: badge-in 0.25s ease-out both;
 }
 .animate-stamp {
-  animation: stamp-in 0.3s ease-out both;
+  animation: badge-in 0.25s ease-out both;
 }
 
 @keyframes overlay-fade-in {
@@ -179,31 +160,31 @@ body {
   to { opacity: 1; }
 }
 .animate-overlay-in {
-  animation: overlay-fade-in 0.25s ease-out both;
+  animation: overlay-fade-in 0.2s ease-out both;
 }
 
 @keyframes card-scale-in {
-  from { opacity: 0; transform: scale(0.9); }
+  from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 .animate-card-in {
-  animation: card-scale-in 0.3s ease-out 0.1s both;
+  animation: card-scale-in 0.25s ease-out 0.05s both;
 }
 
 @keyframes toast-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 .animate-toast-in {
-  animation: toast-in 0.3s ease-out both;
+  animation: toast-in 0.25s ease-out both;
 }
 
 @keyframes toast-out {
   from { opacity: 1; transform: translateX(-50%) translateY(0); }
-  to { opacity: 0; transform: translateX(-50%) translateY(16px); }
+  to { opacity: 0; transform: translateX(-50%) translateY(12px); }
 }
 .animate-toast-out {
-  animation: toast-out 0.3s ease-in both;
+  animation: toast-out 0.25s ease-in both;
 }
 
 @keyframes streak-flash {
@@ -216,19 +197,19 @@ body {
 }
 
 /* Staggered children */
-.stagger-children > * { animation: fade-up 0.35s ease-out both; }
+.stagger-children > * { animation: fade-up 0.3s ease-out both; }
 .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
-.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
-.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
-.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
-.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
-.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
-.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
-.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
-.stagger-children > *:nth-child(9) { animation-delay: 400ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 40ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 80ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 160ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 280ms; }
+.stagger-children > *:nth-child(9) { animation-delay: 320ms; }
 
-/* ===== Scrollbar — warm ===== */
+/* ===== Scrollbar ===== */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }

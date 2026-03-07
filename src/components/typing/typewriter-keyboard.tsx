@@ -120,19 +120,23 @@ const KeyCap = memo(function KeyCap({
   let textCls = "text-key-text";
   let borderColor = "var(--key-border)";
   let bgColor = "var(--key-bg)";
+  let shadow = `0 2px 0 var(--key-shadow)`;
 
   if (flashState === "correct") {
     textCls = "text-ink-correct";
     borderColor = "var(--ink-correct)";
-    bgColor = "rgba(106, 154, 80, 0.15)";
+    bgColor = "rgba(74, 222, 128, 0.1)";
+    shadow = "inset 0 1px 3px rgba(0,0,0,0.3)";
   } else if (flashState === "incorrect") {
     textCls = "text-ink-error";
     borderColor = "var(--ink-error)";
-    bgColor = "rgba(196, 74, 58, 0.15)";
+    bgColor = "rgba(248, 113, 113, 0.1)";
+    shadow = "inset 0 1px 3px rgba(0,0,0,0.3)";
   } else if (highlight) {
     textCls = "text-accent";
     borderColor = "var(--accent)";
-    bgColor = "rgba(184, 164, 76, 0.12)";
+    bgColor = "rgba(212, 166, 60, 0.08)";
+    shadow = `0 2px 0 var(--key-shadow), 0 0 8px rgba(212, 166, 60, 0.2)`;
   }
 
   return (
@@ -143,11 +147,7 @@ const KeyCap = memo(function KeyCap({
         height: isSpace ? "1.6rem" : "2rem",
         background: bgColor,
         border: `1px solid ${borderColor}`,
-        boxShadow: pressed
-          ? `inset 0 1px 3px rgba(0,0,0,0.4)`
-          : highlight
-            ? `0 2px 0 var(--key-shadow), 0 0 8px rgba(200, 155, 60, 0.3)`
-            : `0 2px 0 var(--key-shadow), inset 0 1px 0 rgba(255,255,255,0.04)`,
+        boxShadow: shadow,
         transform: pressed ? "translateY(2px)" : "none",
       }}
     >
@@ -193,14 +193,12 @@ export function TypewriterKeyboard({
 
   return (
     <div
-      className="border border-t-0 border-border"
+      className="border border-border/50 border-t-0 rounded-b-lg"
       style={{
         background: "linear-gradient(180deg, var(--surface) 0%, var(--background) 100%)",
         padding: "8px 12px 10px",
       }}
     >
-      <div className="h-px bg-border-hover/30 mb-2" />
-
       <div className="flex flex-col items-center gap-[1px]">
         {ROWS.map((row, ri) => (
           <div

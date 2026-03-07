@@ -21,11 +21,11 @@ export function Onboarding() {
   }
 
   return (
-    <div className="mb-8 p-8 bg-surface border border-border rounded-2xl text-center animate-fade-up">
+    <div className="mb-8 p-8 bg-surface/50 border border-border/50 rounded-lg text-center animate-fade-up">
       {/* Typewriter SVG */}
       <svg
         viewBox="0 0 120 100"
-        className="w-24 h-24 mx-auto mb-4 text-accent"
+        className="w-20 h-20 mx-auto mb-4 text-accent"
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
@@ -51,11 +51,11 @@ export function Onboarding() {
         <rect x="36" y="65" width="48" height="5" rx="1" className="fill-key-bg stroke-key-border" />
       </svg>
 
-      <h2 className="text-xl font-semibold font-serif text-accent mb-2">
+      <h2 className="text-lg font-serif font-semibold text-foreground mb-1">
         Welcome to BookTyper
       </h2>
-      <p className="text-muted text-sm mb-1">
-        Feed a book into the typewriter and practice your typing.
+      <p className="text-muted text-[13px] mb-1">
+        Practice your typing with real books.
       </p>
       <p className="text-dim text-xs mb-5">
         Upload an EPUB or PDF above to get started.
@@ -64,7 +64,7 @@ export function Onboarding() {
       {/* Arrow pointing up to upload area */}
       <svg
         viewBox="0 0 24 24"
-        className="w-6 h-6 mx-auto text-accent animate-bounce"
+        className="w-5 h-5 mx-auto text-accent animate-bounce"
         fill="none"
         stroke="currentColor"
         strokeWidth="2"

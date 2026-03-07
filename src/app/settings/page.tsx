@@ -35,20 +35,20 @@ export default function SettingsPage() {
   return (
     <>
       <Nav />
-      <main className="max-w-2xl mx-auto px-6 py-8">
-        <h1 className="text-2xl font-serif font-semibold text-foreground mb-8">Settings</h1>
+      <main className="max-w-2xl mx-auto px-6 py-10">
+        <h1 className="text-xl font-semibold text-foreground mb-8">Settings</h1>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Profile section */}
           {user && !isAnonymous && profileLoaded && (
             <Section title="Profile">
               <div className="py-3 space-y-3">
                 <div>
-                  <p className="text-xs text-muted mb-1">Email</p>
+                  <p className="text-xs text-dim mb-1">Email</p>
                   <p className="text-sm">{user.email}</p>
                 </div>
                 <div>
-                  <label htmlFor="displayName" className="text-xs text-muted mb-1 block">
+                  <label htmlFor="displayName" className="text-xs text-dim mb-1 block">
                     Display name
                   </label>
                   <div className="flex gap-2">
@@ -58,12 +58,12 @@ export default function SettingsPage() {
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="Your name"
-                      className="flex-1 px-3 py-1.5 text-sm bg-background border border-border rounded-md placeholder:text-dim focus:outline-none focus:border-accent"
+                      className="flex-1 px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
                     />
                     <button
                       onClick={handleSaveProfile}
                       disabled={saving}
-                      className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-hover text-background rounded-md font-medium transition-colors disabled:opacity-50"
+                      className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-hover text-background rounded-lg font-medium transition-colors disabled:opacity-50"
                     >
                       {saving ? "Saving..." : "Save"}
                     </button>
@@ -109,7 +109,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between py-3">
               <div>
                 <p className="text-sm font-medium">Font size</p>
-                <p className="text-xs text-muted mt-0.5">{settings.fontSize}px</p>
+                <p className="text-xs text-dim mt-0.5">{settings.fontSize}px</p>
               </div>
               <input
                 type="range"
@@ -125,7 +125,7 @@ export default function SettingsPage() {
 
           <button
             onClick={() => update(getDefaults())}
-            className="text-sm text-muted hover:text-foreground transition-colors"
+            className="text-sm text-dim hover:text-muted transition-colors"
           >
             Reset to defaults
           </button>
@@ -137,9 +137,9 @@ export default function SettingsPage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="p-5 bg-surface rounded-lg border border-border">
-      <h2 className="text-sm font-serif font-medium text-muted mb-3">{title}</h2>
-      <div className="divide-y divide-border">{children}</div>
+    <div className="p-5 bg-surface/50 rounded-lg border border-border/50">
+      <h2 className="text-xs font-medium text-dim mb-3">{title}</h2>
+      <div className="divide-y divide-border/30">{children}</div>
     </div>
   );
 }
@@ -159,7 +159,7 @@ function Toggle({
     <label className="flex items-center justify-between py-3 cursor-pointer">
       <div>
         <p className="text-sm font-medium">{label}</p>
-        <p className="text-xs text-muted mt-0.5">{description}</p>
+        <p className="text-xs text-dim mt-0.5">{description}</p>
       </div>
       <button
         role="switch"
@@ -170,7 +170,7 @@ function Toggle({
         }`}
       >
         <span
-          className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-background transition-transform ${
+          className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
             checked ? "translate-x-4" : ""
           }`}
         />

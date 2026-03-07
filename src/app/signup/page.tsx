@@ -51,22 +51,18 @@ export default function SignupPage() {
   if (success) {
     return (
       <main className="min-h-screen flex items-center justify-center px-6">
-        <div className="w-full max-w-sm">
-          <div className="border border-border bg-surface rounded-lg px-6 py-8 text-center">
-            <span className="badge badge-accent animate-badge text-sm mx-auto mb-4">
-              Pending
-            </span>
-            <p className="text-base font-serif font-semibold text-foreground mb-2">
-              Check your email
-            </p>
-            <p className="text-sm text-muted leading-relaxed">
-              We sent a confirmation link to <span className="text-foreground font-medium">{email}</span>.
-              Click the link to complete your registration.
-            </p>
-            <Link href="/login" className="inline-block mt-4 text-sm text-accent hover:text-accent-hover font-medium">
-              Back to sign in
-            </Link>
-          </div>
+        <div className="w-full max-w-sm bg-surface/50 border border-border/50 rounded-xl p-8 text-center">
+          <span className="badge badge-accent animate-badge">Pending</span>
+          <p className="text-base font-semibold text-foreground mt-4 mb-2">
+            Check your email
+          </p>
+          <p className="text-[13px] text-muted leading-relaxed">
+            We sent a confirmation link to <span className="text-foreground font-medium">{email}</span>.
+            Click the link to complete registration.
+          </p>
+          <Link href="/login" className="inline-block mt-4 text-sm text-accent hover:text-accent-hover font-medium">
+            Back to sign in
+          </Link>
         </div>
       </main>
     );
@@ -75,46 +71,34 @@ export default function SignupPage() {
   return (
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
-        {/* Header */}
-        <div className="border border-border bg-surface rounded-t-lg px-6 py-5 text-center">
-          <div className="w-10 h-10 border border-accent rounded-md mx-auto mb-3 flex items-center justify-center">
-            <span className="text-accent text-sm font-bold">BT</span>
-          </div>
-          <h1 className="text-xl font-serif font-semibold text-foreground">
-            Create Account
-          </h1>
-          <p className="text-sm text-muted mt-1">
-            Register to save your progress
-          </p>
+        <div className="text-center mb-6">
+          <span className="text-accent font-bold text-lg">BT</span>
+          <h1 className="text-lg font-semibold text-foreground mt-2">Create account</h1>
+          <p className="text-[13px] text-muted mt-1">Register to save your progress</p>
         </div>
 
-        {/* Form body */}
-        <div className="border border-t-0 border-border bg-surface/50 rounded-b-lg px-6 py-5">
+        <div className="bg-surface/50 border border-border/50 rounded-xl p-6">
           {error && (
-            <div className="mb-4 px-4 py-3 border border-ink-error/30 bg-ink-error/10 rounded-md">
+            <div className="mb-4 px-3 py-2.5 bg-ink-error/8 border border-ink-error/20 rounded-lg">
               <p className="text-sm text-ink-error">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-xs text-muted mb-1.5">
-                Email address
-              </label>
+              <label htmlFor="email" className="block text-xs text-dim mb-1.5">Email</label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-sm bg-background border border-border rounded-md placeholder:text-dim focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 text-sm bg-transparent border border-border/70 rounded-lg placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
                 placeholder="you@example.com"
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-xs text-muted mb-1.5">
-                Password
-              </label>
+              <label htmlFor="password" className="block text-xs text-dim mb-1.5">Password</label>
               <input
                 id="password"
                 type="password"
@@ -122,20 +106,20 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full px-3 py-2 text-sm bg-background border border-border rounded-md placeholder:text-dim focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 text-sm bg-transparent border border-border/70 rounded-lg placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
                 placeholder="Minimum 6 characters"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-md transition-colors disabled:opacity-50"
+              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-lg transition-colors disabled:opacity-50"
             >
               {loading ? "Creating account..." : "Create account"}
             </button>
           </form>
 
-          <p className="text-center text-sm text-muted mt-4">
+          <p className="text-center text-[13px] text-muted mt-4">
             Already have an account?{" "}
             <Link href="/login" className="text-accent hover:text-accent-hover font-medium">
               Sign in
