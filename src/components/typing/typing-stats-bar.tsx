@@ -25,22 +25,22 @@ export function TypingStatsBar({
   }, [tierLabel]);
 
   return (
-    <div className="flex items-stretch gap-0 border border-border bg-surface">
+    <div className="flex items-stretch gap-0 border border-border bg-surface rounded-lg">
       <StatField
         label="WPM"
         value={stats.wpm === 0 && stats.elapsedSeconds < 3 ? "--" : String(stats.wpm)}
         highlight
       />
       <StatField
-        label="ACC"
+        label="Accuracy"
         value={`${stats.accuracy}%`}
       />
       {tier && (
         <div className="border-l border-border px-3 py-1.5 min-w-[60px]">
-          <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-dim mb-0.5">Streak</p>
+          <p className="text-xs text-muted mb-0.5">Streak</p>
           <div className="flex items-baseline gap-1.5">
             <span
-              className={`font-bold font-typewriter leading-none tabular-nums ${tier.color}`}
+              className={`font-semibold font-mono leading-none tabular-nums ${tier.color}`}
               style={{ fontSize: `${Math.min(1.1 + streak * 0.005, 1.5)}rem` }}
             >
               {streak}x
@@ -48,7 +48,7 @@ export function TypingStatsBar({
             {tierLabel && (
               <span
                 key={tierLabel}
-                className={`text-[10px] font-semibold tracking-wider uppercase ${tier.color} opacity-80 ${tierChanged ? "animate-streak-flash" : ""}`}
+                className={`text-xs font-semibold ${tier.color} opacity-80 ${tierChanged ? "animate-streak-flash" : ""}`}
               >
                 {tierLabel}
               </span>
@@ -58,22 +58,22 @@ export function TypingStatsBar({
       )}
       <div className="flex-1 border-l border-border px-4 py-1.5 flex items-center justify-end gap-3">
         {saveStatus === "saved" && (
-          <span className="text-[10px] font-bold tracking-wider uppercase text-ink-correct opacity-70 transition-opacity">
+          <span className="text-xs font-medium text-ink-correct opacity-70 transition-opacity">
             Saved
           </span>
         )}
         {saveStatus === "error" && (
-          <span className="text-[10px] font-bold tracking-wider uppercase text-ink-error">
+          <span className="text-xs font-medium text-ink-error">
             Save failed
           </span>
         )}
-        <div className="w-24 h-1.5 bg-background border border-border">
+        <div className="w-24 h-1.5 bg-background rounded-full">
           <div
-            className="h-full bg-accent transition-all duration-300"
+            className="h-full bg-accent rounded-full transition-all duration-300"
             style={{ width: `${progress.percentage}%` }}
           />
         </div>
-        <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-muted">
+        <span className="text-xs text-muted">
           {progress.current}/{progress.total}
         </span>
       </div>
@@ -84,8 +84,8 @@ export function TypingStatsBar({
 function StatField({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div className="border-r border-border px-3 py-1.5 min-w-[70px]">
-      <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-dim mb-0.5">{label}</p>
-      <p className={`text-xl font-bold font-typewriter leading-none ${highlight ? "text-accent" : "text-foreground"}`}>
+      <p className="text-xs text-muted mb-0.5">{label}</p>
+      <p className={`text-xl font-semibold font-mono leading-none tabular-nums ${highlight ? "text-accent" : "text-foreground"}`}>
         {value}
       </p>
     </div>

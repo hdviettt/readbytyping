@@ -119,10 +119,8 @@ export default function LibraryPage() {
 
   function handleDeleteClick(id: string) {
     if (confirmDeleteId === id) {
-      // Second click — actually delete
       doDelete(id);
     } else {
-      // First click — show confirm
       setConfirmDeleteId(id);
       clearTimeout(confirmTimerRef.current);
       confirmTimerRef.current = setTimeout(() => setConfirmDeleteId(null), 3000);
@@ -199,7 +197,7 @@ export default function LibraryPage() {
       <>
         <Nav />
         <main className="max-w-5xl mx-auto px-6 py-8">
-          <p className="text-center text-muted py-12 animate-pulse font-typewriter">Loading library...</p>
+          <p className="text-center text-muted py-12 animate-pulse">Loading library...</p>
         </main>
       </>
     );
@@ -211,14 +209,14 @@ export default function LibraryPage() {
       <main className="max-w-5xl mx-auto px-6 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-sm font-bold tracking-[0.25em] uppercase text-accent">File Cabinet</h1>
-            <p className="text-[10px] text-dim tracking-wider uppercase mt-0.5">Document Archive</p>
+            <h1 className="text-2xl font-serif font-semibold text-foreground">Your Library</h1>
+            <p className="text-sm text-muted mt-0.5">{books.length} {books.length === 1 ? "book" : "books"}</p>
           </div>
         </div>
 
         {error && (
-          <div className="mb-6 px-3 py-2 border-2 border-stamp/40 bg-stamp/10">
-            <p className="text-xs text-stamp font-bold uppercase tracking-wider">{error}</p>
+          <div className="mb-6 px-4 py-3 border border-ink-error/30 bg-ink-error/10 rounded-lg">
+            <p className="text-sm text-ink-error">{error}</p>
           </div>
         )}
 
@@ -230,21 +228,21 @@ export default function LibraryPage() {
           }}
           onDragLeave={() => setDragActive(false)}
           onDrop={handleDrop}
-          className={`border-2 border-dashed p-6 text-center transition-colors mb-6 ${
+          className={`border border-dashed rounded-lg p-6 text-center transition-colors mb-6 ${
             dragActive
               ? "border-accent bg-accent/10"
               : "border-border hover:border-border-hover"
           }`}
         >
           {uploading ? (
-            <span className="text-xs font-bold tracking-[0.15em] uppercase text-muted">
-              Processing document<TypingDots />
+            <span className="text-sm text-muted">
+              Processing<TypingDots />
             </span>
           ) : (
             <div>
-              <p className="text-xs text-muted uppercase tracking-wider mb-1">
-                Drop file here or{" "}
-                <label className="text-accent hover:text-accent-hover cursor-pointer font-bold">
+              <p className="text-sm text-muted mb-1">
+                Drop a file here or{" "}
+                <label className="text-accent hover:text-accent-hover cursor-pointer font-medium">
                   browse
                   <input
                     type="file"
@@ -257,7 +255,7 @@ export default function LibraryPage() {
                   />
                 </label>
               </p>
-              <p className="text-[10px] text-dim tracking-wider">ACCEPTED: EPUB, PDF</p>
+              <p className="text-xs text-dim">Accepts EPUB and PDF</p>
             </div>
           )}
         </div>
@@ -267,15 +265,15 @@ export default function LibraryPage() {
           <div className="flex items-center gap-2 mb-6">
             <input
               type="text"
-              placeholder="Search files..."
+              placeholder="Search books..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-3 py-1.5 text-xs bg-background border-2 border-border placeholder:text-dim focus:outline-none focus:border-accent font-typewriter uppercase tracking-wider"
+              className="flex-1 px-3 py-1.5 text-sm bg-background border border-border rounded-md placeholder:text-dim focus:outline-none focus:border-accent"
             />
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortOption)}
-              className="px-3 py-1.5 text-xs bg-background border-2 border-border focus:outline-none focus:border-accent font-typewriter uppercase tracking-wider"
+              className="px-3 py-1.5 text-sm bg-background border border-border rounded-md focus:outline-none focus:border-accent"
             >
               <option value="recent">Recently added</option>
               <option value="last-typed">Recently typed</option>
@@ -307,32 +305,30 @@ export default function LibraryPage() {
               return (
                 <div
                   key={book.id}
-                  className="border-2 border-border hover:border-border-hover transition-colors group bg-surface"
+                  className="border border-border hover:border-border-hover transition-colors group bg-surface rounded-lg shadow-sm"
                 >
-                  {/* File tab */}
-                  <div className="flex items-center justify-between px-4 py-1.5 border-b-2 border-border bg-paper/30">
-                    <span className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim">
-                      {book.fileType} — {book.totalChapters} ch
+                  {/* Meta bar */}
+                  <div className="flex items-center justify-between px-4 py-1.5 border-b border-border">
+                    <span className="text-xs text-muted">
+                      {book.fileType.toUpperCase()} · {book.totalChapters} ch
                     </span>
                     {pct === 100 && (
-                      <span className="stamp text-[8px] py-0 px-1.5 border-[1.5px]" style={{ transform: "rotate(-2deg)" }}>
-                        Complete
-                      </span>
+                      <span className="badge badge-success">Complete</span>
                     )}
                   </div>
                   <button
                     onClick={() => router.push(`/book/${book.id}`)}
                     className="w-full text-left px-4 py-3 cursor-pointer"
                   >
-                    <h3 className="text-sm font-bold truncate group-hover:text-accent transition-colors uppercase tracking-wide">
+                    <h3 className="text-base font-serif font-semibold truncate group-hover:text-accent transition-colors">
                       {book.title}
                     </h3>
                     {book.author && (
-                      <p className="text-[11px] text-muted mt-0.5 truncate tracking-wider">
+                      <p className="text-sm text-muted mt-0.5 truncate">
                         {book.author}
                       </p>
                     )}
-                    <div className="flex items-center gap-3 mt-2 text-[10px] text-dim tracking-wider uppercase">
+                    <div className="flex items-center gap-3 mt-2 text-xs text-muted">
                       <span>{book.totalPages} pages</span>
                       {prog?.lastTypedAt && (
                         <span>{timeAgo(prog.lastTypedAt)}</span>
@@ -340,13 +336,13 @@ export default function LibraryPage() {
                     </div>
                     {isInProgress && (
                       <div className="mt-2">
-                        <div className="w-full h-1.5 bg-background border border-border">
+                        <div className="w-full h-1.5 bg-background rounded-full">
                           <div
-                            className="h-full bg-accent transition-all duration-300"
+                            className="h-full bg-accent rounded-full transition-all duration-300"
                             style={{ width: `${pct}%` }}
                           />
                         </div>
-                        <p className="text-[10px] text-muted mt-0.5 tracking-wider">{pct}%</p>
+                        <p className="text-xs text-muted mt-0.5">{pct}%</p>
                       </div>
                     )}
                   </button>
@@ -357,7 +353,7 @@ export default function LibraryPage() {
                           e.stopPropagation();
                           router.push(`/book/${book.id}/type?chapter=${prog.chapterIndex}`);
                         }}
-                        className="text-[10px] text-accent hover:text-accent-hover uppercase tracking-wider font-bold transition-colors py-1"
+                        className="text-xs text-accent hover:text-accent-hover font-medium transition-colors py-1"
                       >
                         Continue
                       </button>
@@ -366,13 +362,13 @@ export default function LibraryPage() {
                     )}
                     <button
                       onClick={() => handleDeleteClick(book.id)}
-                      className={`text-[10px] uppercase tracking-wider font-bold transition-colors py-1 ${
+                      className={`text-xs font-medium transition-colors py-1 ${
                         confirmDeleteId === book.id
-                          ? "text-stamp font-extrabold"
-                          : "text-dim hover:text-stamp"
+                          ? "text-ink-error font-semibold"
+                          : "text-muted hover:text-ink-error"
                       }`}
                     >
-                      {confirmDeleteId === book.id ? "Confirm?" : "Discard"}
+                      {confirmDeleteId === book.id ? "Confirm?" : "Delete"}
                     </button>
                   </div>
                 </div>
@@ -383,17 +379,17 @@ export default function LibraryPage() {
       </main>
 
       {undoItem && (
-        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border-2 border-border px-5 py-3 flex items-center gap-4 ${
+        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border border-border rounded-lg shadow-lg px-5 py-3 flex items-center gap-4 ${
           undoExiting ? "animate-toast-out" : "animate-toast-in"
         }`} style={{ willChange: "transform, opacity" }}>
-          <p className="text-xs uppercase tracking-wider">
-            Discarded: <span className="font-bold text-foreground">{undoItem.book.title}</span>
+          <p className="text-sm">
+            Deleted: <span className="font-medium text-foreground">{undoItem.book.title}</span>
           </p>
           <button
             onClick={handleUndo}
-            className="text-xs font-bold text-accent hover:text-accent-hover uppercase tracking-wider transition-colors"
+            className="text-sm font-medium text-accent hover:text-accent-hover transition-colors"
           >
-            Restore
+            Undo
           </button>
         </div>
       )}

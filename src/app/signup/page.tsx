@@ -52,19 +52,19 @@ export default function SignupPage() {
     return (
       <main className="min-h-screen flex items-center justify-center px-6">
         <div className="w-full max-w-sm">
-          <div className="border-2 border-border bg-surface px-6 py-8 text-center">
-            <div className="stamp animate-stamp text-lg mx-auto w-fit mb-4">
+          <div className="border border-border bg-surface rounded-lg px-6 py-8 text-center">
+            <span className="badge badge-accent animate-badge text-sm mx-auto mb-4">
               Pending
-            </div>
-            <p className="text-sm text-foreground font-bold uppercase tracking-wider mb-2">
-              Verification Required
+            </span>
+            <p className="text-base font-serif font-semibold text-foreground mb-2">
+              Check your email
             </p>
-            <p className="text-xs text-muted leading-relaxed">
-              Confirmation dispatched to <span className="text-foreground font-bold">{email}</span>.
-              Follow the link to complete registration.
+            <p className="text-sm text-muted leading-relaxed">
+              We sent a confirmation link to <span className="text-foreground font-medium">{email}</span>.
+              Click the link to complete your registration.
             </p>
-            <Link href="/login" className="inline-block mt-4 text-[11px] text-accent hover:text-accent-hover uppercase font-bold tracking-wider">
-              Return to Authorization
+            <Link href="/login" className="inline-block mt-4 text-sm text-accent hover:text-accent-hover font-medium">
+              Back to sign in
             </Link>
           </div>
         </div>
@@ -75,33 +75,31 @@ export default function SignupPage() {
   return (
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
-        {/* Document header */}
-        <div className="border-2 border-border bg-surface px-6 py-4 text-center">
-          <div className="w-10 h-10 border-2 border-accent mx-auto mb-3 flex items-center justify-center">
+        {/* Header */}
+        <div className="border border-border bg-surface rounded-t-lg px-6 py-5 text-center">
+          <div className="w-10 h-10 border border-accent rounded-md mx-auto mb-3 flex items-center justify-center">
             <span className="text-accent text-sm font-bold">BT</span>
           </div>
-          <h1 className="text-sm font-bold tracking-[0.25em] uppercase text-foreground">
-            New Registration
+          <h1 className="text-xl font-serif font-semibold text-foreground">
+            Create Account
           </h1>
-          <p className="text-[10px] text-muted tracking-wider uppercase mt-1">
-            Fill in all fields to register
+          <p className="text-sm text-muted mt-1">
+            Register to save your progress
           </p>
         </div>
 
         {/* Form body */}
-        <div className="border-2 border-t-0 border-border bg-surface/50 px-6 py-5">
+        <div className="border border-t-0 border-border bg-surface/50 rounded-b-lg px-6 py-5">
           {error && (
-            <div className="mb-4 px-3 py-2 border-2 border-stamp/40 bg-stamp/10">
-              <p className="text-xs text-stamp font-bold uppercase tracking-wider">
-                Rejected: {error}
-              </p>
+            <div className="mb-4 px-4 py-3 border border-ink-error/30 bg-ink-error/10 rounded-md">
+              <p className="text-sm text-ink-error">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-[10px] font-bold tracking-[0.2em] uppercase text-dim mb-1.5">
-                Email Address
+              <label htmlFor="email" className="block text-xs text-muted mb-1.5">
+                Email address
               </label>
               <input
                 id="email"
@@ -109,12 +107,12 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-sm bg-background border-2 border-border placeholder:text-dim focus:outline-none focus:border-accent font-typewriter"
+                className="w-full px-3 py-2 text-sm bg-background border border-border rounded-md placeholder:text-dim focus:outline-none focus:border-accent"
                 placeholder="you@example.com"
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-[10px] font-bold tracking-[0.2em] uppercase text-dim mb-1.5">
+              <label htmlFor="password" className="block text-xs text-muted mb-1.5">
                 Password
               </label>
               <input
@@ -124,23 +122,23 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full px-3 py-2 text-sm bg-background border-2 border-border placeholder:text-dim focus:outline-none focus:border-accent font-typewriter"
+                className="w-full px-3 py-2 text-sm bg-background border border-border rounded-md placeholder:text-dim focus:outline-none focus:border-accent"
                 placeholder="Minimum 6 characters"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-background font-bold text-xs tracking-[0.2em] uppercase transition-colors disabled:opacity-50 border-2 border-accent hover:border-accent-hover"
+              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-md transition-colors disabled:opacity-50"
             >
-              {loading ? "Processing..." : "Submit Registration"}
+              {loading ? "Creating account..." : "Create account"}
             </button>
           </form>
 
-          <p className="text-center text-[11px] text-muted mt-4 tracking-wider">
-            Already registered?{" "}
-            <Link href="/login" className="text-accent hover:text-accent-hover uppercase font-bold">
-              Authorize
+          <p className="text-center text-sm text-muted mt-4">
+            Already have an account?{" "}
+            <Link href="/login" className="text-accent hover:text-accent-hover font-medium">
+              Sign in
             </Link>
           </p>
         </div>

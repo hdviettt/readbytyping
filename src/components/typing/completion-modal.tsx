@@ -27,62 +27,43 @@ export function CompletionModal({
     };
   }, []);
 
-  const stamps = {
-    page: "Processed",
-    chapter: "Cleared",
-    book: "Completed",
-  };
-
-  const titles = {
-    page: "Page processed successfully",
-    chapter: "Chapter clearance granted",
-    book: "Full document processed",
-  };
-
   return (
     <dialog
       ref={dialogRef}
       onClose={onBackToBook}
       className="backdrop:bg-black/70 bg-transparent p-0 m-auto"
     >
-      <div className="bg-surface border-2 border-border max-w-sm w-full mx-4">
+      <div className="bg-surface border border-border rounded-lg max-w-sm w-full mx-4">
         {/* Header */}
-        <div className="border-b-2 border-border px-6 py-3 flex items-center justify-between">
-          <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim">
-            Processing Report
+        <div className="border-b border-border px-6 py-3 flex items-center justify-between">
+          <p className="text-sm font-serif font-medium text-muted">
+            Session Summary
           </p>
-          <span className="stamp animate-stamp text-sm">
-            {stamps[type]}
+          <span className="badge badge-accent animate-badge">
+            Complete
           </span>
         </div>
 
         {/* Stats grid */}
-        <div className="grid grid-cols-3 border-b-2 border-border">
-          <div className="px-4 py-4 text-center border-r-2 border-border">
-            <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim mb-1">WPM</p>
-            <p className="text-2xl font-bold font-typewriter text-accent">
+        <div className="grid grid-cols-3 border-b border-border">
+          <div className="px-4 py-4 text-center border-r border-border">
+            <p className="text-xs text-muted mb-1">WPM</p>
+            <p className="text-2xl font-mono tabular-nums font-semibold text-accent">
               <CountUp end={stats.wpm} />
             </p>
           </div>
-          <div className="px-4 py-4 text-center border-r-2 border-border">
-            <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim mb-1">Accuracy</p>
-            <p className="text-2xl font-bold font-typewriter text-ink-correct">
+          <div className="px-4 py-4 text-center border-r border-border">
+            <p className="text-xs text-muted mb-1">Accuracy</p>
+            <p className="text-2xl font-mono tabular-nums font-semibold text-ink-correct">
               <CountUp end={stats.accuracy} suffix="%" />
             </p>
           </div>
           <div className="px-4 py-4 text-center">
-            <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim mb-1">Time</p>
-            <p className="text-2xl font-bold font-typewriter text-foreground">
+            <p className="text-xs text-muted mb-1">Time</p>
+            <p className="text-2xl font-mono tabular-nums font-semibold text-foreground">
               {formatTime(stats.elapsedSeconds)}
             </p>
           </div>
-        </div>
-
-        {/* Description */}
-        <div className="px-6 py-3 border-b-2 border-border">
-          <p className="text-xs text-muted text-center tracking-wider uppercase">
-            {titles[type]}
-          </p>
         </div>
 
         {/* Actions */}
@@ -90,16 +71,16 @@ export function CompletionModal({
           {type !== "book" && (
             <button
               onClick={onContinue}
-              className="flex-1 py-2.5 bg-accent hover:bg-accent-hover text-background font-bold text-[11px] tracking-[0.15em] uppercase transition-colors border-2 border-accent hover:border-accent-hover"
+              className="flex-1 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-md transition-colors"
             >
-              {type === "page" ? "Next Document" : "Next Section"}
+              Next Chapter
             </button>
           )}
           <button
             onClick={onBackToBook}
-            className="flex-1 py-2.5 border-2 border-border hover:border-border-hover font-bold text-[11px] tracking-[0.15em] uppercase hover:bg-paper transition-colors"
+            className="flex-1 py-2.5 border border-border hover:border-border-hover font-medium text-sm rounded-md hover:bg-paper transition-colors"
           >
-            Return to File
+            Back to Book
           </button>
         </div>
       </div>

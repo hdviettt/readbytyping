@@ -430,8 +430,8 @@ export function TypingInterface({
         )}
         {!state.startedAt && !state.isComplete && showBeginPrompt.current && isFocused && (
           <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-            <span className="stamp text-sm animate-pulse">
-              Begin Typing
+            <span className="text-sm text-muted font-sans animate-pulse">
+              Begin typing...
             </span>
           </div>
         )}
@@ -439,7 +439,7 @@ export function TypingInterface({
         {/* Escape prompt */}
         {escapePrompt && (
           <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-            <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-muted bg-surface border border-border px-3 py-1.5 animate-fade-up">
+            <span className="text-xs font-medium text-muted bg-surface border border-border rounded-md px-3 py-1.5 animate-fade-up">
               Press Escape again to exit
             </span>
           </div>
@@ -451,7 +451,7 @@ export function TypingInterface({
           style={{ background: isPaused ? "rgba(0,0,0,0.15)" : "transparent" }}
         >
           {isPaused && (
-            <span className="stamp text-lg" style={{ opacity: 0.6 }}>Idle</span>
+            <span className="text-sm text-muted font-sans" style={{ opacity: 0.6 }}>Paused</span>
           )}
         </div>
 
@@ -461,19 +461,19 @@ export function TypingInterface({
             className={`absolute inset-0 flex items-center justify-center z-30 transition-opacity duration-250 ${chapterOverlayVisible ? "opacity-100" : "opacity-0"}`}
             style={{ background: "rgba(0,0,0,0.4)" }}
           >
-            <div className={`bg-surface border-2 border-border px-8 py-6 text-center max-w-xs ${chapterOverlayVisible ? "animate-card-in" : ""}`}>
-              <span className="stamp text-sm animate-stamp">Cleared</span>
+            <div className={`bg-surface border border-border rounded-lg px-8 py-6 text-center max-w-xs ${chapterOverlayVisible ? "animate-card-in" : ""}`}>
+              <span className="badge badge-accent animate-badge">Complete</span>
               <div className="flex gap-8 mt-4 mb-4 justify-center">
                 <div>
-                  <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim">WPM</p>
-                  <p className="text-xl font-bold font-typewriter text-accent">{stats.wpm}</p>
+                  <p className="text-xs text-muted mb-0.5">WPM</p>
+                  <p className="text-xl font-semibold font-mono tabular-nums text-accent">{stats.wpm}</p>
                 </div>
                 <div>
-                  <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim">Accuracy</p>
-                  <p className="text-xl font-bold font-typewriter text-ink-correct">{stats.accuracy}%</p>
+                  <p className="text-xs text-muted mb-0.5">Accuracy</p>
+                  <p className="text-xl font-semibold font-mono tabular-nums text-ink-correct">{stats.accuracy}%</p>
                 </div>
               </div>
-              <p className="text-[10px] tracking-[0.2em] uppercase text-muted animate-pulse mt-2">
+              <p className="text-xs text-muted animate-pulse mt-2">
                 Press any key to continue
               </p>
             </div>

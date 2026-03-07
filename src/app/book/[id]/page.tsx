@@ -18,7 +18,7 @@ export default function BookChaptersPage() {
       <>
         <Nav />
         <main className="max-w-3xl mx-auto px-6 py-8">
-          <p className="text-center text-muted py-12 animate-pulse font-typewriter">Loading...</p>
+          <p className="text-center text-muted py-12 animate-pulse">Loading...</p>
         </main>
       </>
     );
@@ -57,7 +57,7 @@ export default function BookChaptersPage() {
         </Link>
 
         <div className="mb-8">
-          <h1 className="text-2xl font-bold font-typewriter text-accent">{book.title}</h1>
+          <h1 className="text-2xl font-serif font-semibold text-foreground">{book.title}</h1>
           {book.author && (
             <p className="text-muted mt-1">{book.author}</p>
           )}
@@ -70,7 +70,7 @@ export default function BookChaptersPage() {
         {bookProgress && bookProgress.completedPages < book.totalPages && (
           <Link
             href={`/book/${book.id}/type?chapter=${bookProgress.chapterIndex}`}
-            className="flex items-center justify-between w-full mb-6 px-5 py-4 bg-accent hover:bg-accent-hover text-background rounded-xl font-medium transition-colors"
+            className="flex items-center justify-between w-full mb-6 px-5 py-4 bg-accent hover:bg-accent-hover text-background rounded-md font-medium transition-colors"
           >
             <span>Resume typing</span>
             <span className="text-sm opacity-80">
@@ -99,10 +99,10 @@ export default function BookChaptersPage() {
               <Link
                 key={ci}
                 href={`/book/${book.id}/type?chapter=${ci}`}
-                className="flex items-center gap-4 p-4 border border-border rounded-xl hover:border-border-hover transition-colors group"
+                className="flex items-center gap-4 p-4 border border-border rounded-md hover:border-border-hover transition-colors group"
               >
                 <div
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 ${
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 ${
                     isDone
                       ? "bg-ink-correct/20 text-ink-correct"
                       : "bg-paper text-muted group-hover:text-foreground"

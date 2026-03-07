@@ -36,7 +36,7 @@ export default function SettingsPage() {
     <>
       <Nav />
       <main className="max-w-2xl mx-auto px-6 py-8">
-        <h1 className="text-2xl font-bold font-typewriter text-accent mb-8">Settings</h1>
+        <h1 className="text-2xl font-serif font-semibold text-foreground mb-8">Settings</h1>
 
         <div className="space-y-6">
           {/* Profile section */}
@@ -58,12 +58,12 @@ export default function SettingsPage() {
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="Your name"
-                      className="flex-1 px-3 py-1.5 text-sm bg-background border border-border rounded-lg placeholder:text-dim focus:outline-none focus:border-accent"
+                      className="flex-1 px-3 py-1.5 text-sm bg-background border border-border rounded-md placeholder:text-dim focus:outline-none focus:border-accent"
                     />
                     <button
                       onClick={handleSaveProfile}
                       disabled={saving}
-                      className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-hover text-background rounded-lg font-medium transition-colors disabled:opacity-50"
+                      className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-hover text-background rounded-md font-medium transition-colors disabled:opacity-50"
                     >
                       {saving ? "Saving..." : "Save"}
                     </button>
@@ -137,8 +137,8 @@ export default function SettingsPage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="p-5 bg-surface rounded-xl border border-border">
-      <h2 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">{title}</h2>
+    <div className="p-5 bg-surface rounded-lg border border-border">
+      <h2 className="text-sm font-serif font-medium text-muted mb-3">{title}</h2>
       <div className="divide-y divide-border">{children}</div>
     </div>
   );
@@ -170,7 +170,7 @@ function Toggle({
         }`}
       >
         <span
-          className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
+          className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-background transition-transform ${
             checked ? "translate-x-4" : ""
           }`}
         />

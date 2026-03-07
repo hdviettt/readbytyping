@@ -23,7 +23,7 @@ const CharSpan = memo(function CharSpan({
     return (
       <>
         <span
-          className={`font-typewriter text-[1em] ${cls}`}
+          className={`font-mono text-[1em] ${cls}`}
           {...(status === "current" ? { "data-cursor": true } : {})}
         >
           {"\u21B5"}
@@ -33,17 +33,17 @@ const CharSpan = memo(function CharSpan({
     );
   }
 
-  let cls = "font-typewriter text-[1em] ";
+  let cls = "font-mono text-[1em] ";
 
   switch (status) {
     case "correct":
       cls += "text-paper-text";
       break;
     case "incorrect":
-      cls += "text-ink-error bg-ink-error/15";
+      cls += "text-ink-error bg-ink-error/12";
       break;
     case "current":
-      cls += "text-paper-bg bg-paper-text";
+      cls += "bg-accent/80 text-white";
       break;
     case "upcoming":
       cls += "text-paper-upcoming";
@@ -104,10 +104,16 @@ export function TypingDisplay({
     <div
       onClick={onClick}
       ref={scrollRef}
-      className={`book-page relative cursor-text select-none overflow-hidden doc-border transition-shadow duration-200 ${
-        isFocused ? "shadow-[0_0_0_2px_var(--accent)]" : ""
+      className={`book-page relative cursor-text select-none overflow-hidden rounded-lg shadow-lg transition-shadow duration-200 ${
+        isFocused ? "ring-2 ring-accent/30" : ""
       }`}
-      style={{ minHeight: "20rem", height: "55vh", maxHeight: "70vh", fontSize: `${fontSize}px` }}
+      style={{
+        minHeight: "20rem",
+        height: "55vh",
+        maxHeight: "70vh",
+        fontSize: `${fontSize}px`,
+        boxShadow: "inset 0 2px 8px rgba(0,0,0,0.06)",
+      }}
     >
       {/* Text content */}
       <div className="px-8 py-6 pb-40 leading-[1.8] whitespace-pre-wrap relative z-10">
@@ -119,7 +125,7 @@ export function TypingDisplay({
       {/* Focus lost overlay */}
       {!isFocused && (
         <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/15 pointer-events-none">
-          <span className="stamp text-sm opacity-90">Click to resume typing</span>
+          <span className="text-sm text-muted font-sans">Click to resume typing</span>
         </div>
       )}
     </div>

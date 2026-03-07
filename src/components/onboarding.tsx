@@ -51,7 +51,7 @@ export function Onboarding() {
         <rect x="36" y="65" width="48" height="5" rx="1" className="fill-key-bg stroke-key-border" />
       </svg>
 
-      <h2 className="text-xl font-bold font-typewriter text-accent mb-2">
+      <h2 className="text-xl font-semibold font-serif text-accent mb-2">
         Welcome to BookTyper
       </h2>
       <p className="text-muted text-sm mb-1">

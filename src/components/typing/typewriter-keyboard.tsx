@@ -137,7 +137,7 @@ const KeyCap = memo(function KeyCap({
 
   return (
     <div
-      className={`${textCls} flex items-center justify-center font-typewriter select-none transition-all duration-75`}
+      className={`${textCls} flex items-center justify-center font-mono select-none transition-all duration-75 rounded-md`}
       style={{
         width: `${keyDef.w * 2.2}rem`,
         height: isSpace ? "1.6rem" : "2rem",
@@ -145,11 +145,13 @@ const KeyCap = memo(function KeyCap({
         border: `1px solid ${borderColor}`,
         boxShadow: pressed
           ? `inset 0 1px 3px rgba(0,0,0,0.4)`
-          : `0 2px 0 var(--key-shadow), inset 0 1px 0 rgba(255,255,255,0.04)`,
+          : highlight
+            ? `0 2px 0 var(--key-shadow), 0 0 8px rgba(200, 155, 60, 0.3)`
+            : `0 2px 0 var(--key-shadow), inset 0 1px 0 rgba(255,255,255,0.04)`,
         transform: pressed ? "translateY(2px)" : "none",
       }}
     >
-      <span className={`${keyDef.label ? "text-[7px] tracking-[0.15em]" : "text-[10px]"} font-bold`}>
+      <span className={`${keyDef.label ? "text-[7px] tracking-wider" : "text-[10px]"} font-bold uppercase`}>
         {display}
       </span>
     </div>

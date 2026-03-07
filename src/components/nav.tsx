@@ -20,27 +20,27 @@ export function Nav() {
   }
 
   const links = [
-    { href: "/", label: "LIBRARY" },
-    { href: "/stats", label: "RECORDS" },
-    { href: "/settings", label: "CONFIG" },
+    { href: "/", label: "Library" },
+    { href: "/stats", label: "Stats" },
+    { href: "/settings", label: "Settings" },
   ];
 
   return (
-    <header className="bg-surface border-b-2 border-border sticky top-0 z-50">
+    <header className="bg-surface border-b border-border sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-6">
         <div className="flex items-center justify-between h-12">
-          {/* Logo — like a department header */}
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-6 h-6 border-2 border-accent flex items-center justify-center">
+            <div className="w-6 h-6 border border-accent rounded-md flex items-center justify-center">
               <span className="text-accent text-xs font-bold leading-none">BT</span>
             </div>
-            <span className="text-sm font-bold tracking-[0.2em] uppercase text-foreground hidden sm:block">
+            <span className="text-sm font-semibold font-serif text-foreground hidden sm:block">
               BookTyper
             </span>
           </Link>
 
-          {/* Nav tabs — dossier folder tabs */}
-          <nav className="flex items-center gap-0">
+          {/* Nav links */}
+          <nav className="flex items-center gap-1">
             {links.map((link) => {
               const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
               return (
@@ -48,13 +48,16 @@ export function Nav() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "px-4 py-1 text-[11px] font-bold tracking-[0.15em] uppercase border-2 border-b-0 -mb-[2px] transition-colors",
+                    "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
                     active
-                      ? "bg-background border-border text-accent"
-                      : "bg-transparent border-transparent text-muted hover:text-foreground"
+                      ? "text-accent"
+                      : "text-muted hover:text-foreground"
                   )}
                 >
                   {link.label}
+                  {active && (
+                    <div className="h-0.5 bg-accent rounded-full mt-0.5 -mb-1" />
+                  )}
                 </Link>
               );
             })}
@@ -64,17 +67,17 @@ export function Nav() {
           <div className="flex items-center gap-2">
             <button
               onClick={toggle}
-              className="p-1.5 text-muted hover:text-foreground transition-colors"
+              className="p-1.5 text-muted hover:text-foreground transition-colors rounded-md"
               title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
               {theme === "dark" ? (
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                   />
                 </svg>
               ) : (
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
                   />
@@ -83,23 +86,22 @@ export function Nav() {
             </button>
 
             {user && (
-              <div className="flex items-center gap-2 border-l-2 border-border pl-2 ml-1">
+              <div className="flex items-center gap-2 border-l border-border pl-2 ml-1">
                 {isAnonymous ? (
                   <Link
                     href="/signup"
-                    className="stamp text-[9px] py-0 px-2 border-2"
-                    style={{ transform: "rotate(0deg)" }}
+                    className="text-xs bg-accent/10 text-accent rounded-md px-2.5 py-1 font-medium transition-colors hover:bg-accent/20"
                   >
                     Register
                   </Link>
                 ) : (
-                  <span className="text-[10px] text-muted tracking-wider uppercase truncate max-w-[100px]" title={email ?? undefined}>
+                  <span className="text-xs text-muted truncate max-w-[100px]" title={email ?? undefined}>
                     {email}
                   </span>
                 )}
                 <button
                   onClick={handleSignOut}
-                  className="p-1.5 text-dim hover:text-stamp transition-colors"
+                  className="p-1.5 text-dim hover:text-ink-error transition-colors rounded-md"
                   title="Sign out"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
