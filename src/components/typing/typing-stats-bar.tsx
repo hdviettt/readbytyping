@@ -25,7 +25,7 @@ export function TypingStatsBar({
   }, [tierLabel]);
 
   return (
-    <div className="flex items-stretch bg-surface/60 border border-border/50">
+    <div className="flex items-stretch">
       <StatField
         label="WPM"
         value={stats.wpm === 0 && stats.elapsedSeconds < 3 ? "—" : String(stats.wpm)}

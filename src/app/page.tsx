@@ -16,7 +16,7 @@ function hashColor(str: string): string {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
   const hue = Math.abs(hash) % 360;
-  return `hsl(${hue}, 30%, 25%)`;
+  return `hsl(${hue}, 25%, 35%)`;
 }
 
 function timeAgo(ts: number): string {
@@ -206,59 +206,58 @@ export default function LibraryPage() {
   return (
     <>
       <Nav />
-      <main className="max-w-5xl mx-auto px-6 py-10">
-        <div className="flex items-end justify-between mb-8">
-          <div>
+      <main
+        className="max-w-5xl mx-auto px-6 py-10"
+        onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+        onDragLeave={() => setDragActive(false)}
+        onDrop={handleDrop}
+      >
+        {/* Header row: title + upload button inline */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-baseline gap-3">
             <h1 className="text-xl font-semibold text-foreground">Library</h1>
-            <p className="text-[13px] text-muted mt-0.5">{books.length} {books.length === 1 ? "book" : "books"}</p>
+            <span className="text-[13px] text-dim">{books.length} {books.length === 1 ? "book" : "books"}</span>
           </div>
+          <label className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium cursor-pointer transition-colors ${
+            uploading ? "text-muted" : "bg-accent hover:bg-accent-hover text-background"
+          }`}>
+            {uploading ? (
+              <span className="flex items-center gap-1">
+                Processing<TypingDots />
+              </span>
+            ) : (
+              <>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                </svg>
+                Add Book
+              </>
+            )}
+            <input
+              type="file"
+              accept=".epub,.pdf"
+              className="hidden"
+              disabled={uploading}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleFile(f);
+              }}
+            />
+          </label>
         </div>
+
+        {/* Drag overlay */}
+        {dragActive && (
+          <div className="fixed inset-0 z-40 bg-accent/5 border-2 border-dashed border-accent/40 flex items-center justify-center pointer-events-none">
+            <p className="text-accent font-medium text-lg">Drop file to upload</p>
+          </div>
+        )}
 
         {error && (
           <div className="mb-6 px-4 py-3 bg-ink-error/8 border border-ink-error/20">
             <p className="text-sm text-ink-error">{error}</p>
           </div>
         )}
-
-        {/* Upload area */}
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragActive(true);
-          }}
-          onDragLeave={() => setDragActive(false)}
-          onDrop={handleDrop}
-          className={`border border-dashed p-8 text-center transition-all mb-8 ${
-            dragActive
-              ? "border-accent bg-accent/5"
-              : "border-border/70 hover:border-border-hover"
-          }`}
-        >
-          {uploading ? (
-            <span className="text-sm text-muted">
-              Processing<TypingDots />
-            </span>
-          ) : (
-            <div>
-              <p className="text-[13px] text-muted">
-                Drop a file here or{" "}
-                <label className="text-accent hover:text-accent-hover cursor-pointer font-medium">
-                  browse
-                  <input
-                    type="file"
-                    accept=".epub,.pdf"
-                    className="hidden"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) handleFile(f);
-                    }}
-                  />
-                </label>
-              </p>
-              <p className="text-xs text-dim mt-1">EPUB and PDF supported</p>
-            </div>
-          )}
-        </div>
 
         {/* Search and sort */}
         {books.length > 0 && (
@@ -291,7 +290,7 @@ export default function LibraryPage() {
             No books match your search.
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 stagger-children">
+          <div className="space-y-2 stagger-children">
             {sorted.map((book) => {
               const prog = progress[book.id];
               const pct =
@@ -305,49 +304,55 @@ export default function LibraryPage() {
               return (
                 <div
                   key={book.id}
-                  className="group border border-border/50 hover:border-border-hover/70 bg-surface/50 hover:bg-surface transition-all"
+                  className="group flex border border-border/50 hover:border-border-hover/70 bg-surface/30 hover:bg-surface/60 transition-all"
                 >
+                  {/* Color spine */}
+                  <div
+                    className="w-1.5 shrink-0"
+                    style={{ background: pct === 100 ? "var(--ink-correct)" : hashColor(book.title) }}
+                  />
+
+                  {/* Content */}
                   <button
                     onClick={() => router.push(`/book/${book.id}`)}
-                    className="w-full text-left px-4 pt-4 pb-3 cursor-pointer"
+                    className="flex-1 min-w-0 flex items-center gap-4 px-4 py-3.5 text-left cursor-pointer"
                   >
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-[15px] font-serif font-semibold truncate group-hover:text-accent transition-colors leading-tight">
-                        {book.title}
-                      </h3>
-                      {pct === 100 && (
-                        <span className="badge badge-success shrink-0">Done</span>
-                      )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-[15px] font-serif font-semibold truncate group-hover:text-accent transition-colors">
+                          {book.title}
+                        </h3>
+                        {pct === 100 && (
+                          <span className="badge badge-success shrink-0">Done</span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        {book.author && (
+                          <span className="text-[13px] text-muted truncate">
+                            {book.author}
+                          </span>
+                        )}
+                        <span className="text-[11px] text-dim">{book.totalPages} pg</span>
+                        <span className="text-[11px] text-dim">{book.totalChapters} ch</span>
+                        {prog?.lastTypedAt && (
+                          <span className="text-[11px] text-dim">{timeAgo(prog.lastTypedAt)}</span>
+                        )}
+                      </div>
                     </div>
-                    {book.author && (
-                      <p className="text-[13px] text-muted mt-0.5 truncate">
-                        {book.author}
-                      </p>
-                    )}
-                    <div className="flex items-center gap-2 mt-2 text-xs text-dim">
-                      <span>{book.totalPages} pages</span>
-                      <span className="text-border">·</span>
-                      <span>{book.totalChapters} ch</span>
-                      {prog?.lastTypedAt && (
-                        <>
-                          <span className="text-border">·</span>
-                          <span>{timeAgo(prog.lastTypedAt)}</span>
-                        </>
-                      )}
-                    </div>
+
+                    {/* Progress bar — right side */}
                     {isInProgress && (
-                      <div className="mt-3">
+                      <div className="w-24 shrink-0">
                         <div className="w-full h-1 bg-border/30">
-                          <div
-                            className="h-full bg-accent/70"
-                            style={{ width: `${pct}%` }}
-                          />
+                          <div className="h-full bg-accent/70" style={{ width: `${pct}%` }} />
                         </div>
-                        <p className="text-xs text-dim mt-1">{pct}%</p>
+                        <p className="text-[11px] text-dim text-right mt-0.5">{pct}%</p>
                       </div>
                     )}
                   </button>
-                  <div className="px-4 pb-3 flex items-center justify-between">
+
+                  {/* Actions */}
+                  <div className="shrink-0 flex flex-col items-end justify-center px-3 gap-1 border-l border-border/30">
                     {isInProgress && prog ? (
                       <button
                         onClick={(e) => {
@@ -363,10 +368,10 @@ export default function LibraryPage() {
                     )}
                     <button
                       onClick={() => handleDeleteClick(book.id)}
-                      className={`text-xs transition-colors ${
+                      className={`text-[11px] transition-colors ${
                         confirmDeleteId === book.id
                           ? "text-ink-error font-medium"
-                          : "text-dim hover:text-ink-error"
+                          : "text-dim hover:text-ink-error opacity-0 group-hover:opacity-100"
                       }`}
                     >
                       {confirmDeleteId === book.id ? "Confirm?" : "Delete"}

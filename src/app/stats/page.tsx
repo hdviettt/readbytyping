@@ -92,74 +92,84 @@ export default function StatsPage() {
           </div>
         ) : (
           <>
-            {/* Summary cards */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-8 stagger-children">
-              <StatCard label="Avg WPM" color="text-accent">
-                <CountUp end={avgWpm} className="text-2xl font-mono tabular-nums font-semibold" />
-              </StatCard>
-              <StatCard label="Avg Accuracy" color="text-ink-correct">
-                <CountUp end={avgAccuracy} suffix="%" className="text-2xl font-mono tabular-nums font-semibold" />
-              </StatCard>
-              <StatCard label="Sessions">
-                <CountUp end={totalSessions} className="text-2xl font-mono tabular-nums font-semibold" />
-              </StatCard>
-              <StatCard label="Characters">
-                <CountUp end={totalChars} className="text-2xl font-mono tabular-nums font-semibold" />
-              </StatCard>
-              <StatCard label="Total Time">
-                <span className="text-2xl font-mono tabular-nums font-semibold">{Math.round(totalTime / 60)}m</span>
-              </StatCard>
-            </div>
-
-            {/* Best session highlight */}
-            {bestSession && (
-              <div className="mb-8 p-4 bg-surface/50 border border-accent/20">
-                <p className="text-xs text-muted mb-2">Personal best</p>
-                <div className="flex items-center gap-5 text-sm">
-                  <span className="font-mono text-xl font-semibold text-accent">{Math.round(bestSession.avgWpm)} WPM</span>
-                  <span className="text-muted">{Math.round(bestSession.accuracy * 100)}%</span>
-                  <span className="text-muted truncate">{bestSession.bookTitle}</span>
-                  <span className="text-dim ml-auto text-xs">{formatDate(bestSession.startedAt)}</span>
+            {/* Hero stats — two large + three small */}
+            <div className="flex gap-3 mb-8 stagger-children">
+              {/* Primary stats — large */}
+              <div className="flex-1 p-5 bg-surface/50 border border-border/50 flex items-end justify-between">
+                <div>
+                  <CountUp end={avgWpm} className="text-4xl font-mono tabular-nums font-bold text-accent" />
+                  <p className="text-xs text-dim mt-1">Average WPM</p>
+                </div>
+                {bestSession && (
+                  <div className="text-right">
+                    <p className="text-lg font-mono tabular-nums font-semibold text-accent/60">{Math.round(bestSession.avgWpm)}</p>
+                    <p className="text-[11px] text-dim">Best</p>
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 p-5 bg-surface/50 border border-border/50 flex items-end justify-between">
+                <div>
+                  <CountUp end={avgAccuracy} suffix="%" className="text-4xl font-mono tabular-nums font-bold text-ink-correct" />
+                  <p className="text-xs text-dim mt-1">Average Accuracy</p>
                 </div>
               </div>
-            )}
+            </div>
 
-            {/* WPM trend chart */}
-            {trendData.length > 1 && (
-              <div className="mb-8 p-5 bg-surface/50 border border-border/50">
-                <h2 className="text-sm font-medium text-muted mb-4">WPM Over Time</h2>
-                <WpmLineChart data={trendData} />
+            {/* Secondary stats row */}
+            <div className="grid grid-cols-3 gap-3 mb-8">
+              <div className="p-4 bg-surface/30 border border-border/40">
+                <CountUp end={totalSessions} className="text-xl font-mono tabular-nums font-semibold" />
+                <p className="text-xs text-dim mt-0.5">Sessions</p>
               </div>
-            )}
-
-            {/* Latest session WPM chart */}
-            {latestSession && latestSession.wpmSamples.length > 0 && (
-              <div className="mb-8 p-5 bg-surface/50 border border-border/50">
-                <h2 className="text-sm font-medium text-muted mb-4">Latest Session</h2>
-                <WpmLineChart data={latestSession.wpmSamples} />
+              <div className="p-4 bg-surface/30 border border-border/40">
+                <CountUp end={totalChars} className="text-xl font-mono tabular-nums font-semibold" />
+                <p className="text-xs text-dim mt-0.5">Characters</p>
               </div>
-            )}
+              <div className="p-4 bg-surface/30 border border-border/40">
+                <span className="text-xl font-mono tabular-nums font-semibold">{Math.round(totalTime / 60)}m</span>
+                <p className="text-xs text-dim mt-0.5">Total Time</p>
+              </div>
+            </div>
 
-            {/* Key heatmap */}
+            {/* Charts — side by side on desktop */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
+              {trendData.length > 1 && (
+                <div className="p-5 bg-surface/50 border border-border/50">
+                  <h2 className="text-sm font-medium text-muted mb-4">WPM Over Time</h2>
+                  <WpmLineChart data={trendData} />
+                </div>
+              )}
+
+              {latestSession && latestSession.wpmSamples.length > 0 && (
+                <div className="p-5 bg-surface/50 border border-border/50">
+                  <h2 className="text-sm font-medium text-muted mb-4">Latest Session</h2>
+                  <WpmLineChart data={latestSession.wpmSamples} />
+                </div>
+              )}
+            </div>
+
+            {/* Key heatmap — full width */}
             <div className="mb-8 p-5 bg-surface/50 border border-border/50">
               <h2 className="text-sm font-medium text-muted mb-4">Key Accuracy</h2>
               <KeyHeatmap stats={keystrokeStats} />
             </div>
 
             {/* Session history */}
-            <div className="p-5 bg-surface/50 border border-border/50">
-              <h2 className="text-sm font-medium text-muted mb-4">Session History</h2>
+            <div className="bg-surface/50 border border-border/50">
+              <div className="px-5 py-3 border-b border-border/40">
+                <h2 className="text-sm font-medium text-muted">Session History</h2>
+              </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border/50 text-dim text-xs">
-                      <th className="text-left py-2.5 px-3 font-medium">Book</th>
-                      <th className="text-right py-2.5 px-3 font-medium">WPM</th>
-                      <th className="text-right py-2.5 px-3 font-medium">Peak</th>
-                      <th className="text-right py-2.5 px-3 font-medium">Acc</th>
-                      <th className="text-right py-2.5 px-3 font-medium">Duration</th>
-                      <th className="text-right py-2.5 px-3 font-medium">Chars</th>
-                      <th className="text-right py-2.5 px-3 font-medium">Date</th>
+                      <th className="text-left py-2.5 px-4 font-medium">Book</th>
+                      <th className="text-right py-2.5 px-4 font-medium">WPM</th>
+                      <th className="text-right py-2.5 px-4 font-medium">Peak</th>
+                      <th className="text-right py-2.5 px-4 font-medium">Acc</th>
+                      <th className="text-right py-2.5 px-4 font-medium">Duration</th>
+                      <th className="text-right py-2.5 px-4 font-medium">Chars</th>
+                      <th className="text-right py-2.5 px-4 font-medium">Date</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -168,25 +178,25 @@ export default function StatsPage() {
                         key={s.id}
                         className="border-b border-border/30 hover:bg-border/10 transition-colors"
                       >
-                        <td className="py-2.5 px-3 truncate max-w-[200px] text-[13px]">
+                        <td className="py-2.5 px-4 truncate max-w-[200px] text-[13px]">
                           {s.bookTitle}
                         </td>
-                        <td className="py-2.5 px-3 text-right font-medium font-mono tabular-nums text-[13px]">
+                        <td className="py-2.5 px-4 text-right font-medium font-mono tabular-nums text-[13px]">
                           {Math.round(s.avgWpm)}
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono tabular-nums text-dim text-[13px]">
+                        <td className="py-2.5 px-4 text-right font-mono tabular-nums text-dim text-[13px]">
                           {Math.round(s.peakWpm)}
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono tabular-nums text-[13px]">
+                        <td className="py-2.5 px-4 text-right font-mono tabular-nums text-[13px]">
                           {Math.round(s.accuracy * 100)}%
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono tabular-nums text-dim text-[13px]">
+                        <td className="py-2.5 px-4 text-right font-mono tabular-nums text-dim text-[13px]">
                           {formatTime(s.durationSeconds)}
                         </td>
-                        <td className="py-2.5 px-3 text-right font-mono tabular-nums text-dim text-[13px]">
+                        <td className="py-2.5 px-4 text-right font-mono tabular-nums text-dim text-[13px]">
                           {s.totalCharactersTyped}
                         </td>
-                        <td className="py-2.5 px-3 text-right text-dim text-xs whitespace-nowrap">
+                        <td className="py-2.5 px-4 text-right text-dim text-xs whitespace-nowrap">
                           {formatDate(s.startedAt)}
                         </td>
                       </tr>
@@ -196,7 +206,7 @@ export default function StatsPage() {
               </div>
 
               {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/30">
+                <div className="flex items-center justify-between px-5 py-3 border-t border-border/30">
                   <button
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
                     disabled={page === 0}
@@ -221,25 +231,6 @@ export default function StatsPage() {
         )}
       </main>
     </>
-  );
-}
-
-function StatCard({
-  label,
-  color,
-  children,
-}: {
-  label: string;
-  color?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="p-4 bg-surface/50 border border-border/50">
-      <div className={color || "text-foreground"}>
-        {children}
-      </div>
-      <p className="text-xs text-dim mt-1">{label}</p>
-    </div>
   );
 }
 

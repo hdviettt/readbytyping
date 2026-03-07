@@ -30,6 +30,7 @@ export default function BookChaptersPage() {
   }
 
   const completedPages = bookProgress?.completedPages || 0;
+  const overallPct = book.totalPages > 0 ? Math.round((completedPages / book.totalPages) * 100) : 0;
   let pagesBeforeChapter = 0;
 
   return (
@@ -46,30 +47,48 @@ export default function BookChaptersPage() {
           Library
         </Link>
 
-        <div className="mb-8">
-          <h1 className="text-xl font-serif font-semibold text-foreground">{book.title}</h1>
-          {book.author && (
-            <p className="text-muted text-[13px] mt-1">{book.author}</p>
-          )}
-          <div className="flex items-center gap-3 mt-2 text-[13px] text-dim">
-            <span>{book.totalChapters} chapters</span>
-            <span className="text-border">·</span>
-            <span>{book.totalPages} pages</span>
+        {/* Book header with progress */}
+        <div className="mb-8 p-5 bg-surface/50 border border-border/50">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h1 className="text-xl font-serif font-semibold text-foreground">{book.title}</h1>
+              {book.author && (
+                <p className="text-muted text-[13px] mt-1">{book.author}</p>
+              )}
+              <div className="flex items-center gap-3 mt-2 text-[13px] text-dim">
+                <span>{book.totalChapters} chapters</span>
+                <span className="text-border">·</span>
+                <span>{book.totalPages} pages</span>
+              </div>
+            </div>
+            {/* Circular-ish progress indicator */}
+            <div className="shrink-0 text-center">
+              <p className="text-3xl font-mono tabular-nums font-bold text-accent">{overallPct}%</p>
+              <p className="text-[11px] text-dim mt-0.5">{completedPages}/{book.totalPages} pg</p>
+            </div>
           </div>
+
+          {/* Full-width progress bar */}
+          {overallPct > 0 && overallPct < 100 && (
+            <div className="mt-4 w-full h-1 bg-border/30">
+              <div className="h-full bg-accent/70 transition-all" style={{ width: `${overallPct}%` }} />
+            </div>
+          )}
+
+          {bookProgress && bookProgress.completedPages < book.totalPages && (
+            <Link
+              href={`/book/${book.id}/type?chapter=${bookProgress.chapterIndex}`}
+              className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm transition-colors"
+            >
+              Resume typing
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          )}
         </div>
 
-        {bookProgress && bookProgress.completedPages < book.totalPages && (
-          <Link
-            href={`/book/${book.id}/type?chapter=${bookProgress.chapterIndex}`}
-            className="flex items-center justify-between w-full mb-6 px-4 py-3 bg-accent hover:bg-accent-hover text-background font-medium text-sm transition-colors"
-          >
-            <span>Resume typing</span>
-            <span className="text-xs opacity-80">
-              {Math.round((completedPages / book.totalPages) * 100)}% complete
-            </span>
-          </Link>
-        )}
-
+        {/* Chapter list */}
         <div className="space-y-1">
           {book.chapters.map((chapter, ci) => {
             const chapterPageCount = chapter.pages.length;
@@ -90,13 +109,13 @@ export default function BookChaptersPage() {
               <Link
                 key={ci}
                 href={`/book/${book.id}/type?chapter=${ci}`}
-                className="flex items-center gap-3 px-3 py-3 hover:bg-surface/70 transition-colors group"
+                className="flex items-center gap-4 px-4 py-3 hover:bg-surface/50 transition-colors group border border-transparent hover:border-border/40"
               >
                 <div
                   className={`w-8 h-8 flex items-center justify-center text-xs font-medium shrink-0 ${
                     isDone
                       ? "bg-ink-correct/10 text-ink-correct"
-                      : "bg-border/30 text-muted group-hover:text-foreground"
+                      : "bg-border/20 text-muted group-hover:text-foreground"
                   }`}
                 >
                   {isDone ? (
@@ -112,22 +131,18 @@ export default function BookChaptersPage() {
                   <p className="text-[13px] font-medium truncate group-hover:text-accent transition-colors">
                     {chapter.title}
                   </p>
-                  <p className="text-xs text-dim mt-0.5">
-                    {chapterPageCount} pages
-                  </p>
                 </div>
 
+                <span className="text-[11px] text-dim shrink-0">{chapterPageCount} pg</span>
+
                 {pct > 0 && !isDone && (
-                  <div className="w-16 shrink-0">
+                  <div className="w-12 shrink-0">
                     <div className="w-full h-1 bg-border/30">
                       <div
                         className="h-full bg-accent/70"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <p className="text-[10px] text-dim text-right mt-0.5">
-                      {pct}%
-                    </p>
                   </div>
                 )}
 

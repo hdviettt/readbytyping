@@ -368,51 +368,51 @@ export function TypingInterface({
 
   return (
     <div className="max-w-3xl mx-auto" onClick={focusInput}>
-      {/* Chapter info */}
-      <ChapterNav
-        bookTitle={book.title}
-        chapterTitle={chapter.title}
-        currentPage={globalPageIndex + 1}
-        totalPages={book.totalPages}
-        onPrevPage={
-          globalPageIndex > 0
-            ? () => {
-                if (pageIndex > 0) {
-                  setPageIndex(pageIndex - 1);
-                } else if (chapterIndex > 0) {
-                  const prevChapter = book.chapters[chapterIndex - 1];
-                  setChapterIndex(chapterIndex - 1);
-                  setPageIndex(prevChapter.pages.length - 1);
+      {/* Unified header: chapter nav + stats in one bar */}
+      <div className="bg-surface/60 border border-border/50 mb-2">
+        <ChapterNav
+          bookTitle={book.title}
+          chapterTitle={chapter.title}
+          currentPage={globalPageIndex + 1}
+          totalPages={book.totalPages}
+          onPrevPage={
+            globalPageIndex > 0
+              ? () => {
+                  if (pageIndex > 0) {
+                    setPageIndex(pageIndex - 1);
+                  } else if (chapterIndex > 0) {
+                    const prevChapter = book.chapters[chapterIndex - 1];
+                    setChapterIndex(chapterIndex - 1);
+                    setPageIndex(prevChapter.pages.length - 1);
+                  }
                 }
-              }
-            : undefined
-        }
-        onNextPage={
-          globalPageIndex < book.totalPages - 1
-            ? () => {
-                if (pageIndex < chapter.pages.length - 1) {
-                  setPageIndex(pageIndex + 1);
-                } else if (chapterIndex < book.chapters.length - 1) {
-                  setChapterIndex(chapterIndex + 1);
-                  setPageIndex(0);
+              : undefined
+          }
+          onNextPage={
+            globalPageIndex < book.totalPages - 1
+              ? () => {
+                  if (pageIndex < chapter.pages.length - 1) {
+                    setPageIndex(pageIndex + 1);
+                  } else if (chapterIndex < book.chapters.length - 1) {
+                    setChapterIndex(chapterIndex + 1);
+                    setPageIndex(0);
+                  }
                 }
-              }
-            : undefined
-        }
-      />
-
-      {/* Stats bar */}
-      <div className="mt-1.5">
-        <TypingStatsBar
-          stats={displayStats}
-          progress={pageProgress}
-          streak={state.streak}
-          saveStatus={saveStatus}
+              : undefined
+          }
         />
+        <div className="border-t border-border/30">
+          <TypingStatsBar
+            stats={displayStats}
+            progress={pageProgress}
+            streak={state.streak}
+            saveStatus={saveStatus}
+          />
+        </div>
       </div>
 
       {/* Book page — the focal point */}
-      <div className={`relative mt-0 transition-opacity duration-300 ${isTransitioning ? 'opacity-20' : 'opacity-100'}`} ref={typingContainerRef}>
+      <div className={`relative transition-opacity duration-300 ${isTransitioning ? 'opacity-20' : 'opacity-100'}`} ref={typingContainerRef}>
         <TypingDisplay
           text={page.content}
           getCharStatus={charStatuses}
