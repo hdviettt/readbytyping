@@ -115,7 +115,7 @@ export function TypingDisplay({
         className={`book-page absolute inset-0 cursor-text select-none overflow-hidden transition-all duration-200 ${
           isFocused
             ? "ring-1 ring-accent/40"
-            : "ring-1 ring-transparent"
+            : "ring-1 ring-transparent opacity-50"
         }`}
         style={{ fontSize: `${fontSize}px` }}
       >
@@ -126,15 +126,6 @@ export function TypingDisplay({
         </div>
       </div>
 
-      {/* Focus prompt */}
-      {!isFocused && (
-        <div
-          onClick={onClick}
-          className="absolute inset-x-0 bottom-0 z-10 flex justify-center py-3 cursor-pointer bg-gradient-to-t from-paper-bg to-transparent"
-        >
-          <span className="text-xs tracking-wide text-paper-text/40">Click to continue typing</span>
-        </div>
-      )}
     </div>
   );
 }

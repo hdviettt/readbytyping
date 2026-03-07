@@ -429,8 +429,8 @@ export function TypingInterface({
           />
         )}
         {!state.startedAt && !state.isComplete && showBeginPrompt.current && isFocused && (
-          <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-            <span className="text-sm text-muted font-sans animate-pulse">
+          <div className="absolute inset-x-0 bottom-4 flex justify-center z-20 pointer-events-none">
+            <span className="text-xs text-muted font-sans animate-pulse">
               Begin typing...
             </span>
           </div>
