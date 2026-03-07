@@ -55,10 +55,12 @@ export function useTypingEngine(text: string, startOffset: number = 0) {
 
   const stats = useMemo(() => computeStats(state), [state]);
 
-  // Reset when text changes
+  // Reset when text changes (new page). startOffset is intentionally not a dep —
+  // it's read at reset time but should not trigger resets on its own (e.g. after
+  // a background progress save updates the store).
   useEffect(() => {
     dispatch({ type: "RESET", text, startOffset });
-  }, [text, startOffset]);
+  }, [text]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle key events
   const handleKeyDown = useCallback(

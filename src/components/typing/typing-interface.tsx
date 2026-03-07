@@ -169,6 +169,7 @@ export function TypingInterface({
           completedPages: completed ? globalPageIndex + 1 : globalPageIndex,
           lastTypedAt: Date.now(),
         });
+        await refreshProgress();
         setSaveStatus("saved");
         clearTimeout(saveStatusTimerRef.current);
         saveStatusTimerRef.current = setTimeout(() => setSaveStatus("idle"), 1500);
@@ -178,8 +179,14 @@ export function TypingInterface({
         saveStatusTimerRef.current = setTimeout(() => setSaveStatus("idle"), 5000);
       }
     },
-    [book.id, chapterIndex, pageIndex, globalPageIndex]
+    [book.id, chapterIndex, pageIndex, globalPageIndex, refreshProgress]
   );
+
+  // Track latest cursor for unmount save
+  const cursorRef = useRef(state.cursor);
+  cursorRef.current = state.cursor;
+  const doSaveRef = useRef(doSaveProgress);
+  doSaveRef.current = doSaveProgress;
 
   useEffect(() => {
     if (state.cursor > 0 && !state.isComplete) {
@@ -191,9 +198,14 @@ export function TypingInterface({
     return () => clearTimeout(saveTimeoutRef.current);
   }, [state.cursor, state.isComplete, doSaveProgress]);
 
-  // Cleanup audio on unmount
+  // Save on unmount (navigating away via nav links) + cleanup audio
   useEffect(() => {
-    return () => cleanupAudio();
+    return () => {
+      cleanupAudio();
+      if (cursorRef.current > 0) {
+        doSaveRef.current(cursorRef.current);
+      }
+    };
   }, []);
 
   // Save on visibility change
@@ -318,8 +330,10 @@ export function TypingInterface({
           // Second press — save and navigate back
           clearTimeout(escapeTimerRef.current);
           setEscapePrompt(false);
-          if (state.cursor > 0) doSaveProgress(state.cursor);
-          router.push(`/book/${book.id}`);
+          (async () => {
+            if (state.cursor > 0) await doSaveProgress(state.cursor);
+            router.push(`/book/${book.id}`);
+          })();
         } else {
           // First press — show prompt
           setEscapePrompt(true);
