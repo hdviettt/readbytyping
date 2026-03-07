@@ -102,31 +102,39 @@ export function TypingDisplay({
 
   return (
     <div
-      onClick={onClick}
-      ref={scrollRef}
-      className={`book-page relative cursor-text select-none overflow-hidden transition-all duration-200 ${
-        isFocused
-          ? "ring-1 ring-accent/40"
-          : "ring-1 ring-transparent"
-      }`}
+      className="relative"
       style={{
         minHeight: "20rem",
         height: "55vh",
         maxHeight: "70vh",
-        fontSize: `${fontSize}px`,
       }}
     >
-      {/* Text content */}
-      <div className="px-8 py-6 pb-40 leading-[1.8] whitespace-pre-wrap relative z-10">
-        {text.split("").map((char, i) => (
-          <CharSpan key={i} char={char} status={getCharStatus(i)} />
-        ))}
+      <div
+        onClick={onClick}
+        ref={scrollRef}
+        className={`book-page absolute inset-0 cursor-text select-none overflow-hidden transition-all duration-200 ${
+          isFocused
+            ? "ring-1 ring-accent/40"
+            : "ring-1 ring-transparent"
+        }`}
+        style={{ fontSize: `${fontSize}px` }}
+      >
+        <div className="px-8 py-6 pb-40 leading-[1.8] whitespace-pre-wrap">
+          {text.split("").map((char, i) => (
+            <CharSpan key={i} char={char} status={getCharStatus(i)} />
+          ))}
+        </div>
       </div>
 
       {/* Focus lost overlay */}
       {!isFocused && (
-        <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/10 backdrop-blur-[1px] pointer-events-none">
-          <span className="text-[13px] text-paper-text/60">Click to focus</span>
+        <div
+          onClick={onClick}
+          className="absolute inset-0 z-10 flex items-center justify-center bg-paper-bg/80 backdrop-blur-[2px] cursor-pointer"
+        >
+          <div className="flex flex-col items-center gap-2 text-paper-text/50">
+            <span className="text-sm tracking-wide">Click to continue typing</span>
+          </div>
         </div>
       )}
     </div>
