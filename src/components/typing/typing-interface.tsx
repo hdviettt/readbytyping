@@ -224,6 +224,21 @@ export function TypingInterface({
         // Refresh store data
         await Promise.all([refreshProgress(), refreshSessions(), refreshKeystrokeStats()]);
       }
+
+      // Save next position so resume lands on the right page
+      const isLastPage = pageIndex === chapter.pages.length - 1;
+      const isLastCh = chapterIndex === book.chapters.length - 1;
+      if (!(isLastPage && isLastCh)) {
+        await db.saveProgress({
+          bookId: book.id,
+          chapterIndex: isLastPage ? chapterIndex + 1 : chapterIndex,
+          pageIndex: isLastPage ? 0 : pageIndex + 1,
+          charOffset: 0,
+          completedPages: globalPageIndex + 1,
+          lastTypedAt: Date.now(),
+        });
+        await refreshProgress();
+      }
     })();
 
     // Determine completion type
