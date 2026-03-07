@@ -33,7 +33,7 @@ export function CompletionModal({
       onClose={onBackToBook}
       className="backdrop:bg-black/60 backdrop:backdrop-blur-sm bg-transparent p-0 m-auto"
     >
-      <div className="bg-surface border border-border/70 rounded-xl max-w-sm w-full mx-4 shadow-2xl">
+      <div className="bg-surface border border-border/70 max-w-sm w-full mx-4">
         {/* Header */}
         <div className="border-b border-border/50 px-6 py-4 flex items-center justify-between">
           <p className="text-sm font-medium text-foreground">Session Complete</p>
@@ -69,14 +69,14 @@ export function CompletionModal({
           {type !== "book" && (
             <button
               onClick={onContinue}
-              className="flex-1 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-lg transition-colors"
+              className="flex-1 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm transition-colors"
             >
               Next Chapter
             </button>
           )}
           <button
             onClick={onBackToBook}
-            className="flex-1 py-2.5 bg-border/30 hover:bg-border/50 font-medium text-sm rounded-lg transition-colors"
+            className="flex-1 py-2.5 bg-border/30 hover:bg-border/50 font-medium text-sm transition-colors"
           >
             Back to Book
           </button>

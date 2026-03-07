@@ -215,7 +215,7 @@ export default function LibraryPage() {
         </div>
 
         {error && (
-          <div className="mb-6 px-4 py-3 bg-ink-error/8 border border-ink-error/20 rounded-lg">
+          <div className="mb-6 px-4 py-3 bg-ink-error/8 border border-ink-error/20">
             <p className="text-sm text-ink-error">{error}</p>
           </div>
         )}
@@ -228,7 +228,7 @@ export default function LibraryPage() {
           }}
           onDragLeave={() => setDragActive(false)}
           onDrop={handleDrop}
-          className={`border border-dashed rounded-lg p-8 text-center transition-all mb-8 ${
+          className={`border border-dashed p-8 text-center transition-all mb-8 ${
             dragActive
               ? "border-accent bg-accent/5"
               : "border-border/70 hover:border-border-hover"
@@ -268,12 +268,12 @@ export default function LibraryPage() {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
+              className="flex-1 px-3 py-1.5 text-sm bg-transparent border border-border/70 placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
             />
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortOption)}
-              className="px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg focus:outline-none focus:border-accent/50 transition-all"
+              className="px-3 py-1.5 text-sm bg-transparent border border-border/70 focus:outline-none focus:border-accent/50 transition-all"
             >
               <option value="recent">Recently added</option>
               <option value="last-typed">Recently typed</option>
@@ -305,7 +305,7 @@ export default function LibraryPage() {
               return (
                 <div
                   key={book.id}
-                  className="group border border-border/50 hover:border-border-hover/70 rounded-lg bg-surface/50 hover:bg-surface transition-all"
+                  className="group border border-border/50 hover:border-border-hover/70 bg-surface/50 hover:bg-surface transition-all"
                 >
                   <button
                     onClick={() => router.push(`/book/${book.id}`)}
@@ -337,9 +337,9 @@ export default function LibraryPage() {
                     </div>
                     {isInProgress && (
                       <div className="mt-3">
-                        <div className="w-full h-1 bg-border/30 rounded-full">
+                        <div className="w-full h-1 bg-border/30">
                           <div
-                            className="h-full bg-accent/70 rounded-full transition-all duration-300"
+                            className="h-full bg-accent/70"
                             style={{ width: `${pct}%` }}
                           />
                         </div>
@@ -380,7 +380,7 @@ export default function LibraryPage() {
       </main>
 
       {undoItem && (
-        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border border-border/70 rounded-lg shadow-2xl px-4 py-2.5 flex items-center gap-3 ${
+        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border border-border/70 px-4 py-2.5 flex items-center gap-3 ${
           undoExiting ? "animate-toast-out" : "animate-toast-in"
         }`} style={{ willChange: "transform, opacity" }}>
           <p className="text-[13px] text-muted">

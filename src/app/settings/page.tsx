@@ -58,12 +58,12 @@ export default function SettingsPage() {
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="Your name"
-                      className="flex-1 px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
+                      className="flex-1 px-3 py-1.5 text-sm bg-transparent border border-border/70 placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
                     />
                     <button
                       onClick={handleSaveProfile}
                       disabled={saving}
-                      className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-hover text-background rounded-lg font-medium transition-colors disabled:opacity-50"
+                      className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-hover text-background font-medium transition-colors disabled:opacity-50"
                     >
                       {saving ? "Saving..." : "Save"}
                     </button>
@@ -137,7 +137,7 @@ export default function SettingsPage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="p-5 bg-surface/50 rounded-lg border border-border/50">
+    <div className="p-5 bg-surface/50 border border-border/50">
       <h2 className="text-xs font-medium text-dim mb-3">{title}</h2>
       <div className="divide-y divide-border/30">{children}</div>
     </div>
@@ -165,7 +165,7 @@ function Toggle({
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative w-10 h-6 rounded-full transition-colors ${
+        className={`relative w-10 h-6transition-colors ${
           checked ? "bg-accent" : "bg-border"
         }`}
       >

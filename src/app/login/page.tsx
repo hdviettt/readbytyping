@@ -37,9 +37,9 @@ export default function LoginPage() {
           <p className="text-[13px] text-muted mt-1">Enter your credentials to continue</p>
         </div>
 
-        <div className="bg-surface/50 border border-border/50 rounded-xl p-6">
+        <div className="bg-surface/50 border border-border/50 p-6">
           {error && (
-            <div className="mb-4 px-3 py-2.5 bg-ink-error/8 border border-ink-error/20 rounded-lg">
+            <div className="mb-4 px-3 py-2.5 bg-ink-error/8 border border-ink-error/20">
               <p className="text-sm text-ink-error">{error}</p>
             </div>
           )}
@@ -53,7 +53,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-sm bg-transparent border border-border/70 rounded-lg placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
+                className="w-full px-3 py-2 text-sm bg-transparent border border-border/70 placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
                 placeholder="you@example.com"
               />
             </div>
@@ -66,14 +66,14 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full px-3 py-2 text-sm bg-transparent border border-border/70 rounded-lg placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
+                className="w-full px-3 py-2 text-sm bg-transparent border border-border/70 placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
                 placeholder="••••••••"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-lg transition-colors disabled:opacity-50"
+              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm transition-colors disabled:opacity-50"
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>

@@ -113,7 +113,7 @@ export default function StatsPage() {
 
             {/* Best session highlight */}
             {bestSession && (
-              <div className="mb-8 p-4 bg-surface/50 rounded-lg border border-accent/20">
+              <div className="mb-8 p-4 bg-surface/50 border border-accent/20">
                 <p className="text-xs text-muted mb-2">Personal best</p>
                 <div className="flex items-center gap-5 text-sm">
                   <span className="font-mono text-xl font-semibold text-accent">{Math.round(bestSession.avgWpm)} WPM</span>
@@ -126,7 +126,7 @@ export default function StatsPage() {
 
             {/* WPM trend chart */}
             {trendData.length > 1 && (
-              <div className="mb-8 p-5 bg-surface/50 rounded-lg border border-border/50">
+              <div className="mb-8 p-5 bg-surface/50 border border-border/50">
                 <h2 className="text-sm font-medium text-muted mb-4">WPM Over Time</h2>
                 <WpmLineChart data={trendData} />
               </div>
@@ -134,20 +134,20 @@ export default function StatsPage() {
 
             {/* Latest session WPM chart */}
             {latestSession && latestSession.wpmSamples.length > 0 && (
-              <div className="mb-8 p-5 bg-surface/50 rounded-lg border border-border/50">
+              <div className="mb-8 p-5 bg-surface/50 border border-border/50">
                 <h2 className="text-sm font-medium text-muted mb-4">Latest Session</h2>
                 <WpmLineChart data={latestSession.wpmSamples} />
               </div>
             )}
 
             {/* Key heatmap */}
-            <div className="mb-8 p-5 bg-surface/50 rounded-lg border border-border/50">
+            <div className="mb-8 p-5 bg-surface/50 border border-border/50">
               <h2 className="text-sm font-medium text-muted mb-4">Key Accuracy</h2>
               <KeyHeatmap stats={keystrokeStats} />
             </div>
 
             {/* Session history */}
-            <div className="p-5 bg-surface/50 rounded-lg border border-border/50">
+            <div className="p-5 bg-surface/50 border border-border/50">
               <h2 className="text-sm font-medium text-muted mb-4">Session History</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -234,7 +234,7 @@ function StatCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="p-4 bg-surface/50 rounded-lg border border-border/50">
+    <div className="p-4 bg-surface/50 border border-border/50">
       <div className={color || "text-foreground"}>
         {children}
       </div>

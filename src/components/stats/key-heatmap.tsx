@@ -46,7 +46,7 @@ export function KeyHeatmap({ stats }: { stats: KeystrokeStat[] }) {
             return (
               <div
                 key={key}
-                className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-typewriter border border-border ${
+                className={`w-10 h-10 flex items-center justify-center text-sm font-mono border border-border ${
                   acc !== null ? accuracyColor(acc) : "bg-paper/50"
                 }`}
                 title={
@@ -63,13 +63,13 @@ export function KeyHeatmap({ stats }: { stats: KeystrokeStat[] }) {
       ))}
       <div className="flex items-center justify-center gap-4 mt-4 text-xs text-muted">
         <span className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-ink-correct/50" /> 98%+
+          <span className="w-3 h-3 bg-ink-correct/50" /> 98%+
         </span>
         <span className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-accent/30" /> 90-95%
+          <span className="w-3 h-3 bg-accent/30" /> 90-95%
         </span>
         <span className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-ink-error/40" /> &lt;80%
+          <span className="w-3 h-3 bg-ink-error/40" /> &lt;80%
         </span>
       </div>
     </div>

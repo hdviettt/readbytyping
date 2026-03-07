@@ -61,7 +61,7 @@ export default function BookChaptersPage() {
         {bookProgress && bookProgress.completedPages < book.totalPages && (
           <Link
             href={`/book/${book.id}/type?chapter=${bookProgress.chapterIndex}`}
-            className="flex items-center justify-between w-full mb-6 px-4 py-3 bg-accent hover:bg-accent-hover text-background rounded-lg font-medium text-sm transition-colors"
+            className="flex items-center justify-between w-full mb-6 px-4 py-3 bg-accent hover:bg-accent-hover text-background font-medium text-sm transition-colors"
           >
             <span>Resume typing</span>
             <span className="text-xs opacity-80">
@@ -90,10 +90,10 @@ export default function BookChaptersPage() {
               <Link
                 key={ci}
                 href={`/book/${book.id}/type?chapter=${ci}`}
-                className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-surface/70 transition-colors group"
+                className="flex items-center gap-3 px-3 py-3 hover:bg-surface/70 transition-colors group"
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0 ${
+                  className={`w-8 h-8 flex items-center justify-center text-xs font-medium shrink-0 ${
                     isDone
                       ? "bg-ink-correct/10 text-ink-correct"
                       : "bg-border/30 text-muted group-hover:text-foreground"
@@ -119,9 +119,9 @@ export default function BookChaptersPage() {
 
                 {pct > 0 && !isDone && (
                   <div className="w-16 shrink-0">
-                    <div className="w-full h-1 bg-border/30 rounded-full overflow-hidden">
+                    <div className="w-full h-1 bg-border/30">
                       <div
-                        className="h-full bg-accent/70 rounded-full"
+                        className="h-full bg-accent/70"
                         style={{ width: `${pct}%` }}
                       />
                     </div>

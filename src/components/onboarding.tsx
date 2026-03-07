@@ -21,7 +21,7 @@ export function Onboarding() {
   }
 
   return (
-    <div className="mb-8 p-8 bg-surface/50 border border-border/50 rounded-lg text-center animate-fade-up">
+    <div className="mb-8 p-8 bg-surface/50 border border-border/50 text-center animate-fade-up">
       {/* Typewriter SVG */}
       <svg
         viewBox="0 0 120 100"

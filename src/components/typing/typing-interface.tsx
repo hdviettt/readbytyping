@@ -439,7 +439,7 @@ export function TypingInterface({
         {/* Escape prompt */}
         {escapePrompt && (
           <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-            <span className="text-xs font-medium text-muted bg-surface border border-border rounded-md px-3 py-1.5 animate-fade-up">
+            <span className="text-xs font-medium text-muted bg-surface border border-border px-3 py-1.5 animate-fade-up">
               Press Escape again to exit
             </span>
           </div>
@@ -461,7 +461,7 @@ export function TypingInterface({
             className={`absolute inset-0 flex items-center justify-center z-30 transition-opacity duration-250 ${chapterOverlayVisible ? "opacity-100" : "opacity-0"}`}
             style={{ background: "rgba(0,0,0,0.4)" }}
           >
-            <div className={`bg-surface border border-border rounded-lg px-8 py-6 text-center max-w-xs ${chapterOverlayVisible ? "animate-card-in" : ""}`}>
+            <div className={`bg-surface border border-border px-8 py-6 text-center max-w-xs ${chapterOverlayVisible ? "animate-card-in" : ""}`}>
               <span className="badge badge-accent animate-badge">Complete</span>
               <div className="flex gap-8 mt-4 mb-4 justify-center">
                 <div>

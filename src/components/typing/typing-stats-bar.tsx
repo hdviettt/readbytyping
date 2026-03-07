@@ -25,7 +25,7 @@ export function TypingStatsBar({
   }, [tierLabel]);
 
   return (
-    <div className="flex items-stretch bg-surface/60 rounded-lg border border-border/50">
+    <div className="flex items-stretch bg-surface/60 border border-border/50">
       <StatField
         label="WPM"
         value={stats.wpm === 0 && stats.elapsedSeconds < 3 ? "—" : String(stats.wpm)}
@@ -60,9 +60,9 @@ export function TypingStatsBar({
         {saveStatus === "error" && (
           <span className="text-[11px] text-ink-error">Save failed</span>
         )}
-        <div className="w-20 h-1 bg-border/40 rounded-full">
+        <div className="w-20 h-1 bg-border/40">
           <div
-            className="h-full bg-accent/80 rounded-full transition-all duration-300"
+            className="h-full bg-accent/80"
             style={{ width: `${progress.percentage}%` }}
           />
         </div>

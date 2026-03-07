@@ -17,7 +17,7 @@ export default function TypingPage() {
       <>
         <Nav />
         <main className="px-6 py-6">
-          <p className="text-center text-muted py-12 animate-pulse font-typewriter">Loading...</p>
+          <p className="text-center text-muted py-12 animate-pulse font-mono">Loading...</p>
         </main>
       </>
     );

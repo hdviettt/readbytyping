@@ -40,10 +40,10 @@ const CharSpan = memo(function CharSpan({
       cls += "text-paper-text";
       break;
     case "incorrect":
-      cls += "text-ink-error bg-ink-error/10 rounded-sm";
+      cls += "text-ink-error bg-ink-error/10";
       break;
     case "current":
-      cls += "bg-accent text-white rounded-sm";
+      cls += "bg-accent text-white";
       break;
     case "upcoming":
       cls += "text-paper-upcoming";
@@ -104,10 +104,10 @@ export function TypingDisplay({
     <div
       onClick={onClick}
       ref={scrollRef}
-      className={`book-page relative cursor-text select-none overflow-hidden rounded-lg transition-all duration-200 ${
+      className={`book-page relative cursor-text select-none overflow-hidden transition-all duration-200 ${
         isFocused
-          ? "ring-1 ring-accent/40 shadow-lg shadow-accent/5"
-          : "ring-1 ring-transparent shadow-md"
+          ? "ring-1 ring-accent/40"
+          : "ring-1 ring-transparent"
       }`}
       style={{
         minHeight: "20rem",

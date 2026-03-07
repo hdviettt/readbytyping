@@ -141,7 +141,7 @@ const KeyCap = memo(function KeyCap({
 
   return (
     <div
-      className={`${textCls} flex items-center justify-center font-mono select-none transition-all duration-75 rounded-md`}
+      className={`${textCls} flex items-center justify-center font-mono select-none transition-all duration-75`}
       style={{
         width: `${keyDef.w * 2.2}rem`,
         height: isSpace ? "1.6rem" : "2rem",
@@ -193,7 +193,7 @@ export function TypewriterKeyboard({
 
   return (
     <div
-      className="border border-border/50 border-t-0 rounded-b-lg"
+      className="border border-border/50 border-t-0"
       style={{
         background: "linear-gradient(180deg, var(--surface) 0%, var(--background) 100%)",
         padding: "8px 12px 10px",

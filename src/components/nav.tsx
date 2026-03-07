@@ -46,7 +46,7 @@ export function Nav() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "px-3 py-1 text-[13px] font-medium rounded-md transition-colors",
+                    "px-3 py-1 text-[13px] font-medium transition-colors",
                     active
                       ? "text-foreground bg-border/40"
                       : "text-muted hover:text-foreground hover:bg-border/20"
@@ -62,7 +62,7 @@ export function Nav() {
           <div className="flex items-center gap-2">
             <button
               onClick={toggle}
-              className="p-1.5 text-muted hover:text-foreground transition-colors rounded-md hover:bg-border/20"
+              className="p-1.5 text-muted hover:text-foreground transition-colors hover:bg-border/20"
               title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
               {theme === "dark" ? (
@@ -85,7 +85,7 @@ export function Nav() {
                 {isAnonymous ? (
                   <Link
                     href="/signup"
-                    className="text-xs text-accent hover:text-accent-hover font-medium px-2 py-0.5 rounded-md hover:bg-accent/10 transition-colors"
+                    className="text-xs text-accent hover:text-accent-hover font-medium px-2 py-0.5 hover:bg-accent/10 transition-colors"
                   >
                     Register
                   </Link>
@@ -96,7 +96,7 @@ export function Nav() {
                 )}
                 <button
                   onClick={handleSignOut}
-                  className="p-1 text-dim hover:text-foreground transition-colors rounded-md hover:bg-border/20"
+                  className="p-1 text-dim hover:text-foreground transition-colors hover:bg-border/20"
                   title="Sign out"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

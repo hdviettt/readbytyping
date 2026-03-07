@@ -9,7 +9,7 @@ export default function TypingError({
 }) {
   return (
     <div className="max-w-md mx-auto mt-20 p-8 text-center">
-      <h2 className="text-xl font-bold font-typewriter text-ink-error mb-3">
+      <h2 className="text-xl font-semibold text-ink-error mb-3">
         Typing Error
       </h2>
       <p className="text-sm text-muted mb-6">
@@ -18,13 +18,13 @@ export default function TypingError({
       <div className="flex gap-3 justify-center">
         <button
           onClick={reset}
-          className="px-5 py-2.5 bg-accent hover:bg-accent-hover text-background rounded-lg font-medium transition-colors"
+          className="px-5 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium transition-colors"
         >
           Try Again
         </button>
         <a
           href="/"
-          className="px-5 py-2.5 border border-border hover:border-border-hover rounded-lg font-medium transition-colors"
+          className="px-5 py-2.5 border border-border hover:border-border-hover font-medium transition-colors"
         >
           Go back to Library
         </a>
