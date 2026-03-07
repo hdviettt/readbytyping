@@ -66,6 +66,8 @@ export function TypingInterface({
   const typingContainerRef = useRef<HTMLDivElement>(null);
   const prevStateRef = useRef(state);
   const [isPaused, setIsPaused] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const showBeginPrompt = useRef(true);
   const pauseTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Track last key action for keyboard flash
@@ -225,6 +227,7 @@ export function TypingInterface({
     })();
 
     // Determine completion type
+    showBeginPrompt.current = false;
     const isLastPageInChapter = pageIndex === chapter.pages.length - 1;
     const isLastChapter = chapterIndex === book.chapters.length - 1;
 
@@ -233,19 +236,41 @@ export function TypingInterface({
     } else if (isLastPageInChapter) {
       setCompletionType("chapter");
     } else {
-      setCompletionType("page");
+      // Auto-advance to next page with brief transition
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setIsPaused(false);
+        setPageIndex(p => p + 1);
+        setIsTransitioning(false);
+        focusInput();
+      }, 600);
     }
   }, [state.isComplete]);
 
-  function handleContinue() {
+  const handleContinue = useCallback(() => {
     setCompletionType(null);
+    setIsPaused(false);
     if (pageIndex < chapter.pages.length - 1) {
       setPageIndex(pageIndex + 1);
     } else if (chapterIndex < book.chapters.length - 1) {
       setChapterIndex(chapterIndex + 1);
       setPageIndex(0);
     }
-  }
+    setTimeout(() => focusInput(), 50);
+  }, [pageIndex, chapter?.pages.length, chapterIndex, book.chapters.length, focusInput]);
+
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      e.preventDefault();
+      if (completionType === "chapter") {
+        handleContinue();
+        return;
+      }
+      if (isTransitioning || completionType) return;
+      handleKeyDown(e);
+    },
+    [completionType, isTransitioning, handleKeyDown, handleContinue]
+  );
 
   if (!page) return null;
 
@@ -293,7 +318,7 @@ export function TypingInterface({
       </div>
 
       {/* Book page — the focal point */}
-      <div className="relative mt-0" ref={typingContainerRef}>
+      <div className={`relative mt-0 transition-opacity duration-300 ${isTransitioning ? 'opacity-20' : 'opacity-100'}`} ref={typingContainerRef}>
         <TypingDisplay
           text={page.content}
           getCharStatus={charStatuses}
@@ -308,7 +333,7 @@ export function TypingInterface({
             shakeEnabled={settings.screenShake}
           />
         )}
-        {!state.startedAt && !state.isComplete && (
+        {!state.startedAt && !state.isComplete && showBeginPrompt.current && (
           <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
             <span className="stamp text-sm animate-pulse">
               Begin Typing
@@ -323,9 +348,30 @@ export function TypingInterface({
             <span className="stamp text-xl">Paused</span>
           )}
         </div>
+        {completionType === "chapter" && (
+          <div className="absolute inset-0 flex items-center justify-center z-30"
+               style={{ background: "rgba(0,0,0,0.4)" }}>
+            <div className="bg-surface border-2 border-border px-8 py-6 text-center max-w-xs">
+              <span className="stamp text-sm animate-stamp">Cleared</span>
+              <div className="flex gap-8 mt-4 mb-4 justify-center">
+                <div>
+                  <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim">WPM</p>
+                  <p className="text-xl font-bold font-typewriter text-accent">{stats.wpm}</p>
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-dim">Accuracy</p>
+                  <p className="text-xl font-bold font-typewriter text-ink-correct">{stats.accuracy}%</p>
+                </div>
+              </div>
+              <p className="text-[10px] tracking-[0.2em] uppercase text-muted animate-pulse mt-2">
+                Press any key to continue
+              </p>
+            </div>
+          </div>
+        )}
         <textarea
           ref={inputRef}
-          onKeyDown={handleKeyDown}
+          onKeyDown={onKeyDown}
           className="absolute top-0 left-0 w-0 h-0 opacity-0"
           autoFocus
           aria-label="Type here"
@@ -340,9 +386,9 @@ export function TypingInterface({
         />
       )}
 
-      {completionType && (
+      {completionType === "book" && (
         <CompletionModal
-          type={completionType}
+          type="book"
           stats={stats}
           onContinue={handleContinue}
           onBackToBook={() => router.push(`/book/${book.id}`)}
