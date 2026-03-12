@@ -31,6 +31,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setKeystrokeStats(await db.getKeystrokeStats());
   }, []);
 
+  const removeBook = useCallback((id: string) => {
+    setBooks((prev) => prev.filter((b) => b.id !== id));
+  }, []);
+
   const refresh = useCallback(async () => {
     await Promise.all([
       refreshBooks(),
@@ -66,6 +70,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     refreshProgress,
     refreshSessions,
     refreshKeystrokeStats,
+    removeBook,
   };
 
   return (

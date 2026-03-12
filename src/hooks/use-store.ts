@@ -15,6 +15,7 @@ export interface StoreData {
   refreshProgress: () => Promise<void>;
   refreshSessions: () => Promise<void>;
   refreshKeystrokeStats: () => Promise<void>;
+  removeBook: (id: string) => void;
 }
 
 export const StoreContext = createContext<StoreData>({
@@ -28,6 +29,7 @@ export const StoreContext = createContext<StoreData>({
   refreshProgress: async () => {},
   refreshSessions: async () => {},
   refreshKeystrokeStats: async () => {},
+  removeBook: () => {},
 });
 
 export function useStore() {

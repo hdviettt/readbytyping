@@ -34,7 +34,7 @@ function timeAgo(ts: number): string {
 type SortOption = "recent" | "last-typed" | "title" | "progress";
 
 export default function LibraryPage() {
-  const { books, progress, loading, refreshBooks } = useStore();
+  const { books, progress, loading, refreshBooks, removeBook } = useStore();
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -134,8 +134,8 @@ export default function LibraryPage() {
     setConfirmDeleteId(null);
     clearTimeout(confirmTimerRef.current);
 
-    await db.deleteBook(id);
-    await refreshBooks();
+    removeBook(id);
+    db.deleteBook(id);
 
     if (undoItem) {
       clearTimeout(undoItem.timeout);
@@ -153,8 +153,7 @@ export default function LibraryPage() {
   async function handleUndo() {
     if (!undoItem) return;
     clearTimeout(undoItem.timeout);
-    await db.saveBook(undoItem.book);
-    await refreshBooks();
+    db.saveBook(undoItem.book).then(() => refreshBooks());
     setUndoExiting(true);
     setTimeout(() => {
       setUndoItem(null);
