@@ -10,12 +10,12 @@
   --border-hover: #3f3f46;
   --muted: #71717a;
   --dim: #52525b;
-  --accent: #d4a63c;
-  --accent-hover: #e4b84a;
+  --accent: #6e47ff;
+  --accent-hover: #5835e0;
   --ink: #e4e4e7;
   --ink-correct: #4ade80;
   --ink-error: #f87171;
-  --ink-current: #d4a63c;
+  --ink-current: #6e47ff;
   --stamp: #ef4444;
   --stamp-dim: #991b1b;
   /* Typing page — warm cream literary feel */
@@ -23,7 +23,7 @@
   --paper-text: #1c1917;
   --paper-upcoming: #a8a29e;
   --paper-line: #e7e5e4;
-  --paper-margin: #d4a63c;
+  --paper-margin: #6e47ff;
   --paper-shadow: rgba(0, 0, 0, 0.4);
   /* Keyboard */
   --key-bg: #18181b;
@@ -33,15 +33,6 @@
   /* Platen */
   --platen-from: #09090b;
   --platen-mid: #27272a;
-  /* Accent subtle (dynamic — set by theme store) */
-  --accent-subtle: rgba(212, 166, 60, 0.15);
-  /* Radius (dynamic — set by theme store) */
-  --r-xs: 0px;
-  --r-sm: 0px;
-  --r-md: 0px;
-  --r-lg: 0px;
-  --r-btn: 0px;
-  --r-badge: 0px;
 }
 
 /* ===== Light theme ===== */
@@ -54,19 +45,19 @@
   --border-hover: #a8a29e;
   --muted: #78716c;
   --dim: #a8a29e;
-  --accent: #b8942e;
-  --accent-hover: #a07e20;
+  --accent: #6e47ff;
+  --accent-hover: #5835e0;
   --ink: #1c1917;
   --ink-correct: #16a34a;
   --ink-error: #dc2626;
-  --ink-current: #b8942e;
+  --ink-current: #6e47ff;
   --stamp: #dc2626;
   --stamp-dim: #fca5a5;
   --paper-bg: #faf8f2;
   --paper-text: #1c1917;
   --paper-upcoming: #a8a29e;
   --paper-line: #e7e5e4;
-  --paper-margin: #b8942e;
+  --paper-margin: #6e47ff;
   --paper-shadow: rgba(0, 0, 0, 0.08);
   --key-bg: #f5f5f4;
   --key-border: #d6d3d1;
@@ -74,7 +65,6 @@
   --key-shadow: #d6d3d1;
   --platen-from: #78716c;
   --platen-mid: #a8a29e;
-  --accent-subtle: rgba(212, 166, 60, 0.12);
 }
 
 @theme inline {
@@ -102,11 +92,6 @@
   --color-key-bg: var(--key-bg);
   --color-key-border: var(--key-border);
   --color-key-text: var(--key-text);
-  --color-accent-subtle: var(--accent-subtle);
-  --radius-sm: var(--r-sm);
-  --radius-md: var(--r-md);
-  --radius-lg: var(--r-lg);
-  --radius-xl: var(--r-lg);
   --font-serif: var(--font-lora);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
@@ -132,7 +117,7 @@ body {
   display: inline-flex;
   align-items: center;
   padding: 3px 10px;
-  border-radius: var(--r-badge);
+  border-radius: 0;
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.01em;
@@ -142,7 +127,7 @@ body {
   color: var(--ink-correct);
 }
 .badge-accent {
-  background: var(--accent-subtle);
+  background: rgba(110, 71, 255, 0.12);
   color: var(--accent);
 }
 .badge-error {

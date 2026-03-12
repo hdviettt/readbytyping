@@ -1,42 +1,55 @@
 "use client";
 
-import { useEffect } from "react";
-import { useThemeStore, applyTheme } from "@/store/theme-store";
+import { createContext, useContext, useEffect, useState } from "react";
 import { migrateFromLocalStorage } from "@/lib/db";
 
-/**
- * Backward-compatible hook — returns { theme, toggle } like the old context-based provider.
- * Components needing full theme control can use useThemeStore directly.
- */
+type Theme = "light" | "dark";
+
+const ThemeContext = createContext<{
+  theme: Theme;
+  toggle: () => void;
+}>({
+  theme: "dark",
+  toggle: () => {},
+});
+
 export function useTheme() {
-  const store = useThemeStore();
-  return {
-    theme: store.mode,
-    toggle: () => store.setMode(store.mode === "dark" ? "light" : "dark"),
-  };
+  return useContext(ThemeContext);
 }
 
-/**
- * Applies CSS custom properties from the Zustand theme store to the document root.
- * Migrates from the old localStorage key on first load.
- */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const state = useThemeStore();
+  const [theme, setTheme] = useState<Theme>("dark");
+  const [mounted, setMounted] = useState(false);
 
-  // One-time migration from old theme storage + localStorage data
   useEffect(() => {
-    const oldTheme = localStorage.getItem("booktyper_theme");
-    if (oldTheme === "light" || oldTheme === "dark") {
-      useThemeStore.getState().setMode(oldTheme);
-      localStorage.removeItem("booktyper_theme");
+    const stored = localStorage.getItem("booktyper_theme") as Theme | null;
+    if (stored === "light" || stored === "dark") {
+      setTheme(stored);
     }
+    setMounted(true);
     migrateFromLocalStorage();
   }, []);
 
-  // Apply CSS vars whenever theme state changes
   useEffect(() => {
-    applyTheme(state);
-  }, [state.mode, state.accentKey, state.radiusKey]);
+    if (!mounted) return;
+    const html = document.documentElement;
+    html.classList.remove("light", "dark");
+    html.classList.add(theme);
+    localStorage.setItem("booktyper_theme", theme);
+  }, [theme, mounted]);
 
-  return <>{children}</>;
+  function toggle() {
+    setTheme((t) => (t === "dark" ? "light" : "dark"));
+  }
+
+  // Prevent flash of wrong theme
+  if (!mounted) {
+    return <>{children}</>;
+  }
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggle }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 }
