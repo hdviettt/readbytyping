@@ -33,6 +33,15 @@
   /* Platen */
   --platen-from: #09090b;
   --platen-mid: #27272a;
+  /* Accent subtle (dynamic — set by theme store) */
+  --accent-subtle: rgba(212, 166, 60, 0.15);
+  /* Radius (dynamic — set by theme store) */
+  --r-xs: 0px;
+  --r-sm: 0px;
+  --r-md: 0px;
+  --r-lg: 0px;
+  --r-btn: 0px;
+  --r-badge: 0px;
 }
 
 /* ===== Light theme ===== */
@@ -65,6 +74,7 @@
   --key-shadow: #d6d3d1;
   --platen-from: #78716c;
   --platen-mid: #a8a29e;
+  --accent-subtle: rgba(212, 166, 60, 0.12);
 }
 
 @theme inline {
@@ -92,6 +102,11 @@
   --color-key-bg: var(--key-bg);
   --color-key-border: var(--key-border);
   --color-key-text: var(--key-text);
+  --color-accent-subtle: var(--accent-subtle);
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-lg);
   --font-serif: var(--font-lora);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
@@ -117,7 +132,7 @@ body {
   display: inline-flex;
   align-items: center;
   padding: 3px 10px;
-  border-radius: 0;
+  border-radius: var(--r-badge);
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.01em;
@@ -127,7 +142,7 @@ body {
   color: var(--ink-correct);
 }
 .badge-accent {
-  background: rgba(212, 166, 60, 0.12);
+  background: var(--accent-subtle);
   color: var(--accent);
 }
 .badge-error {

@@ -1,16 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
 import { useAuth } from "@/hooks/use-auth";
+import { ThemeConfigurator } from "@/components/theme-configurator";
 
 export function Nav() {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggle } = useTheme();
   const { user, isAnonymous, signOut } = useAuth();
+  const [themeOpen, setThemeOpen] = useState(false);
 
   const email = user?.email;
 
@@ -79,6 +82,19 @@ export function Nav() {
                 </svg>
               )}
             </button>
+            <button
+              onClick={() => setThemeOpen(true)}
+              className="p-1.5 text-muted hover:text-foreground transition-colors hover:bg-border/20"
+              title="Customize theme"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="13.5" cy="6.5" r="2" />
+                <circle cx="17.5" cy="10.5" r="2" />
+                <circle cx="8.5" cy="7.5" r="2" />
+                <circle cx="6.5" cy="12" r="2" />
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+              </svg>
+            </button>
 
             {user && (
               <div className="flex items-center gap-1.5 border-l border-border/50 pl-2 ml-0.5">
@@ -110,6 +126,7 @@ export function Nav() {
           </div>
         </div>
       </div>
+      <ThemeConfigurator isOpen={themeOpen} onClose={() => setThemeOpen(false)} />
     </header>
   );
 }
