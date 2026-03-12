@@ -217,8 +217,8 @@ export default function LibraryPage() {
             <h1 className="text-xl font-semibold text-foreground">Library</h1>
             <span className="text-[13px] text-dim">{books.length} {books.length === 1 ? "book" : "books"}</span>
           </div>
-          <label className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium cursor-pointer transition-colors ${
-            uploading ? "text-muted" : "bg-accent hover:bg-accent-hover text-background"
+          <label className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium cursor-pointer rounded-lg transition-all ${
+            uploading ? "text-muted" : "bg-accent hover:bg-accent-hover text-background shadow-sm shadow-accent/25 hover:shadow-md hover:shadow-accent/30"
           }`}>
             {uploading ? (
               <span className="flex items-center gap-1">
@@ -247,13 +247,13 @@ export default function LibraryPage() {
 
         {/* Drag overlay */}
         {dragActive && (
-          <div className="fixed inset-0 z-40 bg-accent/5 border-2 border-dashed border-accent/40 flex items-center justify-center pointer-events-none">
+          <div className="fixed inset-0 z-40 bg-accent/5 border-2 border-dashed border-accent/40 rounded-3xl m-4 flex items-center justify-center pointer-events-none">
             <p className="text-accent font-medium text-lg">Drop file to upload</p>
           </div>
         )}
 
         {error && (
-          <div className="mb-6 px-4 py-3 bg-ink-error/8 border border-ink-error/20">
+          <div className="mb-6 px-4 py-3 bg-ink-error/8 border border-ink-error/20 rounded-lg">
             <p className="text-sm text-ink-error">{error}</p>
           </div>
         )}
@@ -266,12 +266,12 @@ export default function LibraryPage() {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-3 py-1.5 text-sm bg-transparent border border-border/70 placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
+              className="flex-1 px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
             />
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortOption)}
-              className="px-3 py-1.5 text-sm bg-transparent border border-border/70 focus:outline-none focus:border-accent/50 transition-all"
+              className="px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg focus:outline-none focus:border-accent/50 transition-all"
             >
               <option value="recent">Recently added</option>
               <option value="last-typed">Recently typed</option>
@@ -303,11 +303,11 @@ export default function LibraryPage() {
               return (
                 <div
                   key={book.id}
-                  className="group flex border border-border/50 hover:border-border-hover/70 bg-surface/30 hover:bg-surface/60 transition-all"
+                  className="group flex rounded-xl border border-border/50 hover:border-accent/30 bg-surface/30 hover:bg-surface/60 hover:shadow-md hover:shadow-accent/5 transition-all"
                 >
                   {/* Color spine */}
                   <div
-                    className="w-1.5 shrink-0"
+                    className="w-1.5 shrink-0 rounded-l-xl"
                     style={{ background: pct === 100 ? "var(--ink-correct)" : hashColor(book.title) }}
                   />
 
@@ -342,8 +342,8 @@ export default function LibraryPage() {
                     {/* Progress bar — right side */}
                     {isInProgress && (
                       <div className="w-24 shrink-0">
-                        <div className="w-full h-1 bg-border/30">
-                          <div className="h-full bg-accent/70" style={{ width: `${pct}%` }} />
+                        <div className="w-full h-1 bg-border/30 rounded-full">
+                          <div className="h-full bg-accent/70 rounded-full" style={{ width: `${pct}%` }} />
                         </div>
                         <p className="text-[11px] text-dim text-right mt-0.5">{pct}%</p>
                       </div>
@@ -384,7 +384,7 @@ export default function LibraryPage() {
       </main>
 
       {undoItem && (
-        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border border-border/70 px-4 py-2.5 flex items-center gap-3 ${
+        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border border-border/70 rounded-xl shadow-lg px-4 py-2.5 flex items-center gap-3 ${
           undoExiting ? "animate-toast-out" : "animate-toast-in"
         }`} style={{ willChange: "transform, opacity" }}>
           <p className="text-[13px] text-muted">

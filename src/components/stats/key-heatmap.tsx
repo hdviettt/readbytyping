@@ -46,7 +46,7 @@ export function KeyHeatmap({ stats }: { stats: KeystrokeStat[] }) {
             return (
               <div
                 key={key}
-                className={`w-10 h-10 flex items-center justify-center text-sm font-mono border border-border ${
+                className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-mono border border-border ${
                   acc !== null ? accuracyColor(acc) : "bg-paper/50"
                 }`}
                 title={

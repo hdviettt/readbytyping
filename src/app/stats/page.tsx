@@ -95,7 +95,7 @@ export default function StatsPage() {
             {/* Hero stats — two large + three small */}
             <div className="flex gap-3 mb-8 stagger-children">
               {/* Primary stats — large */}
-              <div className="flex-1 p-5 bg-surface/50 border border-border/50 flex items-end justify-between">
+              <div className="flex-1 p-5 bg-surface/50 border border-border/50 rounded-xl flex items-end justify-between">
                 <div>
                   <CountUp end={avgWpm} className="text-4xl font-mono tabular-nums font-bold text-accent" />
                   <p className="text-xs text-dim mt-1">Average WPM</p>
@@ -107,7 +107,7 @@ export default function StatsPage() {
                   </div>
                 )}
               </div>
-              <div className="flex-1 p-5 bg-surface/50 border border-border/50 flex items-end justify-between">
+              <div className="flex-1 p-5 bg-surface/50 border border-border/50 rounded-xl flex items-end justify-between">
                 <div>
                   <CountUp end={avgAccuracy} suffix="%" className="text-4xl font-mono tabular-nums font-bold text-ink-correct" />
                   <p className="text-xs text-dim mt-1">Average Accuracy</p>
@@ -117,15 +117,15 @@ export default function StatsPage() {
 
             {/* Secondary stats row */}
             <div className="grid grid-cols-3 gap-3 mb-8">
-              <div className="p-4 bg-surface/30 border border-border/40">
+              <div className="p-4 bg-surface/30 border border-border/40 rounded-lg">
                 <CountUp end={totalSessions} className="text-xl font-mono tabular-nums font-semibold" />
                 <p className="text-xs text-dim mt-0.5">Sessions</p>
               </div>
-              <div className="p-4 bg-surface/30 border border-border/40">
+              <div className="p-4 bg-surface/30 border border-border/40 rounded-lg">
                 <CountUp end={totalChars} className="text-xl font-mono tabular-nums font-semibold" />
                 <p className="text-xs text-dim mt-0.5">Characters</p>
               </div>
-              <div className="p-4 bg-surface/30 border border-border/40">
+              <div className="p-4 bg-surface/30 border border-border/40 rounded-lg">
                 <span className="text-xl font-mono tabular-nums font-semibold">{Math.round(totalTime / 60)}m</span>
                 <p className="text-xs text-dim mt-0.5">Total Time</p>
               </div>
@@ -134,14 +134,14 @@ export default function StatsPage() {
             {/* Charts — side by side on desktop */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
               {trendData.length > 1 && (
-                <div className="p-5 bg-surface/50 border border-border/50">
+                <div className="p-5 bg-surface/50 border border-border/50 rounded-xl">
                   <h2 className="text-sm font-medium text-muted mb-4">WPM Over Time</h2>
                   <WpmLineChart data={trendData} />
                 </div>
               )}
 
               {latestSession && latestSession.wpmSamples.length > 0 && (
-                <div className="p-5 bg-surface/50 border border-border/50">
+                <div className="p-5 bg-surface/50 border border-border/50 rounded-xl">
                   <h2 className="text-sm font-medium text-muted mb-4">Latest Session</h2>
                   <WpmLineChart data={latestSession.wpmSamples} />
                 </div>
@@ -149,13 +149,13 @@ export default function StatsPage() {
             </div>
 
             {/* Key heatmap — full width */}
-            <div className="mb-8 p-5 bg-surface/50 border border-border/50">
+            <div className="mb-8 p-5 bg-surface/50 border border-border/50 rounded-xl">
               <h2 className="text-sm font-medium text-muted mb-4">Key Accuracy</h2>
               <KeyHeatmap stats={keystrokeStats} />
             </div>
 
             {/* Session history */}
-            <div className="bg-surface/50 border border-border/50">
+            <div className="bg-surface/50 border border-border/50 rounded-xl overflow-hidden">
               <div className="px-5 py-3 border-b border-border/40">
                 <h2 className="text-sm font-medium text-muted">Session History</h2>
               </div>

@@ -46,9 +46,9 @@ export function Nav() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "px-3 py-1 text-[13px] font-medium transition-colors",
+                    "px-3 py-1 text-[13px] font-medium rounded-md transition-colors",
                     active
-                      ? "text-foreground bg-border/40"
+                      ? "text-accent bg-accent/10"
                       : "text-muted hover:text-foreground hover:bg-border/20"
                   )}
                 >
@@ -62,7 +62,7 @@ export function Nav() {
           <div className="flex items-center gap-2">
             <button
               onClick={toggle}
-              className="p-1.5 text-muted hover:text-foreground transition-colors hover:bg-border/20"
+              className="p-1.5 text-muted hover:text-foreground transition-colors hover:bg-border/20 rounded-md"
               title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
               {theme === "dark" ? (

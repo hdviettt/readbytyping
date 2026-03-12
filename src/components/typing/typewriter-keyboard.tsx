@@ -193,7 +193,7 @@ export function TypewriterKeyboard({
 
   return (
     <div
-      className="border border-border/50 border-t-0"
+      className="border border-border/50 border-t-0 rounded-b-xl"
       style={{
         background: "linear-gradient(180deg, var(--surface) 0%, var(--background) 100%)",
         padding: "8px 12px 10px",

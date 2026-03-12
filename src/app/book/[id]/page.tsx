@@ -48,7 +48,7 @@ export default function BookChaptersPage() {
         </Link>
 
         {/* Book header with progress */}
-        <div className="mb-8 p-5 bg-surface/50 border border-border/50">
+        <div className="mb-8 p-5 bg-surface/50 border border-border/50 rounded-xl">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <h1 className="text-xl font-serif font-semibold text-foreground">{book.title}</h1>
@@ -70,15 +70,15 @@ export default function BookChaptersPage() {
 
           {/* Full-width progress bar */}
           {overallPct > 0 && overallPct < 100 && (
-            <div className="mt-4 w-full h-1 bg-border/30">
-              <div className="h-full bg-accent/70 transition-all" style={{ width: `${overallPct}%` }} />
+            <div className="mt-4 w-full h-1 bg-border/30 rounded-full">
+              <div className="h-full bg-accent/70 rounded-full transition-all" style={{ width: `${overallPct}%` }} />
             </div>
           )}
 
           {bookProgress && bookProgress.completedPages < book.totalPages && (
             <Link
               href={`/book/${book.id}/type?chapter=${bookProgress.chapterIndex}`}
-              className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm transition-colors"
+              className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-lg shadow-sm shadow-accent/25 hover:shadow-md hover:shadow-accent/30 transition-all"
             >
               Resume typing
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,10 +109,10 @@ export default function BookChaptersPage() {
               <Link
                 key={ci}
                 href={`/book/${book.id}/type?chapter=${ci}`}
-                className="flex items-center gap-4 px-4 py-3 hover:bg-surface/50 transition-colors group border border-transparent hover:border-border/40"
+                className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-surface/50 transition-colors group border border-transparent hover:border-border/40"
               >
                 <div
-                  className={`w-8 h-8 flex items-center justify-center text-xs font-medium shrink-0 ${
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-medium shrink-0 ${
                     isDone
                       ? "bg-ink-correct/10 text-ink-correct"
                       : "bg-border/20 text-muted group-hover:text-foreground"
@@ -137,9 +137,9 @@ export default function BookChaptersPage() {
 
                 {pct > 0 && !isDone && (
                   <div className="w-12 shrink-0">
-                    <div className="w-full h-1 bg-border/30">
+                    <div className="w-full h-1 bg-border/30 rounded-full">
                       <div
-                        className="h-full bg-accent/70"
+                        className="h-full bg-accent/70 rounded-full"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
