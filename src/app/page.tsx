@@ -10,13 +10,26 @@ import { parsePdf } from "@/lib/parsers/pdf-parser";
 import type { Book, Chapter, Page } from "@/types/book";
 import { Onboarding } from "@/components/onboarding";
 
-function hashColor(str: string): string {
+function hashGradient(str: string): [string, string] {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
   const hue = Math.abs(hash) % 360;
-  return `hsl(${hue}, 25%, 35%)`;
+  return [
+    `hsl(${hue}, 20%, 22%)`,
+    `hsl(${(hue + 40) % 360}, 15%, 13%)`,
+  ];
+}
+
+function getInitials(title: string): string {
+  return title
+    .split(/\s+/)
+    .filter((w) => w.length > 0)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
 }
 
 function timeAgo(ts: number): string {
@@ -117,7 +130,8 @@ export default function LibraryPage() {
     if (file) handleFile(file);
   }
 
-  function handleDeleteClick(id: string) {
+  function handleDeleteClick(e: React.MouseEvent, id: string) {
+    e.stopPropagation();
     if (confirmDeleteId === id) {
       doDelete(id);
     } else {
@@ -196,10 +210,16 @@ export default function LibraryPage() {
       <>
         <Nav />
         <main className="max-w-5xl mx-auto px-6 py-10">
-          <div className="py-12 space-y-3 max-w-lg mx-auto animate-pulse">
-            <div className="h-3 bg-border/30 rounded-full w-3/4" />
-            <div className="h-3 bg-border/30 rounded-full w-1/2" />
-            <div className="h-3 bg-border/30 rounded-full w-2/3" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-14">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="rounded-xl border border-border/30 overflow-hidden animate-pulse">
+                <div className="h-32 bg-surface/50" />
+                <div className="p-4 space-y-2">
+                  <div className="h-3 bg-border/20 rounded-full w-3/4" />
+                  <div className="h-2.5 bg-border/20 rounded-full w-1/2" />
+                </div>
+              </div>
+            ))}
           </div>
         </main>
       </>
@@ -215,7 +235,7 @@ export default function LibraryPage() {
         onDragLeave={() => setDragActive(false)}
         onDrop={handleDrop}
       >
-        {/* Header row: title + upload button inline */}
+        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-baseline gap-3">
             <h1 className="text-xl font-semibold text-foreground">Library</h1>
@@ -265,17 +285,22 @@ export default function LibraryPage() {
         {/* Search and sort */}
         {books.length > 0 && (
           <div className="flex items-center gap-2 mb-6">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg placeholder:text-dim focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
-            />
+            <div className="flex-1 relative">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dim pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search books..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 text-sm bg-surface/50 border border-border/50 rounded-full placeholder:text-dim focus:outline-none focus:border-border-hover focus:bg-surface transition-all"
+              />
+            </div>
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortOption)}
-              className="px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
+              className="px-3 py-2 text-sm bg-surface/50 border border-border/50 rounded-full focus:outline-none focus:border-border-hover transition-all"
             >
               <option value="recent">Recently added</option>
               <option value="last-typed">Recently typed</option>
@@ -285,7 +310,7 @@ export default function LibraryPage() {
           </div>
         )}
 
-        {/* Book list */}
+        {/* Book grid */}
         {books.length === 0 ? (
           <Onboarding />
         ) : sorted.length === 0 ? (
@@ -294,7 +319,7 @@ export default function LibraryPage() {
             <p className="text-dim text-xs">Try a different keyword or clear the filter.</p>
           </div>
         ) : (
-          <div className="space-y-2 stagger-children">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 stagger-children">
             {sorted.map((book) => {
               const prog = progress[book.id];
               const pct =
@@ -304,82 +329,99 @@ export default function LibraryPage() {
                     )
                   : 0;
               const isInProgress = pct > 0 && pct < 100;
+              const isDone = pct === 100;
+              const [c1, c2] = hashGradient(book.title);
+              const initials = getInitials(book.title);
 
               return (
                 <div
                   key={book.id}
-                  className="group flex rounded-xl border border-border/50 hover:border-accent/30 bg-surface/30 hover:bg-surface/60 transition-all"
+                  className="group rounded-xl border border-border/50 bg-surface/20 hover:border-border-hover hover:bg-surface/40 overflow-hidden transition-all cursor-pointer"
+                  onClick={() => router.push(`/book/${book.id}`)}
                 >
-                  {/* Color spine */}
+                  {/* Cover */}
                   <div
-                    className="w-1.5 shrink-0 rounded-l-xl"
-                    style={{ background: pct === 100 ? "var(--ink-correct)" : hashColor(book.title) }}
-                  />
-
-                  {/* Content */}
-                  <button
-                    onClick={() => router.push(`/book/${book.id}`)}
-                    className="flex-1 min-w-0 flex items-center gap-4 px-4 py-3.5 text-left cursor-pointer"
+                    className="h-32 flex items-center justify-center relative"
+                    style={{ background: `linear-gradient(135deg, ${c1}, ${c2})` }}
                   >
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-[15px] font-semibold truncate group-hover:text-accent transition-colors">
-                          {book.title}
-                        </h3>
-                        {pct === 100 && (
-                          <span className="badge badge-success shrink-0">Done</span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        {book.author && (
-                          <span className="text-[13px] text-muted truncate">
-                            {book.author}
-                          </span>
-                        )}
-                        <span className="text-[11px] text-dim">{book.totalPages} pg</span>
-                        <span className="text-[11px] text-dim">{book.totalChapters} ch</span>
-                        {prog?.lastTypedAt && (
-                          <span className="text-[11px] text-dim">{timeAgo(prog.lastTypedAt)}</span>
-                        )}
-                      </div>
-                    </div>
+                    <span className="text-3xl font-bold text-white/70 select-none tracking-wider">
+                      {initials}
+                    </span>
 
-                    {/* Progress bar — right side */}
-                    {isInProgress && (
-                      <div className="w-24 shrink-0">
-                        <div className="w-full h-1 bg-border/30 rounded-full">
-                          <div className="h-full bg-accent/70 rounded-full" style={{ width: `${pct}%` }} />
-                        </div>
-                        <p className="text-[11px] text-dim text-right mt-0.5">{pct}%</p>
-                      </div>
+                    {isDone && (
+                      <span className="badge badge-success absolute top-2.5 right-2.5">
+                        <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Done
+                      </span>
                     )}
-                  </button>
 
-                  {/* Actions */}
-                  <div className="shrink-0 flex flex-col items-end justify-center px-3 gap-1 border-l border-border/30">
-                    {isInProgress && prog ? (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/book/${book.id}/type?chapter=${prog.chapterIndex}`);
-                        }}
-                        className="text-xs text-accent hover:text-accent-hover font-medium transition-colors"
-                      >
-                        Continue
-                      </button>
-                    ) : (
-                      <span />
-                    )}
+                    {/* Delete button — top-right on hover */}
                     <button
-                      onClick={() => handleDeleteClick(book.id)}
-                      className={`text-[11px] transition-colors ${
+                      onClick={(e) => handleDeleteClick(e, book.id)}
+                      className={`absolute top-2.5 transition-all ${
+                        isDone ? "left-2.5" : "right-2.5"
+                      } ${
                         confirmDeleteId === book.id
-                          ? "text-ink-error font-medium"
-                          : "text-dim hover:text-ink-error opacity-0 group-hover:opacity-100"
+                          ? "opacity-100 bg-ink-error/90 text-white px-2 py-0.5 rounded-full text-[11px] font-medium"
+                          : "opacity-0 group-hover:opacity-100 w-6 h-6 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white/70 hover:text-white text-xs"
                       }`}
                     >
-                      {confirmDeleteId === book.id ? "Confirm?" : "Delete"}
+                      {confirmDeleteId === book.id ? "Confirm?" : "×"}
                     </button>
+
+                    {/* Continue overlay — appears on hover for in-progress books */}
+                    {isInProgress && prog && (
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 flex items-center justify-center transition-all">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/book/${book.id}/type?chapter=${prog.chapterIndex}`);
+                          }}
+                          className="opacity-0 group-hover:opacity-100 px-4 py-1.5 bg-accent text-background text-sm font-medium rounded-full transition-all hover:bg-accent-hover"
+                        >
+                          Continue
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Body */}
+                  <div className="p-4">
+                    <h3 className="text-[15px] font-medium text-foreground truncate">
+                      {book.title}
+                    </h3>
+                    {book.author && (
+                      <p className="text-[13px] text-muted truncate mt-0.5">{book.author}</p>
+                    )}
+
+                    <div className="flex items-center gap-1.5 mt-2.5 text-[11px] text-dim">
+                      <span>{book.totalChapters} ch</span>
+                      <span className="text-border">·</span>
+                      <span>{book.totalPages} pg</span>
+                      {prog?.lastTypedAt && (
+                        <>
+                          <span className="text-border">·</span>
+                          <span>{timeAgo(prog.lastTypedAt)}</span>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Progress bar */}
+                    {pct > 0 && (
+                      <div className="mt-3">
+                        <div className="w-full h-1 bg-border/30 rounded-full">
+                          <div
+                            className={`h-full rounded-full transition-all duration-500 ${
+                              isDone ? "bg-ink-correct/60" : "bg-foreground/40"
+                            }`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                        <p className="text-[11px] text-dim mt-1 text-right tabular-nums font-mono">{pct}%</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -389,7 +431,7 @@ export default function LibraryPage() {
       </main>
 
       {undoItem && (
-        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border border-border/70 rounded-xl px-4 py-2.5 flex items-center gap-3 ${
+        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border border-border/70 rounded-full px-5 py-2.5 flex items-center gap-3 ${
           undoExiting ? "animate-toast-out" : "animate-toast-in"
         }`} style={{ willChange: "transform, opacity" }}>
           <p className="text-[13px] text-muted">
