@@ -37,6 +37,7 @@ export function useTypingEngine(text: string, startOffset: number = 0) {
   );
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const composingRef = useRef(false);
   const keystrokesRef = useRef<import("@/types/typing").Keystroke[]>([]);
 
   // Keep keystrokesRef in sync — engine still adds to state.keystrokes for WPM,
@@ -65,6 +66,9 @@ export function useTypingEngine(text: string, startOffset: number = 0) {
   // Handle key events
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      // Don't interfere with IME composition
+      if (composingRef.current) return;
+
       // Prevent default for all keys to stop textarea behavior
       e.preventDefault();
 
@@ -75,6 +79,34 @@ export function useTypingEngine(text: string, startOffset: number = 0) {
         key: e.key,
         timestamp: Date.now(),
       });
+    },
+    []
+  );
+
+  // IME composition handlers (Vietnamese, Chinese, Japanese, Korean, etc.)
+  const handleCompositionStart = useCallback(() => {
+    composingRef.current = true;
+  }, []);
+
+  const handleCompositionEnd = useCallback(
+    (e: React.CompositionEvent<HTMLTextAreaElement>) => {
+      composingRef.current = false;
+      const data = e.data;
+      if (!data) return;
+
+      // Dispatch each composed character
+      for (const char of Array.from(data)) {
+        dispatch({
+          type: "KEY_PRESS",
+          key: char,
+          timestamp: Date.now(),
+        });
+      }
+
+      // Clear the textarea since we handle input ourselves
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
     },
     []
   );
@@ -101,6 +133,8 @@ export function useTypingEngine(text: string, startOffset: number = 0) {
     charStatuses,
     progress,
     handleKeyDown,
+    handleCompositionStart,
+    handleCompositionEnd,
     inputRef,
     focusInput,
     keystrokesRef,

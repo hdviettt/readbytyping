@@ -58,6 +58,8 @@ export function TypingInterface({
     charStatuses,
     progress: pageProgress,
     handleKeyDown,
+    handleCompositionStart,
+    handleCompositionEnd,
     inputRef,
     focusInput,
     keystrokesRef,
@@ -474,6 +476,8 @@ export function TypingInterface({
         <textarea
           ref={inputRef}
           onKeyDown={onKeyDown}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           className="absolute top-0 left-0 w-0 h-0 opacity-0"

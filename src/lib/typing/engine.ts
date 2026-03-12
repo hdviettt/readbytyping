@@ -46,6 +46,9 @@ const IGNORED_KEYS = new Set([
   "F10",
   "F11",
   "F12",
+  "Process",      // IME processing key
+  "Dead",         // dead key (diacritical composition)
+  "Unidentified",
 ]);
 
 export function shouldIgnoreKey(key: string): boolean {

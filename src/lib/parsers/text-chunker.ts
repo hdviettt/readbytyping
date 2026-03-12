@@ -39,13 +39,16 @@ const CHAR_REPLACEMENTS: [RegExp, string][] = [
   [/[\u00E6]/g, "ae"],
 ];
 
-export function normalizeToAscii(text: string): string {
-  let result = text;
+export function normalizeText(text: string): string {
+  // Normalize Unicode to NFC (precomposed) so Vietnamese characters are single codepoints
+  let result = text.normalize("NFC");
   for (const [pattern, replacement] of CHAR_REPLACEMENTS) {
     result = result.replace(pattern, replacement);
   }
-  // Strip any remaining non-ASCII non-printable characters, keep newlines and tabs
-  result = result.replace(/[^\x20-\x7E\n\t]/g, "");
+  // Normalize line endings
+  result = result.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  // Strip only control characters, keep all printable Unicode (Vietnamese, CJK, etc.)
+  result = result.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F\uFEFF]/g, "");
   return result;
 }
 
@@ -59,7 +62,7 @@ export function chunkText(
   text: string,
   targetWords: number = DEFAULT_TARGET_WORDS
 ): TextChunk[] {
-  const trimmed = normalizeToAscii(text).trim();
+  const trimmed = normalizeText(text).trim();
   if (!trimmed) return [];
 
   const words = trimmed.split(/\s+/);

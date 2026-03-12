@@ -1,32 +1,55 @@
 import { describe, it, expect } from "vitest";
-import { normalizeToAscii, chunkText } from "./text-chunker";
+import { normalizeText, chunkText } from "./text-chunker";
 
-describe("normalizeToAscii", () => {
+describe("normalizeText", () => {
   it("converts smart quotes to straight quotes", () => {
-    expect(normalizeToAscii("\u201CHello\u201D")).toBe('"Hello"');
-    expect(normalizeToAscii("\u2018it\u2019s\u2019")).toBe("'it's'");
+    expect(normalizeText("\u201CHello\u201D")).toBe('"Hello"');
+    expect(normalizeText("\u2018it\u2019s\u2019")).toBe("'it's'");
   });
 
   it("converts em dash to hyphen", () => {
-    expect(normalizeToAscii("word\u2014word")).toBe("word-word");
+    expect(normalizeText("word\u2014word")).toBe("word-word");
   });
 
   it("converts ellipsis to three dots", () => {
-    expect(normalizeToAscii("wait\u2026")).toBe("wait...");
+    expect(normalizeText("wait\u2026")).toBe("wait...");
   });
 
-  it("strips non-ASCII non-printable characters", () => {
-    expect(normalizeToAscii("hello\u0080world")).toBe("helloworld");
+  it("strips control characters but keeps Unicode letters", () => {
+    expect(normalizeText("hello\x00world")).toBe("helloworld");
+    expect(normalizeText("hello\x0Bworld")).toBe("helloworld");
   });
 
   it("preserves newlines and standard ASCII", () => {
-    expect(normalizeToAscii("line1\nline2")).toBe("line1\nline2");
-    expect(normalizeToAscii("abc 123 !@#")).toBe("abc 123 !@#");
+    expect(normalizeText("line1\nline2")).toBe("line1\nline2");
+    expect(normalizeText("abc 123 !@#")).toBe("abc 123 !@#");
   });
 
   it("converts ligatures", () => {
-    expect(normalizeToAscii("\uFB01nd")).toBe("find");
-    expect(normalizeToAscii("\uFB02ow")).toBe("flow");
+    expect(normalizeText("\uFB01nd")).toBe("find");
+    expect(normalizeText("\uFB02ow")).toBe("flow");
+  });
+
+  it("preserves Vietnamese characters", () => {
+    expect(normalizeText("Xin chào thế giới")).toBe("Xin chào thế giới");
+    expect(normalizeText("ăâđêôơư")).toBe("ăâđêôơư");
+    expect(normalizeText("ả ễ ỡ ự ừ")).toBe("ả ễ ỡ ự ừ");
+  });
+
+  it("normalizes to NFC", () => {
+    // o + combining horn (NFD) should become ơ (NFC)
+    const nfd = "o\u031B";
+    const result = normalizeText(nfd);
+    expect(result).toBe("\u01A1"); // ơ in NFC
+  });
+
+  it("normalizes line endings", () => {
+    expect(normalizeText("a\r\nb")).toBe("a\nb");
+    expect(normalizeText("a\rb")).toBe("a\nb");
+  });
+
+  it("strips BOM", () => {
+    expect(normalizeText("\uFEFFhello")).toBe("hello");
   });
 });
 
@@ -68,5 +91,12 @@ describe("chunkText", () => {
   it("sets characterCount correctly", () => {
     const chunks = chunkText("Hello world");
     expect(chunks[0].characterCount).toBe(11);
+  });
+
+  it("chunks Vietnamese text correctly", () => {
+    const words = Array(300).fill("xin chào").join(" ");
+    const chunks = chunkText(words, 250);
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(chunks[0].content).toContain("chào");
   });
 });
