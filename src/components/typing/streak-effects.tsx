@@ -28,13 +28,13 @@ export function getTier(streak: number) {
   return null;
 }
 
-// Violet-based particle colors
+// Warm violet particle colors — violet accent mixed with warm tones
 const PARTICLE_COLORS = [
-  ["#6e47ff", "#8b6fff", "#5835e0"], // violet (5+)
-  ["#6e47ff", "#8b6fff", "#a78bfa"], // bright violet (10+)
-  ["#8b6fff", "#a78bfa", "#c4b5fd"], // lavender (25+)
-  ["#f87171", "#fb923c", "#6e47ff"], // red-violet (50+)
-  ["#f87171", "#fb923c", "#a78bfa", "#c4b5fd"], // fire (100+)
+  ["#6e47ff", "#8b6fff", "#a78bfa"], // violet (5+)
+  ["#6e47ff", "#a78bfa", "#d4a63c"], // violet-gold (10+)
+  ["#a78bfa", "#d4a63c", "#e4b84a"], // warm glow (25+)
+  ["#f87171", "#fb923c", "#d4a63c"], // fire-gold (50+)
+  ["#f87171", "#fb923c", "#d4a63c", "#e4b84a"], // full fire (100+)
 ];
 
 function getParticleColors(streak: number): string[] {

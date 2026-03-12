@@ -1,18 +1,19 @@
 @import "tailwindcss";
 
-/* ===== Modern Literary — Dark theme (default) ===== */
+/* ===== Warm Literary — Dark theme (default) ===== */
+/* Uses stone scale (warm gray) to connect with the cream typing page */
 :root {
-  --background: #09090b;
-  --foreground: #e4e4e7;
-  --surface: #18181b;
-  --paper: #1c1c21;
-  --border-color: #27272a;
-  --border-hover: #3f3f46;
-  --muted: #71717a;
-  --dim: #52525b;
+  --background: #0c0a09;
+  --foreground: #e7e5e4;
+  --surface: #1c1917;
+  --paper: #231f1b;
+  --border-color: #292524;
+  --border-hover: #44403a;
+  --muted: #78716c;
+  --dim: #57534e;
   --accent: #6e47ff;
   --accent-hover: #5835e0;
-  --ink: #e4e4e7;
+  --ink: #e7e5e4;
   --ink-correct: #4ade80;
   --ink-error: #f87171;
   --ink-current: #6e47ff;
@@ -26,13 +27,13 @@
   --paper-margin: #6e47ff;
   --paper-shadow: rgba(0, 0, 0, 0.4);
   /* Keyboard */
-  --key-bg: #18181b;
-  --key-border: #27272a;
-  --key-text: #a1a1aa;
-  --key-shadow: #09090b;
+  --key-bg: #1c1917;
+  --key-border: #292524;
+  --key-text: #a8a29e;
+  --key-shadow: #0c0a09;
   /* Platen */
-  --platen-from: #09090b;
-  --platen-mid: #27272a;
+  --platen-from: #0c0a09;
+  --platen-mid: #292524;
 }
 
 /* ===== Light theme ===== */

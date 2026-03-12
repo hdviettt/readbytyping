@@ -214,7 +214,7 @@ export default function LibraryPage() {
         {/* Header row: title + upload button inline */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-baseline gap-3">
-            <h1 className="text-xl font-semibold text-foreground">Library</h1>
+            <h1 className="text-xl font-serif font-semibold text-foreground">Library</h1>
             <span className="text-[13px] text-dim">{books.length} {books.length === 1 ? "book" : "books"}</span>
           </div>
           <label className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium cursor-pointer rounded-lg transition-all ${

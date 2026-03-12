@@ -72,8 +72,8 @@ export default function SignupPage() {
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
-          <span className="text-accent font-bold text-lg">BT</span>
-          <h1 className="text-lg font-semibold text-foreground mt-2">Create account</h1>
+          <span className="text-accent font-serif font-bold text-lg">BT</span>
+          <h1 className="text-lg font-serif font-semibold text-foreground mt-2">Create account</h1>
           <p className="text-[13px] text-muted mt-1">Register to save your progress</p>
         </div>
 

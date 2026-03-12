@@ -71,7 +71,7 @@ export default function StatsPage() {
     <>
       <Nav />
       <main className="max-w-5xl mx-auto px-6 py-10">
-        <h1 className="text-xl font-semibold text-foreground mb-8">Statistics</h1>
+        <h1 className="text-xl font-serif font-semibold text-foreground mb-8">Statistics</h1>
 
         {totalSessions === 0 ? (
           <div className="text-center py-16 animate-fade-up">

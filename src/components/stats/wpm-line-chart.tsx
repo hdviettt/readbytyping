@@ -24,12 +24,12 @@ export function WpmLineChart({
   height?: number;
 }) {
   const [colors, setColors] = useState({
-    grid: "#3d3429",
-    axis: "#8a7a66",
-    surface: "#231e18",
-    border: "#3d3429",
-    text: "#e8dcc8",
-    accent: "#c89b3c",
+    grid: "#292524",
+    axis: "#78716c",
+    surface: "#1c1917",
+    border: "#292524",
+    text: "#e7e5e4",
+    accent: "#6e47ff",
   });
   const observerRef = useRef<MutationObserver | null>(null);
 

@@ -36,7 +36,7 @@ export default function SettingsPage() {
     <>
       <Nav />
       <main className="max-w-3xl mx-auto px-6 py-10">
-        <h1 className="text-xl font-semibold text-foreground mb-8">Settings</h1>
+        <h1 className="text-xl font-serif font-semibold text-foreground mb-8">Settings</h1>
 
         <div className="space-y-8">
           {/* Profile section */}
