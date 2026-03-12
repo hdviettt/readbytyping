@@ -32,8 +32,8 @@ export default function LoginPage() {
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
-          <span className="text-accent font-serif font-bold text-lg">BT</span>
-          <h1 className="text-lg font-serif font-semibold text-foreground mt-2">Sign in</h1>
+          <span className="text-accent font-bold text-lg">BT</span>
+          <h1 className="text-lg font-semibold text-foreground mt-2">Sign in</h1>
           <p className="text-[13px] text-muted mt-1">Enter your credentials to continue</p>
         </div>
 
@@ -73,7 +73,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-lg shadow-sm shadow-accent/25 hover:shadow-md hover:shadow-accent/30 transition-all disabled:opacity-50"
+              className="w-full py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-full transition-all disabled:opacity-50"
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>

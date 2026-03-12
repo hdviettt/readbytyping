@@ -20,7 +20,7 @@ export function ChapterNav({
   return (
     <div className="flex items-center justify-between px-4 py-1.5">
       <div className="min-w-0">
-        <p className="text-[13px] font-serif font-medium text-foreground truncate">{chapterTitle}</p>
+        <p className="text-[13px] font-medium text-foreground truncate">{chapterTitle}</p>
         <p className="text-[11px] text-dim truncate">{bookTitle}</p>
       </div>
 

@@ -55,7 +55,7 @@ export default function BookChaptersPage() {
         <div className="mb-8 p-5 bg-surface/50 border border-border/50 rounded-xl">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <h1 className="text-xl font-serif font-semibold text-foreground">{book.title}</h1>
+              <h1 className="text-xl font-semibold text-foreground">{book.title}</h1>
               {book.author && (
                 <p className="text-muted text-[13px] mt-1">{book.author}</p>
               )}
@@ -82,7 +82,7 @@ export default function BookChaptersPage() {
           {bookProgress && bookProgress.completedPages < book.totalPages && (
             <Link
               href={`/book/${book.id}/type?chapter=${bookProgress.chapterIndex}`}
-              className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-lg shadow-sm shadow-accent/25 hover:shadow-md hover:shadow-accent/30 transition-all"
+              className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-accent hover:bg-accent-hover text-background font-medium text-sm rounded-full transition-all"
             >
               Resume typing
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

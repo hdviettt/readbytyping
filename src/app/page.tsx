@@ -218,11 +218,11 @@ export default function LibraryPage() {
         {/* Header row: title + upload button inline */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-baseline gap-3">
-            <h1 className="text-xl font-serif font-semibold text-foreground">Library</h1>
+            <h1 className="text-xl font-semibold text-foreground">Library</h1>
             <span className="text-[13px] text-dim">{books.length} {books.length === 1 ? "book" : "books"}</span>
           </div>
-          <label className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium cursor-pointer rounded-lg transition-all ${
-            uploading ? "text-muted" : "bg-accent hover:bg-accent-hover text-background shadow-sm shadow-accent/25 hover:shadow-md hover:shadow-accent/30"
+          <label className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium cursor-pointer rounded-full transition-all ${
+            uploading ? "text-muted" : "bg-accent hover:bg-accent-hover text-background"
           }`}>
             {uploading ? (
               <span className="flex items-center gap-1">
@@ -308,7 +308,7 @@ export default function LibraryPage() {
               return (
                 <div
                   key={book.id}
-                  className="group flex rounded-xl border border-border/50 hover:border-accent/30 bg-surface/30 hover:bg-surface/60 hover:shadow-md hover:shadow-accent/5 transition-all"
+                  className="group flex rounded-xl border border-border/50 hover:border-accent/30 bg-surface/30 hover:bg-surface/60 transition-all"
                 >
                   {/* Color spine */}
                   <div
@@ -323,7 +323,7 @@ export default function LibraryPage() {
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-[15px] font-serif font-semibold truncate group-hover:text-accent transition-colors">
+                        <h3 className="text-[15px] font-semibold truncate group-hover:text-accent transition-colors">
                           {book.title}
                         </h3>
                         {pct === 100 && (
@@ -389,7 +389,7 @@ export default function LibraryPage() {
       </main>
 
       {undoItem && (
-        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border border-border/70 rounded-xl shadow-lg px-4 py-2.5 flex items-center gap-3 ${
+        <div className={`fixed bottom-6 left-1/2 z-50 bg-surface border border-border/70 rounded-xl px-4 py-2.5 flex items-center gap-3 ${
           undoExiting ? "animate-toast-out" : "animate-toast-in"
         }`} style={{ willChange: "transform, opacity" }}>
           <p className="text-[13px] text-muted">

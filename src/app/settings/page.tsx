@@ -36,7 +36,7 @@ export default function SettingsPage() {
     <>
       <Nav />
       <main className="max-w-3xl mx-auto px-6 py-10">
-        <h1 className="text-xl font-serif font-semibold text-foreground mb-8">Settings</h1>
+        <h1 className="text-xl font-semibold text-foreground mb-8">Settings</h1>
 
 
         <div className="space-y-8">
@@ -64,7 +64,7 @@ export default function SettingsPage() {
                     <button
                       onClick={handleSaveProfile}
                       disabled={saving}
-                      className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-hover text-background font-medium rounded-lg transition-all disabled:opacity-50"
+                      className="px-4 py-1.5 text-sm bg-accent hover:bg-accent-hover text-background font-medium rounded-full transition-all disabled:opacity-50"
                     >
                       {saving ? "Saving..." : "Save"}
                     </button>
@@ -141,7 +141,7 @@ function SettingsRow({ label, description, children }: { label: string; descript
   return (
     <div className="flex gap-8 border-b border-border/30 pb-8">
       <div className="w-36 shrink-0 pt-1">
-        <p className="text-sm font-serif font-medium text-foreground">{label}</p>
+        <p className="text-sm font-medium text-foreground">{label}</p>
         <p className="text-xs text-dim mt-0.5">{description}</p>
       </div>
       <div className="flex-1 min-w-0">{children}</div>

@@ -31,8 +31,8 @@ export function Nav() {
         <div className="flex items-center justify-between h-11">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-accent font-serif font-bold text-sm">BT</span>
-            <span className="text-sm font-serif font-medium text-foreground/80 hidden sm:block">
+            <span className="text-accent font-bold text-sm">BT</span>
+            <span className="text-sm font-medium text-foreground/80 hidden sm:block">
               BookTyper
             </span>
           </Link>

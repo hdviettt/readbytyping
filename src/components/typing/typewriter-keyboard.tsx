@@ -135,8 +135,8 @@ const KeyCap = memo(function KeyCap({
   } else if (highlight) {
     textCls = "text-accent";
     borderColor = "var(--accent)";
-    bgColor = "rgba(110, 71, 255, 0.08)";
-    shadow = `0 2px 0 var(--key-shadow), 0 0 8px rgba(110, 71, 255, 0.2)`;
+    bgColor = "rgba(244, 244, 245, 0.08)";
+    shadow = `0 2px 0 var(--key-shadow), 0 0 8px rgba(244, 244, 245, 0.15)`;
   }
 
   return (

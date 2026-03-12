@@ -75,7 +75,7 @@ export default function StatsPage() {
     <>
       <Nav />
       <main className="max-w-5xl mx-auto px-6 py-10">
-        <h1 className="text-xl font-serif font-semibold text-foreground mb-8">Statistics</h1>
+        <h1 className="text-xl font-semibold text-foreground mb-8">Statistics</h1>
 
         {totalSessions === 0 ? (
           <div className="text-center py-16 animate-fade-up">
@@ -139,14 +139,14 @@ export default function StatsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
               {trendData.length > 1 && (
                 <div className="p-5 bg-surface/50 border border-border/50 rounded-xl">
-                  <h2 className="text-sm font-serif font-medium text-muted mb-4">WPM Over Time</h2>
+                  <h2 className="text-sm font-medium text-muted mb-4">WPM Over Time</h2>
                   <WpmLineChart data={trendData} />
                 </div>
               )}
 
               {latestSession && latestSession.wpmSamples.length > 0 && (
                 <div className="p-5 bg-surface/50 border border-border/50 rounded-xl">
-                  <h2 className="text-sm font-serif font-medium text-muted mb-4">Latest Session</h2>
+                  <h2 className="text-sm font-medium text-muted mb-4">Latest Session</h2>
                   <WpmLineChart data={latestSession.wpmSamples} />
                 </div>
               )}
@@ -154,14 +154,14 @@ export default function StatsPage() {
 
             {/* Key heatmap — full width */}
             <div className="mb-8 p-5 bg-surface/50 border border-border/50 rounded-xl">
-              <h2 className="text-sm font-serif font-medium text-muted mb-4">Key Accuracy</h2>
+              <h2 className="text-sm font-medium text-muted mb-4">Key Accuracy</h2>
               <KeyHeatmap stats={keystrokeStats} />
             </div>
 
             {/* Session history */}
             <div className="bg-surface/50 border border-border/50 rounded-xl overflow-hidden">
               <div className="px-5 py-3 border-b border-border/40">
-                <h2 className="text-sm font-serif font-medium text-muted">Session History</h2>
+                <h2 className="text-sm font-medium text-muted">Session History</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">

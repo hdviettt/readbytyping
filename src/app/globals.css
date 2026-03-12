@@ -1,71 +1,71 @@
 @import "tailwindcss";
 
-/* ===== Warm Literary — Dark theme (default) ===== */
-/* Uses stone scale (warm gray) to connect with the cream typing page */
+/* ===== Grok-inspired — Dark theme (default) ===== */
+/* Monochrome zinc scale, flat design, white accent */
 :root {
-  --background: #0c0a09;
-  --foreground: #e7e5e4;
-  --surface: #1c1917;
-  --paper: #231f1b;
-  --border-color: #292524;
-  --border-hover: #44403a;
-  --muted: #78716c;
-  --dim: #57534e;
-  --accent: #6e47ff;
-  --accent-hover: #5835e0;
-  --ink: #e7e5e4;
+  --background: #09090b;
+  --foreground: #fafafa;
+  --surface: #18181b;
+  --paper: #1c1c20;
+  --border-color: #27272a;
+  --border-hover: #3f3f46;
+  --muted: #71717a;
+  --dim: #52525b;
+  --accent: #f4f4f5;
+  --accent-hover: #d4d4d8;
+  --ink: #fafafa;
   --ink-correct: #4ade80;
   --ink-error: #f87171;
-  --ink-current: #6e47ff;
+  --ink-current: #f4f4f5;
   --stamp: #ef4444;
   --stamp-dim: #991b1b;
-  /* Typing page — warm cream literary feel */
-  --paper-bg: #f7f3e8;
-  --paper-text: #1c1917;
-  --paper-upcoming: #a8a29e;
-  --paper-line: #e7e5e4;
-  --paper-margin: #6e47ff;
-  --paper-shadow: rgba(0, 0, 0, 0.4);
+  /* Typing page — dark surface, light text */
+  --paper-bg: #141416;
+  --paper-text: #e4e4e7;
+  --paper-upcoming: #3f3f46;
+  --paper-line: #27272a;
+  --paper-margin: #52525b;
+  --paper-shadow: transparent;
   /* Keyboard */
-  --key-bg: #1c1917;
-  --key-border: #292524;
-  --key-text: #a8a29e;
-  --key-shadow: #0c0a09;
+  --key-bg: #18181b;
+  --key-border: #27272a;
+  --key-text: #71717a;
+  --key-shadow: #09090b;
   /* Platen */
-  --platen-from: #0c0a09;
-  --platen-mid: #292524;
+  --platen-from: #09090b;
+  --platen-mid: #27272a;
 }
 
 /* ===== Light theme ===== */
 .light {
-  --background: #fafaf9;
-  --foreground: #1c1917;
-  --surface: #f5f5f4;
-  --paper: #e7e5e4;
-  --border-color: #d6d3d1;
-  --border-hover: #a8a29e;
-  --muted: #78716c;
-  --dim: #a8a29e;
-  --accent: #6e47ff;
-  --accent-hover: #5835e0;
-  --ink: #1c1917;
+  --background: #fafafa;
+  --foreground: #09090b;
+  --surface: #f4f4f5;
+  --paper: #e4e4e7;
+  --border-color: #d4d4d8;
+  --border-hover: #a1a1aa;
+  --muted: #71717a;
+  --dim: #a1a1aa;
+  --accent: #18181b;
+  --accent-hover: #27272a;
+  --ink: #09090b;
   --ink-correct: #16a34a;
   --ink-error: #dc2626;
-  --ink-current: #6e47ff;
+  --ink-current: #18181b;
   --stamp: #dc2626;
   --stamp-dim: #fca5a5;
-  --paper-bg: #faf8f2;
-  --paper-text: #1c1917;
-  --paper-upcoming: #a8a29e;
-  --paper-line: #e7e5e4;
-  --paper-margin: #6e47ff;
-  --paper-shadow: rgba(0, 0, 0, 0.08);
-  --key-bg: #f5f5f4;
-  --key-border: #d6d3d1;
-  --key-text: #57534e;
-  --key-shadow: #d6d3d1;
-  --platen-from: #78716c;
-  --platen-mid: #a8a29e;
+  --paper-bg: #ffffff;
+  --paper-text: #09090b;
+  --paper-upcoming: #a1a1aa;
+  --paper-line: #e4e4e7;
+  --paper-margin: #71717a;
+  --paper-shadow: transparent;
+  --key-bg: #f4f4f5;
+  --key-border: #d4d4d8;
+  --key-text: #52525b;
+  --key-shadow: #d4d4d8;
+  --platen-from: #71717a;
+  --platen-mid: #a1a1aa;
 }
 
 @theme inline {
@@ -110,7 +110,6 @@ body {
 .book-page {
   background: var(--paper-bg);
   border-radius: 0.75rem;
-  box-shadow: 0 1px 3px var(--paper-shadow), 0 4px 20px var(--paper-shadow);
   scrollbar-width: none;
 }
 .book-page::-webkit-scrollbar { display: none; }
@@ -130,8 +129,11 @@ body {
   color: var(--ink-correct);
 }
 .badge-accent {
-  background: rgba(110, 71, 255, 0.12);
+  background: rgba(244, 244, 245, 0.1);
   color: var(--accent);
+}
+.light .badge-accent {
+  background: rgba(24, 24, 27, 0.08);
 }
 .badge-error {
   background: rgba(248, 113, 113, 0.12);

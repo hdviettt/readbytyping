@@ -114,7 +114,7 @@ export function TypingDisplay({
         ref={scrollRef}
         className={`book-page absolute inset-0 cursor-text select-none overflow-hidden transition-all duration-300 ${
           isFocused
-            ? "opacity-100 ring-1 ring-accent/30 shadow-lg shadow-accent/5"
+            ? "opacity-100 ring-1 ring-accent/30"
             : "opacity-80 ring-1 ring-transparent"
         }`}
         style={{ fontSize: `${fontSize}px` }}
