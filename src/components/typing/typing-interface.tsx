@@ -369,7 +369,7 @@ export function TypingInterface({
   return (
     <div className="max-w-3xl mx-auto" onClick={focusInput}>
       {/* Unified header: chapter nav + stats in one bar */}
-      <div className="bg-surface/60 border border-border/50 mb-2">
+      <div className="bg-surface/60 border border-border/50 rounded-xl mb-2 overflow-hidden">
         <ChapterNav
           bookTitle={book.title}
           chapterTitle={chapter.title}
@@ -431,7 +431,7 @@ export function TypingInterface({
         {/* Escape prompt */}
         {escapePrompt && (
           <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-            <span className="text-xs font-medium text-muted bg-surface border border-border px-3 py-1.5 animate-fade-up">
+            <span className="text-xs font-medium text-muted bg-surface border border-border rounded-lg px-3 py-1.5 shadow-lg animate-fade-up">
               Press Escape again to exit
             </span>
           </div>
@@ -439,33 +439,33 @@ export function TypingInterface({
 
         {/* Idle overlay */}
         <div
-          className={`absolute inset-0 flex items-center justify-center z-20 pointer-events-none transition-opacity duration-1000 ${isPaused ? "opacity-100" : "opacity-0"}`}
-          style={{ background: isPaused ? "rgba(0,0,0,0.15)" : "transparent" }}
+          className={`absolute inset-0 flex items-center justify-center z-20 pointer-events-none rounded-xl transition-opacity duration-1000 ${isPaused ? "opacity-100" : "opacity-0"}`}
+          style={{ background: isPaused ? "rgba(0,0,0,0.2)" : "transparent" }}
         >
           {isPaused && (
-            <span className="text-sm text-muted font-sans" style={{ opacity: 0.6 }}>Paused</span>
+            <span className="text-sm text-muted/60 font-serif tracking-wide">Paused</span>
           )}
         </div>
 
         {/* Chapter completion overlay with animation */}
         {completionType === "chapter" && (
           <div
-            className={`absolute inset-0 flex items-center justify-center z-30 transition-opacity duration-250 ${chapterOverlayVisible ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 flex items-center justify-center z-30 rounded-xl transition-opacity duration-250 ${chapterOverlayVisible ? "opacity-100" : "opacity-0"}`}
             style={{ background: "rgba(0,0,0,0.4)" }}
           >
-            <div className={`bg-surface border border-border px-8 py-6 text-center max-w-xs ${chapterOverlayVisible ? "animate-card-in" : ""}`}>
+            <div className={`bg-surface border border-border rounded-xl px-8 py-6 text-center max-w-xs shadow-xl ${chapterOverlayVisible ? "animate-card-in" : ""}`}>
               <span className="badge badge-accent animate-badge">Complete</span>
               <div className="flex gap-8 mt-4 mb-4 justify-center">
                 <div>
-                  <p className="text-xs text-muted mb-0.5">WPM</p>
+                  <p className="text-[11px] text-dim mb-0.5 uppercase tracking-wider">WPM</p>
                   <p className="text-xl font-semibold font-mono tabular-nums text-accent">{stats.wpm}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted mb-0.5">Accuracy</p>
+                  <p className="text-[11px] text-dim mb-0.5 uppercase tracking-wider">Accuracy</p>
                   <p className="text-xl font-semibold font-mono tabular-nums text-ink-correct">{stats.accuracy}%</p>
                 </div>
               </div>
-              <p className="text-xs text-muted animate-pulse mt-2">
+              <p className="text-xs text-muted animate-gentle-pulse mt-2">
                 Press any key to continue
               </p>
             </div>

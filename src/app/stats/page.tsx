@@ -28,7 +28,11 @@ export default function StatsPage() {
       <>
         <Nav />
         <main className="max-w-5xl mx-auto px-6 py-10">
-          <p className="text-center text-muted py-12 animate-pulse text-sm">Loading...</p>
+          <div className="py-12 space-y-3 max-w-lg mx-auto animate-pulse">
+            <div className="h-3 bg-border/30 rounded-full w-3/4" />
+            <div className="h-3 bg-border/30 rounded-full w-1/2" />
+            <div className="h-3 bg-border/30 rounded-full w-2/3" />
+          </div>
         </main>
       </>
     );
@@ -135,14 +139,14 @@ export default function StatsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
               {trendData.length > 1 && (
                 <div className="p-5 bg-surface/50 border border-border/50 rounded-xl">
-                  <h2 className="text-sm font-medium text-muted mb-4">WPM Over Time</h2>
+                  <h2 className="text-sm font-serif font-medium text-muted mb-4">WPM Over Time</h2>
                   <WpmLineChart data={trendData} />
                 </div>
               )}
 
               {latestSession && latestSession.wpmSamples.length > 0 && (
                 <div className="p-5 bg-surface/50 border border-border/50 rounded-xl">
-                  <h2 className="text-sm font-medium text-muted mb-4">Latest Session</h2>
+                  <h2 className="text-sm font-serif font-medium text-muted mb-4">Latest Session</h2>
                   <WpmLineChart data={latestSession.wpmSamples} />
                 </div>
               )}
@@ -150,14 +154,14 @@ export default function StatsPage() {
 
             {/* Key heatmap — full width */}
             <div className="mb-8 p-5 bg-surface/50 border border-border/50 rounded-xl">
-              <h2 className="text-sm font-medium text-muted mb-4">Key Accuracy</h2>
+              <h2 className="text-sm font-serif font-medium text-muted mb-4">Key Accuracy</h2>
               <KeyHeatmap stats={keystrokeStats} />
             </div>
 
             {/* Session history */}
             <div className="bg-surface/50 border border-border/50 rounded-xl overflow-hidden">
               <div className="px-5 py-3 border-b border-border/40">
-                <h2 className="text-sm font-medium text-muted">Session History</h2>
+                <h2 className="text-sm font-serif font-medium text-muted">Session History</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -210,17 +214,17 @@ export default function StatsPage() {
                   <button
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
                     disabled={page === 0}
-                    className="text-xs text-muted hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    className="text-xs text-muted hover:text-foreground hover:bg-border/20 px-2 py-1 rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
                     Previous
                   </button>
-                  <span className="text-xs text-dim tabular-nums">
+                  <span className="text-xs text-dim tabular-nums font-mono">
                     {page + 1} / {totalPages}
                   </span>
                   <button
                     onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                     disabled={page >= totalPages - 1}
-                    className="text-xs text-muted hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    className="text-xs text-muted hover:text-foreground hover:bg-border/20 px-2 py-1 rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
                     Next
                   </button>

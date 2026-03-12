@@ -85,7 +85,7 @@ export function Nav() {
                 {isAnonymous ? (
                   <Link
                     href="/signup"
-                    className="text-xs text-accent hover:text-accent-hover font-medium px-2 py-0.5 hover:bg-accent/10 transition-colors"
+                    className="text-xs text-accent hover:text-accent-hover font-medium px-2 py-0.5 rounded-md hover:bg-accent/10 transition-colors"
                   >
                     Register
                   </Link>
@@ -96,7 +96,7 @@ export function Nav() {
                 )}
                 <button
                   onClick={handleSignOut}
-                  className="p-1 text-dim hover:text-foreground transition-colors hover:bg-border/20"
+                  className="p-1 text-dim hover:text-foreground transition-colors hover:bg-border/20 rounded-md"
                   title="Sign out"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

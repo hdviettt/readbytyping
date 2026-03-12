@@ -63,13 +63,13 @@ export function KeyHeatmap({ stats }: { stats: KeystrokeStat[] }) {
       ))}
       <div className="flex items-center justify-center gap-4 mt-4 text-xs text-muted">
         <span className="flex items-center gap-1">
-          <span className="w-3 h-3 bg-ink-correct/50" /> 98%+
+          <span className="w-3 h-3 rounded bg-ink-correct/50" /> 98%+
         </span>
         <span className="flex items-center gap-1">
-          <span className="w-3 h-3 bg-accent/30" /> 90-95%
+          <span className="w-3 h-3 rounded bg-accent/30" /> 90-95%
         </span>
         <span className="flex items-center gap-1">
-          <span className="w-3 h-3 bg-ink-error/40" /> &lt;80%
+          <span className="w-3 h-3 rounded bg-ink-error/40" /> &lt;80%
         </span>
       </div>
     </div>

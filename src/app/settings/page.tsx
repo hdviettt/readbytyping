@@ -38,6 +38,7 @@ export default function SettingsPage() {
       <main className="max-w-3xl mx-auto px-6 py-10">
         <h1 className="text-xl font-serif font-semibold text-foreground mb-8">Settings</h1>
 
+
         <div className="space-y-8">
           {/* Profile section */}
           {user && !isAnonymous && profileLoaded && (
@@ -140,7 +141,7 @@ function SettingsRow({ label, description, children }: { label: string; descript
   return (
     <div className="flex gap-8 border-b border-border/30 pb-8">
       <div className="w-36 shrink-0 pt-1">
-        <p className="text-sm font-medium text-foreground">{label}</p>
+        <p className="text-sm font-serif font-medium text-foreground">{label}</p>
         <p className="text-xs text-dim mt-0.5">{description}</p>
       </div>
       <div className="flex-1 min-w-0">{children}</div>

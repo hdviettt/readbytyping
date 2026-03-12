@@ -17,7 +17,11 @@ export default function TypingPage() {
       <>
         <Nav />
         <main className="px-6 py-6">
-          <p className="text-center text-muted py-12 animate-pulse font-mono">Loading...</p>
+          <div className="py-12 space-y-3 max-w-lg mx-auto animate-pulse">
+            <div className="h-3 bg-border/30 rounded-full w-3/4" />
+            <div className="h-3 bg-border/30 rounded-full w-1/2" />
+            <div className="h-3 bg-border/30 rounded-full w-2/3" />
+          </div>
         </main>
       </>
     );

@@ -60,9 +60,9 @@ export function TypingStatsBar({
         {saveStatus === "error" && (
           <span className="text-[11px] text-ink-error">Save failed</span>
         )}
-        <div className="w-20 h-1 bg-border/40">
+        <div className="w-20 h-1 bg-border/40 rounded-full">
           <div
-            className="h-full bg-accent/80"
+            className="h-full bg-accent/80 rounded-full transition-all duration-300"
             style={{ width: `${progress.percentage}%` }}
           />
         </div>

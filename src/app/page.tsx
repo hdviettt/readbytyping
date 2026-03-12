@@ -196,7 +196,11 @@ export default function LibraryPage() {
       <>
         <Nav />
         <main className="max-w-5xl mx-auto px-6 py-10">
-          <p className="text-center text-muted py-12 animate-pulse text-sm">Loading...</p>
+          <div className="py-12 space-y-3 max-w-lg mx-auto animate-pulse">
+            <div className="h-3 bg-border/30 rounded-full w-3/4" />
+            <div className="h-3 bg-border/30 rounded-full w-1/2" />
+            <div className="h-3 bg-border/30 rounded-full w-2/3" />
+          </div>
         </main>
       </>
     );
@@ -271,7 +275,7 @@ export default function LibraryPage() {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortOption)}
-              className="px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg focus:outline-none focus:border-accent/50 transition-all"
+              className="px-3 py-1.5 text-sm bg-transparent border border-border/70 rounded-lg focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
             >
               <option value="recent">Recently added</option>
               <option value="last-typed">Recently typed</option>
@@ -285,9 +289,10 @@ export default function LibraryPage() {
         {books.length === 0 ? (
           <Onboarding />
         ) : sorted.length === 0 ? (
-          <p className="text-center text-muted py-12 text-sm">
-            No books match your search.
-          </p>
+          <div className="text-center py-16 animate-fade-up">
+            <p className="text-muted text-sm mb-1">No books match your search.</p>
+            <p className="text-dim text-xs">Try a different keyword or clear the filter.</p>
+          </div>
         ) : (
           <div className="space-y-2 stagger-children">
             {sorted.map((book) => {

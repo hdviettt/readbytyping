@@ -28,19 +28,19 @@ export function ChapterNav({
         <button
           onClick={onPrevPage}
           disabled={!onPrevPage}
-          className="w-6 h-6 flex items-center justify-center text-muted hover:text-foreground hover:bg-border/30 disabled:opacity-20 transition-colors"
+          className="w-6 h-6 flex items-center justify-center text-muted hover:text-foreground hover:bg-border/30 rounded-md disabled:opacity-20 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <span className="text-[11px] text-muted tabular-nums min-w-[56px] text-center">
+        <span className="text-[11px] text-muted tabular-nums min-w-[56px] text-center font-mono">
           {currentPage} / {totalPages}
         </span>
         <button
           onClick={onNextPage}
           disabled={!onNextPage}
-          className="w-6 h-6 flex items-center justify-center text-muted hover:text-foreground hover:bg-border/30 disabled:opacity-20 transition-colors"
+          className="w-6 h-6 flex items-center justify-center text-muted hover:text-foreground hover:bg-border/30 rounded-md disabled:opacity-20 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

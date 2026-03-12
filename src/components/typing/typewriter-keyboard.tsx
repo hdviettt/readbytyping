@@ -147,6 +147,7 @@ const KeyCap = memo(function KeyCap({
         height: isSpace ? "1.6rem" : "2rem",
         background: bgColor,
         border: `1px solid ${borderColor}`,
+        borderRadius: "0.375rem",
         boxShadow: shadow,
         transform: pressed ? "translateY(2px)" : "none",
       }}
