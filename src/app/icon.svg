@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="108" fill="#09090b"/>
+
+  <!-- Open book — left page -->
+  <path d="M100 120 C100 112 106 106 114 108 L244 138 C248 139 252 143 252 148 L252 392 C252 398 247 402 242 400 L114 370 C108 368 100 364 100 356 Z" fill="#18181b" stroke="#fafafa" stroke-width="16" stroke-linejoin="round"/>
+
+  <!-- Open book — right page -->
+  <path d="M412 120 C412 112 406 106 398 108 L268 138 C264 139 260 143 260 148 L260 392 C260 398 265 402 270 400 L398 370 C404 368 412 364 412 356 Z" fill="#18181b" stroke="#fafafa" stroke-width="16" stroke-linejoin="round"/>
+
+  <!-- Text lines on left page -->
+  <line x1="140" y1="196" x2="220" y2="210" stroke="#3f3f46" stroke-width="12" stroke-linecap="round"/>
+  <line x1="140" y1="236" x2="216" y2="249" stroke="#3f3f46" stroke-width="12" stroke-linecap="round"/>
+  <line x1="140" y1="276" x2="210" y2="288" stroke="#3f3f46" stroke-width="12" stroke-linecap="round"/>
+  <line x1="140" y1="316" x2="196" y2="326" stroke="#3f3f46" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- Text lines on right page -->
+  <line x1="296" y1="210" x2="372" y2="196" stroke="#3f3f46" stroke-width="12" stroke-linecap="round"/>
+  <line x1="296" y1="249" x2="368" y2="236" stroke="#3f3f46" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- Typing cursor on right page -->
+  <rect x="296" y="272" width="8" height="48" rx="4" fill="#fafafa">
+    <animate attributeName="opacity" values="1;1;0.2;0.2;1" dur="1.2s" repeatCount="indefinite"/>
+  </rect>
+</svg>
