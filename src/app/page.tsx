@@ -9,6 +9,7 @@ import { parseEpub } from "@/lib/parsers/epub-parser";
 import { parsePdf } from "@/lib/parsers/pdf-parser";
 import type { Book, Chapter, Page } from "@/types/book";
 import { Onboarding } from "@/components/onboarding";
+import { Dropdown } from "@/components/dropdown";
 
 function hashGradient(str: string): [string, string] {
   let hash = 0;
@@ -297,16 +298,16 @@ export default function LibraryPage() {
                 className="w-full pl-9 pr-3 py-2 text-sm bg-surface/50 border border-border/50 rounded-full placeholder:text-dim focus:outline-none focus:border-border-hover focus:bg-surface transition-all"
               />
             </div>
-            <select
+            <Dropdown
               value={sort}
-              onChange={(e) => setSort(e.target.value as SortOption)}
-              className="px-3 py-2 text-sm bg-surface/50 border border-border/50 rounded-full focus:outline-none focus:border-border-hover transition-all"
-            >
-              <option value="recent">Recently added</option>
-              <option value="last-typed">Recently typed</option>
-              <option value="title">Title A–Z</option>
-              <option value="progress">Progress</option>
-            </select>
+              onChange={setSort}
+              options={[
+                { value: "recent", label: "Recently added" },
+                { value: "last-typed", label: "Recently typed" },
+                { value: "title", label: "Title A–Z" },
+                { value: "progress", label: "Progress" },
+              ]}
+            />
           </div>
         )}
 
