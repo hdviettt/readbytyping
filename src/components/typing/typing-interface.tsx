@@ -15,6 +15,7 @@ import { TypingDisplay } from "./typing-display";
 import { TypingStatsBar } from "./typing-stats-bar";
 import { ChapterNav } from "./chapter-nav";
 import { CompletionModal } from "./completion-modal";
+import { ChapterToc } from "./chapter-toc";
 import { StreakEffects } from "./streak-effects";
 import { TypewriterKeyboard } from "./typewriter-keyboard";
 import { playKeystroke, playReturn, playBackspace, playError, cleanupAudio } from "@/lib/typing/sounds";
@@ -90,6 +91,9 @@ export function TypingInterface({
   // Escape key state for double-press exit
   const escapeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [escapePrompt, setEscapePrompt] = useState(false);
+
+  // Table of contents panel
+  const [tocOpen, setTocOpen] = useState(false);
 
   // Chapter completion animation
   const [chapterOverlayVisible, setChapterOverlayVisible] = useState(false);
@@ -322,6 +326,22 @@ export function TypingInterface({
     setTimeout(() => focusInput(), 50);
   }, [pageIndex, chapter?.pages.length, chapterIndex, book.chapters.length, focusInput]);
 
+  const handleSelectChapter = useCallback(
+    (ci: number) => {
+      setTocOpen(false);
+      if (ci === chapterIndex) return;
+      // Save current progress before jumping
+      if (state.cursor > 0) doSaveProgress(state.cursor);
+      setChapterIndex(ci);
+      setPageIndex(0);
+      setCompletionType(null);
+      setChapterOverlayVisible(false);
+      setIsPaused(false);
+      setTimeout(() => focusInput(), 50);
+    },
+    [chapterIndex, state.cursor, doSaveProgress, focusInput]
+  );
+
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       e.preventDefault();
@@ -371,12 +391,14 @@ export function TypingInterface({
   return (
     <div className="max-w-3xl mx-auto" onClick={focusInput}>
       {/* Unified header: chapter nav + stats in one bar */}
-      <div className="bg-surface/60 border border-border/50 rounded-xl mb-2 overflow-hidden">
+      <div className="bg-surface/60 border border-border/50 rounded-xl mb-2 overflow-hidden relative">
         <ChapterNav
           bookTitle={book.title}
           chapterTitle={chapter.title}
           currentPage={globalPageIndex + 1}
           totalPages={book.totalPages}
+          tocOpen={tocOpen}
+          onToggleToc={() => setTocOpen((v) => !v)}
           onPrevPage={
             globalPageIndex > 0
               ? () => {
@@ -411,6 +433,17 @@ export function TypingInterface({
             saveStatus={saveStatus}
           />
         </div>
+
+        {/* Table of contents dropdown */}
+        {tocOpen && (
+          <ChapterToc
+            book={book}
+            currentChapterIndex={chapterIndex}
+            completedPages={progress?.completedPages ?? 0}
+            onSelectChapter={handleSelectChapter}
+            onClose={() => setTocOpen(false)}
+          />
+        )}
       </div>
 
       {/* Book page — the focal point */}
