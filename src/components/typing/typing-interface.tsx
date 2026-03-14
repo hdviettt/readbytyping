@@ -397,6 +397,9 @@ export function TypingInterface({
           chapterTitle={chapter.title}
           currentPage={globalPageIndex + 1}
           totalPages={book.totalPages}
+          chapterNumber={chapterIndex + 1}
+          totalChapters={book.chapters.length}
+          bookProgressPct={book.totalPages > 0 ? Math.round(((progress?.completedPages ?? 0) / book.totalPages) * 100) : 0}
           tocOpen={tocOpen}
           onToggleToc={() => setTocOpen((v) => !v)}
           onPrevPage={
